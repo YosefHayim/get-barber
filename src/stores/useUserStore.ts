@@ -46,10 +46,9 @@ export const useUserStore = create<UserState>()(
             state.currentLocation = {
               ...location,
               accuracy: 0,
-              altitude: null,
-              altitudeAccuracy: null,
-              heading: null,
-              speed: null,
+              altitude: undefined,
+              heading: undefined,
+              speed: undefined,
               timestamp: Date.now(),
             };
           } else {

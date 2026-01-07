@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Pressable } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Scissors, Mail, Lock } from 'lucide-react-native';
+import { Scissors, Mail, Lock, Sparkles } from 'lucide-react-native';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useAuth } from '@/features/auth/context/AuthContext';
+
+const GOLD = '#DAA520';
+const DARK_GOLD = '#B8860B';
+const BURGUNDY = '#722F37';
 
 export default function LoginScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
@@ -42,13 +47,18 @@ export default function LoginScreen(): React.JSX.Element {
         ]}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.header}>
+        <Animated.View style={styles.header} entering={FadeInDown.duration(600).delay(100)}>
           <View style={styles.logoContainer}>
-            <Scissors size={40} color="#3B82F6" />
+            <View style={styles.logoInner}>
+              <Scissors size={36} color="#FFFFFF" style={{ transform: [{ rotate: '-45deg' }] }} />
+            </View>
+            <View style={styles.sparkle}>
+              <Sparkles size={16} color={GOLD} fill={GOLD} />
+            </View>
           </View>
           <Text style={styles.title}>Welcome Back</Text>
           <Text style={styles.subtitle}>Sign in to book your barber</Text>
-        </View>
+        </Animated.View>
 
         <View style={styles.form}>
           {error ? (
@@ -115,79 +125,115 @@ export default function LoginScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FAFAFA',
   },
   scrollContent: {
     flexGrow: 1,
-    padding: 24,
+    padding: 28,
   },
   header: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 52,
   },
   logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 20,
-    backgroundColor: '#EFF6FF',
+    width: 90,
+    height: 90,
+    borderRadius: 24,
+    backgroundColor: BURGUNDY,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 28,
+    shadowColor: BURGUNDY,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 12,
+  },
+  logoInner: {
+    width: 70,
+    height: 70,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sparkle: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 4,
+    shadowColor: GOLD,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
   },
   title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#111827',
-    marginBottom: 8,
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#1A1A1A',
+    marginBottom: 10,
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#6B7280',
+    fontSize: 17,
+    color: '#757575',
+    fontWeight: '500',
   },
   form: {
     flex: 1,
   },
   errorContainer: {
-    backgroundColor: '#FEE2E2',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
+    backgroundColor: 'rgba(220, 38, 38, 0.1)',
+    padding: 14,
+    borderRadius: 12,
+    marginBottom: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(220, 38, 38, 0.2)',
   },
   errorText: {
     color: '#DC2626',
     fontSize: 14,
     textAlign: 'center',
+    fontWeight: '500',
   },
   input: {
-    marginBottom: 16,
+    marginBottom: 18,
     backgroundColor: '#FFFFFF',
   },
   inputOutline: {
-    borderRadius: 12,
+    borderRadius: 14,
+    borderWidth: 1.5,
   },
   button: {
-    marginTop: 8,
-    borderRadius: 12,
+    marginTop: 10,
+    borderRadius: 16,
+    backgroundColor: DARK_GOLD,
   },
   outlineButton: {
-    borderRadius: 12,
+    borderRadius: 16,
+    borderColor: GOLD,
+    borderWidth: 2,
   },
   buttonContent: {
-    height: 52,
+    height: 56,
   },
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 24,
+    marginVertical: 28,
   },
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
   },
   dividerText: {
-    marginHorizontal: 16,
+    marginHorizontal: 18,
     color: '#9CA3AF',
     fontSize: 14,
+    fontWeight: '500',
   },
 });

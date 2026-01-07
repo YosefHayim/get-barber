@@ -1,122 +1,526 @@
-import React, { useCallback, useMemo } from 'react';
-import { View, StyleSheet, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
-import { Text } from 'react-native-paper';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { View, StyleSheet, Pressable, KeyboardAvoidingView, Platform, TextInput, Keyboard } from 'react-native';
+import { Text, Surface, IconButton, Button } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { X, Phone, MoreVertical } from 'lucide-react-native';
+import { FlashList } from '@shopify/flash-list';
+import { formatDistanceToNow } from 'date-fns';
+import {
+  X,
+  Phone,
+  MoreVertical,
+  Send,
+  DollarSign,
+  Camera,
+  CheckCheck,
+  Check,
+  Clock,
+  Sparkles,
+  ArrowLeft,
+} from 'lucide-react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  FadeIn,
+  FadeOut,
+  FadeInDown,
+} from 'react-native-reanimated';
 import { Avatar } from '@/components/ui/Avatar';
-import { MessageList } from '@/features/chat/components/MessageList';
-import { ChatInput } from '@/features/chat/components/ChatInput';
-import { useChatMessages } from '@/features/chat/hooks/useChatMessages';
-import { useSendMessage, useSendOffer } from '@/features/chat/hooks/useSendMessage';
-import { useAuth } from '@/features/auth/context/AuthContext';
-import type { ChatParticipant } from '@/features/chat/types/chat.types';
+import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
+import { useAppStore } from '@/stores/useAppStore';
+import {
+  MOCK_CONVERSATIONS_CUSTOMER,
+  MOCK_CONVERSATIONS_BARBER,
+  MOCK_MESSAGES,
+  type MockMessage,
+  type MockConversation,
+} from '@/constants/mockData';
+
+type OfferStatus = 'pending' | 'accepted' | 'rejected' | 'expired';
+
+function TextBubble({
+  content,
+  isOwn,
+  timestamp,
+  senderName,
+  senderAvatar,
+}: {
+  content: string;
+  isOwn: boolean;
+  timestamp: string;
+  senderName: string;
+  senderAvatar: string | null;
+}): React.JSX.Element {
+  return (
+    <Animated.View
+      entering={FadeInDown.duration(200)}
+      style={[styles.messageRow, isOwn && styles.ownMessageRow]}
+    >
+      {!isOwn && (
+        <Avatar uri={senderAvatar} name={senderName} size={32} />
+      )}
+      <View style={[styles.bubbleContainer, isOwn && styles.ownBubbleContainer]}>
+        <Surface
+          style={[styles.textBubble, isOwn ? styles.ownBubble : styles.otherBubble]}
+          elevation={1}
+        >
+          <Text style={[styles.messageText, isOwn && styles.ownMessageText]}>
+            {content}
+          </Text>
+        </Surface>
+        <View style={styles.messageFooter}>
+          <Text style={styles.timestamp}>
+            {formatDistanceToNow(new Date(timestamp), { addSuffix: true })}
+          </Text>
+          {isOwn && <CheckCheck size={12} color={COLORS.textMuted} />}
+        </View>
+      </View>
+    </Animated.View>
+  );
+}
+
+function OfferBubble({
+  amount,
+  status,
+  isOwn,
+  timestamp,
+  onAccept,
+  onReject,
+  onCounter,
+}: {
+  amount: number;
+  status: OfferStatus;
+  isOwn: boolean;
+  timestamp: string;
+  onAccept?: () => void;
+  onReject?: () => void;
+  onCounter?: () => void;
+}): React.JSX.Element {
+  const statusConfig = {
+    pending: { label: 'Pending', color: COLORS.warning, bgColor: COLORS.warningLight },
+    accepted: { label: 'Accepted', color: COLORS.success, bgColor: COLORS.successLight },
+    rejected: { label: 'Rejected', color: COLORS.error, bgColor: COLORS.errorLight },
+    expired: { label: 'Expired', color: COLORS.textMuted, bgColor: COLORS.borderLight },
+  };
+
+  const config = statusConfig[status];
+  const canRespond = status === 'pending' && !isOwn;
+
+  return (
+    <Animated.View
+      entering={FadeInDown.duration(200)}
+      style={[styles.offerRow, isOwn && styles.ownOfferRow]}
+    >
+      <Surface style={styles.offerBubble} elevation={2}>
+        <View style={styles.offerHeader}>
+          <Sparkles size={16} color={COLORS.gold} />
+          <Text style={styles.offerLabel}>Price Offer</Text>
+          <View style={[styles.statusBadge, { backgroundColor: config.bgColor }]}>
+            <Text style={[styles.statusText, { color: config.color }]}>
+              {config.label}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.offerAmountContainer}>
+          <Text style={styles.offerCurrency}>₪</Text>
+          <Text style={styles.offerAmount}>{amount}</Text>
+        </View>
+
+        {canRespond && (
+          <View style={styles.offerActions}>
+            <Button
+              mode="contained"
+              onPress={onAccept}
+              icon={() => <Check size={16} color={COLORS.textInverse} />}
+              compact
+              style={[styles.offerButton, { backgroundColor: COLORS.success }]}
+              labelStyle={styles.offerButtonLabel}
+            >
+              Accept
+            </Button>
+            <Button
+              mode="outlined"
+              onPress={onCounter}
+              compact
+              style={styles.offerButton}
+              labelStyle={styles.counterButtonLabel}
+            >
+              Counter
+            </Button>
+            <Pressable onPress={onReject} style={styles.rejectButton}>
+              <X size={18} color={COLORS.error} />
+            </Pressable>
+          </View>
+        )}
+
+        {status === 'accepted' && (
+          <View style={styles.acceptedBanner}>
+            <Check size={14} color={COLORS.success} />
+            <Text style={styles.acceptedText}>Booking confirmed!</Text>
+          </View>
+        )}
+
+        <Text style={styles.offerTimestamp}>
+          {formatDistanceToNow(new Date(timestamp), { addSuffix: true })}
+        </Text>
+      </Surface>
+    </Animated.View>
+  );
+}
+
+function SystemMessage({ content }: { content: string }): React.JSX.Element {
+  return (
+    <Animated.View entering={FadeIn.duration(200)} style={styles.systemContainer}>
+      <Text style={styles.systemText}>{content}</Text>
+    </Animated.View>
+  );
+}
+
+function ChatInputComponent({
+  onSendMessage,
+  onSendOffer,
+  isDisabled,
+}: {
+  onSendMessage: (content: string) => void;
+  onSendOffer: (amount: number) => void;
+  isDisabled: boolean;
+}): React.JSX.Element {
+  const [message, setMessage] = useState('');
+  const [showOfferInput, setShowOfferInput] = useState(false);
+  const [offerAmount, setOfferAmount] = useState('');
+  const sendButtonScale = useSharedValue(1);
+
+  const sendButtonStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: sendButtonScale.value }],
+  }));
+
+  const handleSend = useCallback(() => {
+    const trimmedMessage = message.trim();
+    if (!trimmedMessage) return;
+
+    sendButtonScale.value = withSpring(0.9, {}, () => {
+      sendButtonScale.value = withSpring(1);
+    });
+
+    onSendMessage(trimmedMessage);
+    setMessage('');
+    Keyboard.dismiss();
+  }, [message, onSendMessage, sendButtonScale]);
+
+  const handleSendOffer = useCallback(() => {
+    const amount = parseInt(offerAmount, 10);
+    if (isNaN(amount) || amount <= 0) return;
+
+    sendButtonScale.value = withSpring(0.9, {}, () => {
+      sendButtonScale.value = withSpring(1);
+    });
+
+    onSendOffer(amount);
+    setOfferAmount('');
+    setShowOfferInput(false);
+    Keyboard.dismiss();
+  }, [offerAmount, onSendOffer, sendButtonScale]);
+
+  const toggleOfferInput = useCallback(() => {
+    setShowOfferInput((prev) => !prev);
+    setOfferAmount('');
+  }, []);
+
+  const canSend = showOfferInput
+    ? offerAmount.trim().length > 0 && !isNaN(parseInt(offerAmount, 10))
+    : message.trim().length > 0;
+
+  return (
+    <View style={styles.inputContainer}>
+      {showOfferInput && (
+        <Animated.View
+          entering={FadeIn.duration(200)}
+          exiting={FadeOut.duration(200)}
+          style={styles.offerInputContainer}
+        >
+          <View style={styles.offerInputHeader}>
+            <Sparkles size={16} color={COLORS.gold} />
+            <Text style={styles.offerInputLabel}>Send Price Offer</Text>
+            <Pressable onPress={toggleOfferInput}>
+              <X size={18} color={COLORS.textMuted} />
+            </Pressable>
+          </View>
+          <View style={styles.offerInputRow}>
+            <Text style={styles.offerInputCurrency}>₪</Text>
+            <TextInput
+              style={styles.offerInputField}
+              value={offerAmount}
+              onChangeText={setOfferAmount}
+              placeholder="0"
+              placeholderTextColor={COLORS.textMuted}
+              keyboardType="numeric"
+              maxLength={6}
+              editable={!isDisabled}
+              autoFocus
+            />
+          </View>
+        </Animated.View>
+      )}
+
+      <View style={styles.inputRow}>
+        <View style={styles.inputActions}>
+          <IconButton
+            icon={() => <Camera size={22} color={COLORS.textMuted} />}
+            onPress={() => {}}
+            disabled={isDisabled}
+            size={22}
+          />
+          <IconButton
+            icon={() => (
+              <DollarSign
+                size={22}
+                color={showOfferInput ? COLORS.gold : COLORS.textMuted}
+              />
+            )}
+            onPress={toggleOfferInput}
+            disabled={isDisabled}
+            size={22}
+          />
+        </View>
+
+        {!showOfferInput && (
+          <TextInput
+            style={styles.textInput}
+            value={message}
+            onChangeText={setMessage}
+            placeholder="Type a message..."
+            placeholderTextColor={COLORS.textMuted}
+            multiline
+            maxLength={1000}
+            editable={!isDisabled}
+          />
+        )}
+
+        <Animated.View style={sendButtonStyle}>
+          <Pressable
+            onPress={showOfferInput ? handleSendOffer : handleSend}
+            disabled={!canSend || isDisabled}
+            style={[
+              styles.sendButton,
+              canSend && !isDisabled && styles.sendButtonActive,
+            ]}
+          >
+            <Send
+              size={20}
+              color={canSend && !isDisabled ? COLORS.textInverse : COLORS.textMuted}
+            />
+          </Pressable>
+        </Animated.View>
+      </View>
+    </View>
+  );
+}
 
 export default function ChatScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
   const { requestId } = useLocalSearchParams<{ requestId: string }>();
-  const { user } = useAuth();
+  const userMode = useAppStore((s) => s.userMode);
+  const [messages, setMessages] = useState<MockMessage[]>([]);
 
-  const { data: messages = [], isLoading } = useChatMessages(requestId ?? '');
-  const sendMessage = useSendMessage();
-  const sendOffer = useSendOffer();
+  const conversations = userMode === 'barber'
+    ? MOCK_CONVERSATIONS_BARBER
+    : MOCK_CONVERSATIONS_CUSTOMER;
 
-  const participants = useMemo<Record<string, ChatParticipant>>(() => {
-    return {
-      [user?.id ?? '']: {
-        id: user?.id ?? '',
-        display_name: user?.email?.split('@')[0] ?? 'You',
-        avatar_url: null,
-        user_type: 'customer',
-      },
-      'barber-demo': {
-        id: 'barber-demo',
-        display_name: 'Demo Barber',
-        avatar_url: null,
-        user_type: 'barber',
-      },
-    };
-  }, [user]);
+  const conversation = useMemo(
+    () => conversations.find((c) => c.id === requestId),
+    [conversations, requestId]
+  );
+
+  useEffect(() => {
+    const mockMessages = MOCK_MESSAGES[requestId ?? ''] ?? [];
+    setMessages([...mockMessages].reverse());
+  }, [requestId]);
 
   const handleSendMessage = useCallback((content: string) => {
-    if (!requestId || !user) return;
-    
-    sendMessage.mutate({
-      requestId,
-      senderId: user.id,
-      senderType: 'customer',
+    const newMessage: MockMessage = {
+      id: `msg-${Date.now()}`,
+      conversationId: requestId ?? '',
+      senderId: 'current-user',
+      senderType: userMode === 'barber' ? 'barber' : 'customer',
       content,
-    });
-  }, [requestId, user, sendMessage]);
+      messageType: 'text',
+      offerAmount: null,
+      offerStatus: null,
+      createdAt: new Date().toISOString(),
+    };
+    setMessages((prev) => [newMessage, ...prev]);
+  }, [requestId, userMode]);
 
   const handleSendOffer = useCallback((amount: number) => {
-    if (!requestId || !user) return;
-    
-    sendOffer.mutate({
-      requestId,
-      senderId: user.id,
-      senderType: 'customer',
-      amount,
-    });
-  }, [requestId, user, sendOffer]);
+    const newMessage: MockMessage = {
+      id: `msg-${Date.now()}`,
+      conversationId: requestId ?? '',
+      senderId: 'current-user',
+      senderType: userMode === 'barber' ? 'barber' : 'customer',
+      content: null,
+      messageType: 'offer',
+      offerAmount: amount,
+      offerStatus: 'pending',
+      createdAt: new Date().toISOString(),
+    };
+    setMessages((prev) => [newMessage, ...prev]);
+  }, [requestId, userMode]);
 
   const handleAcceptOffer = useCallback((messageId: string) => {
-    console.log('Accept offer:', messageId);
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.id === messageId ? { ...msg, offerStatus: 'accepted' as const } : msg
+      )
+    );
   }, []);
 
   const handleRejectOffer = useCallback((messageId: string) => {
-    console.log('Reject offer:', messageId);
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.id === messageId ? { ...msg, offerStatus: 'rejected' as const } : msg
+      )
+    );
   }, []);
 
-  const handleCounterOffer = useCallback((messageId: string) => {
-    console.log('Counter offer:', messageId);
-  }, []);
+  const renderMessage = useCallback(
+    ({ item }: { item: MockMessage }) => {
+      const isOwn = item.senderId === 'current-user';
+
+      switch (item.messageType) {
+        case 'text':
+          return (
+            <TextBubble
+              content={item.content ?? ''}
+              isOwn={isOwn}
+              timestamp={item.createdAt}
+              senderName={conversation?.participantName ?? 'Unknown'}
+              senderAvatar={conversation?.participantAvatar ?? null}
+            />
+          );
+
+        case 'offer':
+        case 'counter_offer':
+          return (
+            <OfferBubble
+              amount={item.offerAmount ?? 0}
+              status={item.offerStatus ?? 'pending'}
+              isOwn={isOwn}
+              timestamp={item.createdAt}
+              onAccept={() => handleAcceptOffer(item.id)}
+              onReject={() => handleRejectOffer(item.id)}
+              onCounter={() => {}}
+            />
+          );
+
+        case 'system':
+          return <SystemMessage content={item.content ?? ''} />;
+
+        default:
+          return null;
+      }
+    },
+    [conversation, handleAcceptOffer, handleRejectOffer]
+  );
+
+  const keyExtractor = useCallback((item: MockMessage) => item.id, []);
+
+  if (!conversation) {
+    return (
+      <View style={[styles.container, { paddingTop: insets.top }]}>
+        <View style={styles.header}>
+          <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <ArrowLeft size={24} color={COLORS.textPrimary} />
+          </Pressable>
+          <Text style={styles.headerName}>Conversation not found</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <X size={24} color="#111827" />
+          <ArrowLeft size={24} color={COLORS.textPrimary} />
         </Pressable>
-        
+
         <Pressable style={styles.headerProfile}>
-          <Avatar uri={null} name="Demo Barber" size={40} />
+          <Avatar
+            uri={conversation.participantAvatar}
+            name={conversation.participantName}
+            size={44}
+          />
           <View style={styles.headerInfo}>
-            <Text style={styles.headerName}>Demo Barber</Text>
-            <Text style={styles.headerStatus}>Negotiating price</Text>
+            <Text style={styles.headerName}>{conversation.participantName}</Text>
+            <View style={styles.headerStatusRow}>
+              {conversation.status === 'negotiating' && (
+                <>
+                  <Clock size={12} color={COLORS.warning} />
+                  <Text style={[styles.headerStatus, { color: COLORS.warning }]}>
+                    Negotiating price
+                  </Text>
+                </>
+              )}
+              {conversation.status === 'confirmed' && (
+                <>
+                  <Check size={12} color={COLORS.success} />
+                  <Text style={[styles.headerStatus, { color: COLORS.success }]}>
+                    Booking confirmed
+                  </Text>
+                </>
+              )}
+              {conversation.status === 'completed' && (
+                <Text style={[styles.headerStatus, { color: COLORS.textMuted }]}>
+                  Completed
+                </Text>
+              )}
+            </View>
           </View>
         </Pressable>
 
         <View style={styles.headerActions}>
           <Pressable style={styles.iconButton}>
-            <Phone size={20} color="#6B7280" />
+            <Phone size={20} color={COLORS.textMuted} />
           </Pressable>
           <Pressable style={styles.iconButton}>
-            <MoreVertical size={20} color="#6B7280" />
+            <MoreVertical size={20} color={COLORS.textMuted} />
           </Pressable>
         </View>
       </View>
+
+      {conversation.offeredPrice && (
+        <View style={styles.priceBar}>
+          <Sparkles size={14} color={COLORS.gold} />
+          <Text style={styles.priceBarText}>
+            Agreed price: <Text style={styles.priceBarAmount}>₪{conversation.offeredPrice}</Text>
+          </Text>
+          <Text style={styles.priceBarServices}>
+            {conversation.serviceNames.join(' + ')}
+          </Text>
+        </View>
+      )}
 
       <KeyboardAvoidingView
         style={styles.content}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={0}
       >
-        <MessageList
-          messages={messages}
-          currentUserId={user?.id ?? ''}
-          participants={participants}
-          onAcceptOffer={handleAcceptOffer}
-          onRejectOffer={handleRejectOffer}
-          onCounterOffer={handleCounterOffer}
-          isLoading={isLoading}
+        <FlashList
+          data={messages}
+          renderItem={renderMessage}
+          keyExtractor={keyExtractor}
+          estimatedItemSize={80}
+          inverted
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
         />
 
-        <ChatInput
+        <ChatInputComponent
           onSendMessage={handleSendMessage}
           onSendOffer={handleSendOffer}
-          isDisabled={sendMessage.isPending || sendOffer.isPending}
-          placeholder="Negotiate the price..."
+          isDisabled={false}
         />
       </KeyboardAvoidingView>
     </View>
@@ -126,16 +530,16 @@ export default function ChatScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: COLORS.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    backgroundColor: '#FFFFFF',
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: COLORS.border,
   },
   backButton: {
     width: 40,
@@ -148,25 +552,30 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    marginLeft: 8,
+    gap: SPACING.md,
+    marginLeft: SPACING.sm,
   },
   headerInfo: {
     flex: 1,
   },
   headerName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
+    fontSize: TYPOGRAPHY.md,
+    fontWeight: TYPOGRAPHY.semibold,
+    color: COLORS.textPrimary,
+  },
+  headerStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.xxs,
+    marginTop: 2,
   },
   headerStatus: {
-    fontSize: 13,
-    color: '#F59E0B',
-    fontWeight: '500',
+    fontSize: TYPOGRAPHY.sm,
+    fontWeight: TYPOGRAPHY.medium,
   },
   headerActions: {
     flexDirection: 'row',
-    gap: 4,
+    gap: SPACING.xxs,
   },
   iconButton: {
     width: 40,
@@ -175,7 +584,270 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  priceBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.sm,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.sm,
+    backgroundColor: COLORS.goldMuted,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  priceBarText: {
+    fontSize: TYPOGRAPHY.sm,
+    color: COLORS.textSecondary,
+  },
+  priceBarAmount: {
+    fontWeight: TYPOGRAPHY.bold,
+    color: COLORS.goldDark,
+  },
+  priceBarServices: {
+    fontSize: TYPOGRAPHY.xs,
+    color: COLORS.textMuted,
+    marginLeft: 'auto',
+  },
   content: {
     flex: 1,
+  },
+  listContent: {
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+  },
+  messageRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginBottom: SPACING.sm,
+    gap: SPACING.sm,
+  },
+  ownMessageRow: {
+    flexDirection: 'row-reverse',
+  },
+  bubbleContainer: {
+    maxWidth: '75%',
+  },
+  ownBubbleContainer: {
+    alignItems: 'flex-end',
+  },
+  textBubble: {
+    borderRadius: RADIUS.xl,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+  },
+  ownBubble: {
+    backgroundColor: COLORS.charcoal,
+    borderBottomRightRadius: SPACING.xxs,
+  },
+  otherBubble: {
+    backgroundColor: COLORS.surface,
+    borderBottomLeftRadius: SPACING.xxs,
+  },
+  messageText: {
+    fontSize: TYPOGRAPHY.base,
+    lineHeight: 22,
+    color: COLORS.textPrimary,
+  },
+  ownMessageText: {
+    color: COLORS.textInverse,
+  },
+  messageFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.xxs,
+    marginTop: SPACING.xxs,
+    marginHorizontal: SPACING.xxs,
+  },
+  timestamp: {
+    fontSize: TYPOGRAPHY.xs,
+    color: COLORS.textMuted,
+  },
+  offerRow: {
+    alignSelf: 'flex-start',
+    maxWidth: '85%',
+    marginVertical: SPACING.sm,
+  },
+  ownOfferRow: {
+    alignSelf: 'flex-end',
+  },
+  offerBubble: {
+    borderRadius: RADIUS.xl,
+    padding: SPACING.lg,
+    backgroundColor: COLORS.surface,
+    borderWidth: 1,
+    borderColor: COLORS.goldMuted,
+  },
+  offerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.xs,
+    marginBottom: SPACING.md,
+  },
+  offerLabel: {
+    fontSize: TYPOGRAPHY.sm,
+    fontWeight: TYPOGRAPHY.medium,
+    color: COLORS.textSecondary,
+    flex: 1,
+  },
+  statusBadge: {
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xxs,
+    borderRadius: RADIUS.sm,
+  },
+  statusText: {
+    fontSize: TYPOGRAPHY.xs,
+    fontWeight: TYPOGRAPHY.semibold,
+  },
+  offerAmountContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    justifyContent: 'center',
+    gap: SPACING.xxs,
+    marginBottom: SPACING.sm,
+  },
+  offerCurrency: {
+    fontSize: TYPOGRAPHY.lg,
+    fontWeight: TYPOGRAPHY.medium,
+    color: COLORS.textMuted,
+  },
+  offerAmount: {
+    fontSize: 36,
+    fontWeight: TYPOGRAPHY.bold,
+    color: COLORS.textPrimary,
+  },
+  offerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.sm,
+    marginTop: SPACING.md,
+  },
+  offerButton: {
+    flex: 1,
+    borderRadius: RADIUS.sm,
+  },
+  offerButtonLabel: {
+    fontSize: TYPOGRAPHY.sm,
+  },
+  counterButtonLabel: {
+    fontSize: TYPOGRAPHY.sm,
+    color: COLORS.goldDark,
+  },
+  rejectButton: {
+    width: 36,
+    height: 36,
+    borderRadius: RADIUS.sm,
+    borderWidth: 1,
+    borderColor: COLORS.errorLight,
+    backgroundColor: COLORS.errorLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  acceptedBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.xs,
+    marginTop: SPACING.md,
+    paddingTop: SPACING.md,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.successLight,
+  },
+  acceptedText: {
+    fontSize: TYPOGRAPHY.sm,
+    color: COLORS.success,
+    fontWeight: TYPOGRAPHY.medium,
+  },
+  offerTimestamp: {
+    fontSize: TYPOGRAPHY.xs,
+    color: COLORS.textMuted,
+    textAlign: 'center',
+    marginTop: SPACING.sm,
+  },
+  systemContainer: {
+    alignItems: 'center',
+    marginVertical: SPACING.md,
+    paddingHorizontal: SPACING.xl,
+  },
+  systemText: {
+    fontSize: TYPOGRAPHY.sm,
+    color: COLORS.textMuted,
+    textAlign: 'center',
+    backgroundColor: COLORS.borderLight,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.xs,
+    borderRadius: RADIUS.md,
+  },
+  inputContainer: {
+    backgroundColor: COLORS.surface,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.border,
+    paddingBottom: 34,
+  },
+  offerInputContainer: {
+    padding: SPACING.lg,
+    backgroundColor: COLORS.goldMuted,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  offerInputHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.xs,
+    marginBottom: SPACING.md,
+  },
+  offerInputLabel: {
+    flex: 1,
+    fontSize: TYPOGRAPHY.sm,
+    fontWeight: TYPOGRAPHY.medium,
+    color: COLORS.textSecondary,
+  },
+  offerInputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: SPACING.sm,
+  },
+  offerInputCurrency: {
+    fontSize: TYPOGRAPHY.xl,
+    fontWeight: TYPOGRAPHY.semibold,
+    color: COLORS.textMuted,
+  },
+  offerInputField: {
+    fontSize: 44,
+    fontWeight: TYPOGRAPHY.bold,
+    color: COLORS.textPrimary,
+    minWidth: 120,
+    textAlign: 'center',
+  },
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.sm,
+    gap: SPACING.xxs,
+  },
+  inputActions: {
+    flexDirection: 'row',
+  },
+  textInput: {
+    flex: 1,
+    backgroundColor: COLORS.borderLight,
+    borderRadius: RADIUS.xl,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+    paddingTop: SPACING.md,
+    fontSize: TYPOGRAPHY.base,
+    color: COLORS.textPrimary,
+    maxHeight: 100,
+    minHeight: 40,
+  },
+  sendButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.borderLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendButtonActive: {
+    backgroundColor: COLORS.goldDark,
   },
 });

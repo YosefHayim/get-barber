@@ -1,9 +1,9 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { Map, Calendar, User, MessageCircle } from 'lucide-react-native';
+import { LayoutDashboard, Briefcase, Calendar, User, TrendingUp } from 'lucide-react-native';
 import { COLORS } from '@/constants/theme';
 
-export default function TabsLayout(): React.JSX.Element {
+export default function BarberTabsLayout(): React.JSX.Element {
   return (
     <Tabs
       screenOptions={{
@@ -11,38 +11,31 @@ export default function TabsLayout(): React.JSX.Element {
         tabBarActiveTintColor: COLORS.gold,
         tabBarInactiveTintColor: COLORS.textMuted,
         tabBarStyle: {
-          backgroundColor: COLORS.surface,
-          borderTopColor: COLORS.border,
+          backgroundColor: COLORS.charcoal,
+          borderTopColor: COLORS.darkGray,
           borderTopWidth: 1,
           height: 84,
           paddingTop: 8,
           paddingBottom: 28,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: '600',
         },
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="dashboard"
         options={{
-          title: 'Find Barber',
-          tabBarIcon: ({ color, size }) => <Map size={size} color={color} />,
+          title: 'Dashboard',
+          tabBarIcon: ({ color, size }) => <LayoutDashboard size={size} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="bookings"
+        name="requests"
         options={{
-          title: 'Bookings',
-          tabBarIcon: ({ color, size }) => <Calendar size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="messages"
-        options={{
-          title: 'Messages',
-          tabBarIcon: ({ color, size }) => <MessageCircle size={size} color={color} />,
+          title: 'Requests',
+          tabBarIcon: ({ color, size }) => <Briefcase size={size} color={color} />,
           tabBarBadge: 3,
           tabBarBadgeStyle: {
             backgroundColor: COLORS.gold,
@@ -53,7 +46,21 @@ export default function TabsLayout(): React.JSX.Element {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="schedule"
+        options={{
+          title: 'Schedule',
+          tabBarIcon: ({ color, size }) => <Calendar size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="earnings"
+        options={{
+          title: 'Earnings',
+          tabBarIcon: ({ color, size }) => <TrendingUp size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="barber-profile"
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, size }) => <User size={size} color={color} />,
