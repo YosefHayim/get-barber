@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Barber Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                "primary": "#135bec",
+                "background-light": "#f6f6f8",
+                "background-dark": "#101622",
+                "surface-dark": "#1e293b",
+                "surface-light": "#ffffff",
+                },
+                fontFamily: {
+                "display": ["Inter", "sans-serif"]
+                },
+                borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+            },
+            },
+        }
+    </script>
+<style>.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-x-hidden selection:bg-primary selection:text-white pb-24">
+<div class="fixed top-0 left-0 right-0 z-50 p-4 pt-12 flex justify-between items-center transition-all duration-300 bg-gradient-to-b from-black/60 to-transparent">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-black/20 backdrop-blur-md text-white border border-white/10 hover:bg-black/40 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="flex gap-3">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-black/20 backdrop-blur-md text-white border border-white/10 hover:bg-black/40 transition-colors">
+<span class="material-symbols-outlined">ios_share</span>
+</button>
+</div>
+</div>
+<div class="relative w-full h-80">
+<div class="w-full h-full bg-cover bg-center" data-alt="Barber cutting hair in a modern shop with warm lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCn7kcREOcr6X5ldejj1YG2CU8HgKUkeMu4zFs7jqH8PkfWqqBoilGP2gMhUKSVj8uq_jMMRpoCa0_gEJL_55B4ZeISO2zTIiJW0lcB-2IiySNaw8NQhnURgG_bwIvViiMbPXny0rVFAC1m9JA1OsymEuqYKnUDieUJvAhqHnGUMfk48sDbQjaAJ2WntP_x7IKvq0NW1a4a2Qn4fQW2cqI4aeGVeKHAskrWm9nlG-c_gKsLZiGhXl3mEqfijDTBDL3XQ5jR0GZs5x53');">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/50 to-transparent"></div>
+<div class="absolute bottom-0 left-0 w-full p-4 pb-6">
+<div class="flex items-end justify-between gap-4">
+<div class="flex-1">
+<div class="flex gap-2 mb-2">
+<div class="flex h-6 shrink-0 items-center justify-center gap-x-1 rounded-full bg-green-500/20 border border-green-500/30 pl-2 pr-3">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+</span>
+<p class="text-green-400 text-xs font-bold uppercase tracking-wide">Online</p>
+</div>
+<div class="flex h-6 shrink-0 items-center justify-center gap-x-1 rounded-full bg-primary/20 border border-primary/30 pl-1 pr-2">
+<span class="material-symbols-outlined text-primary text-[16px]">verified</span>
+<p class="text-primary text-xs font-bold uppercase tracking-wide">Verified</p>
+</div>
+</div>
+<h1 class="text-white text-3xl font-bold leading-tight drop-shadow-sm">Alex "The Fade" Master</h1>
+<p class="text-gray-300 text-sm mt-1 font-medium">Specialist in classic cuts &amp; modern fades</p>
+</div>
+<button class="shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-primary hover:border-primary hover:text-white transition-all active:scale-95 group shadow-lg">
+<span class="material-symbols-outlined text-[28px] group-hover:scale-110 transition-transform">favorite</span>
+</button>
+</div>
+</div>
+</div>
+<div class="px-4 py-2 flex items-center justify-between border-b border-gray-800/50 pb-4">
+<div class="flex flex-col items-center">
+<div class="flex items-center gap-1 text-yellow-400">
+<span class="text-lg font-bold text-white">4.9</span>
+<span class="material-symbols-outlined fill-1 text-[18px]">star</span>
+</div>
+<span class="text-xs text-gray-400">(203 reviews)</span>
+</div>
+<div class="w-px h-8 bg-gray-800"></div>
+<div class="flex flex-col items-center">
+<span class="text-lg font-bold text-white">1.2<span class="text-sm font-normal text-gray-400 ml-0.5">km</span></span>
+<span class="text-xs text-gray-400">Distance</span>
+</div>
+<div class="w-px h-8 bg-gray-800"></div>
+<div class="flex flex-col items-center">
+<span class="text-lg font-bold text-white">$$</span>
+<span class="text-xs text-gray-400">Price Range</span>
+</div>
+</div>
+<div class="pt-6 pb-2">
+<div class="flex items-center justify-between px-4 mb-3">
+<h2 class="text-lg font-bold text-white">Recent Work</h2>
+<button class="text-primary text-sm font-semibold">See All</button>
+</div>
+<div class="flex gap-3 overflow-x-auto px-4 no-scrollbar pb-2">
+<div class="relative shrink-0 w-32 h-32 rounded-xl overflow-hidden group">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Sharp fade haircut side profile" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDzgjalsKw5n2hNeZlLemcsihS3AxqHdMKRIPvRxf_PKuyaq5cv7MNbJ_LAkHcS57Eb3qG2vAnHwHLayyLZfPf8Er2GrvQPKwzGJPrOcD0VgUi74PUAvwMxODOdaGsVdD6omNS-WzZtn6cd0S_3fNMXP9CCQ4CJmppLxE1cMr6QQV7XYSjnlFFlokp_755KjEgqe7Hb8jAi3IceGR2xAzPs8lOcL16FED9No61ycMFWGeMkD5Jz2nDwnBWkhWvhnN4DxZh15YzYTngh');"></div>
+</div>
+<div class="relative shrink-0 w-32 h-32 rounded-xl overflow-hidden group">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Beard trim and lineup closeup" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDu4qBHUBs3qNbHDOrZeF3Lwl4EhCO7iP2UsWu88A8EHgtM3SBYHAeJ_QsO3ECQ-zNcm14XPiSf6IDk3WXgf1T5vGnM8gRUxwBs2Za5L1zkVqc1tbvsaAPDxx3IXoor8xbhclVmqiU9uOxMbJ5s7k_ULgdGUT3WOWCMxAKYbERM4qelTGIbdJGtT65-LBSI7W06FR4rLRnshZ1V3tJRIeRq4bc39Il2dlXaXBr-z1uAcwYrTkC0VIQe-tBFS8Crfv1JwBeLZoqag4nm');"></div>
+</div>
+<div class="relative shrink-0 w-32 h-32 rounded-xl overflow-hidden group">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Modern textured crop haircut" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdkCIZkHmcB1wmK6XSJL_tVZiF6PsEia1g2iZF-4DY0RQmE-ynVBpGSbcDsTWW3XuzeQiNuulLCf71qQAHETqxzBOEjq7ofOMJU8m5T86uUP9jA8f98oiLpTFC9erxJEa1GFCFBWD5-pxTZFd9YtNYF9K_BrtjvgR27Jo8j_CYsRa0kXKYmXez9eAC2spzsY28akWTbrOvwl2voad9Um45N2GhAg3XyQ1MuVgmM7qmleyTvyJOIu26dv-N3-9X-6d8PwDxcqi7xfZ4');"></div>
+</div>
+<div class="relative shrink-0 w-32 h-32 rounded-xl overflow-hidden group">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Classic gentleman's cut" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB4cJLbL7jJruN9nqbB3NpfYDhpW8sTnXFMe6GLNzsCxzlTz-k0e8gYuuI-4237qsB9hbinE1x97EwHObQlhKY74aTHvwAj_by6VAnEBOB7D6tTR1YCxXUtxb1i_xjzLfHu4x9ifBC7Tok9ctwK3jCONL2gcXUhj_lXIBsHhzEMwFFiqcJm6umgHcpLvP-E9l6cp3RK9NU0VKnZIZ2P2wEVrB3q_umkHPyk_jXCnutMQGQUFG0dnLNkQHq1O7CL6MW1KCKTPVlbnNlU');"></div>
+</div>
+</div>
+</div>
+<div class="px-4 py-4">
+<h2 class="text-lg font-bold text-white mb-4">Services</h2>
+<div class="space-y-3">
+<div class="group relative flex items-center justify-between p-4 rounded-xl bg-surface-dark border border-gray-800 hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex-1 pr-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-semibold text-white">Skin Fade</h3>
+<span class="text-white font-bold">$35.00</span>
+</div>
+<p class="text-sm text-gray-400 line-clamp-1">Precise fade with straight razor lineup.</p>
+<div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>45 min</span>
+</div>
+</div>
+<button class="shrink-0 h-8 w-8 rounded-full bg-gray-700 text-white flex items-center justify-center hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<div class="group relative flex items-center justify-between p-4 rounded-xl bg-surface-dark border border-gray-800 hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex-1 pr-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-semibold text-white">Beard Sculpt &amp; Trim</h3>
+<span class="text-white font-bold">$25.00</span>
+</div>
+<p class="text-sm text-gray-400 line-clamp-1">Shape up, trim, and hot towel finish.</p>
+<div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>25 min</span>
+</div>
+</div>
+<button class="shrink-0 h-8 w-8 rounded-full bg-gray-700 text-white flex items-center justify-center hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<div class="group relative flex items-center justify-between p-4 rounded-xl bg-surface-dark border border-gray-800 hover:border-primary/50 transition-all cursor-pointer ring-1 ring-primary/50 bg-primary/5">
+<div class="flex-1 pr-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-semibold text-white">The Full Experience</h3>
+<span class="text-white font-bold">$55.00</span>
+</div>
+<p class="text-sm text-gray-400 line-clamp-1">Haircut, beard trim, wash &amp; style.</p>
+<div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>60 min</span>
+</div>
+</div>
+<button class="shrink-0 h-8 w-8 rounded-full bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</button>
+</div>
+<div class="group relative flex items-center justify-between p-4 rounded-xl bg-surface-dark border border-gray-800 hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex-1 pr-4">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-semibold text-white">Kids Cut</h3>
+<span class="text-white font-bold">$25.00</span>
+</div>
+<p class="text-sm text-gray-400 line-clamp-1">Patient and stylish cuts for under 12s.</p>
+<div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>30 min</span>
+</div>
+</div>
+<button class="shrink-0 h-8 w-8 rounded-full bg-gray-700 text-white flex items-center justify-center hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<div class="px-4 py-4 mb-20">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg font-bold text-white">What clients say</h2>
+<button class="text-primary text-sm font-semibold">View all 203</button>
+</div>
+<div class="p-4 rounded-xl bg-surface-dark border border-gray-800">
+<div class="flex gap-3 mb-3">
+<div class="h-10 w-10 rounded-full bg-cover bg-center" data-alt="Portrait of a smiling male customer" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLg_gI2llADsSD4SMMFliMAus-yckeAdp9xrgDLyvrhHI1KHZI0jYdFdaQiosqntM-ev4JI2FEGXsGUoQoZa05zzddmycF2K3mMZ7-iQS1JLNsfqrzidfgS-DgSoLzNluinRwmbhkdEcm3Bq3c35EMUoAKEz3V9LFvfUudfWm7Zi-VAzoh0gNxFOL9uHS1d_0INSbdJTnw4U3mGgrDJ89dz8zn-aYOrkDWKYaS277V-XqJR5powzNHHq74DSTw965cOTpLYXib8_mk')"></div>
+<div>
+<h4 class="text-sm font-bold text-white">Michael R.</h4>
+<div class="flex text-yellow-400 text-xs">
+<span class="material-symbols-outlined text-[14px] fill-1">star</span>
+<span class="material-symbols-outlined text-[14px] fill-1">star</span>
+<span class="material-symbols-outlined text-[14px] fill-1">star</span>
+<span class="material-symbols-outlined text-[14px] fill-1">star</span>
+<span class="material-symbols-outlined text-[14px] fill-1">star</span>
+</div>
+</div>
+<span class="ml-auto text-xs text-gray-500">2d ago</span>
+</div>
+<p class="text-sm text-gray-300 leading-relaxed">
+                "Alex is the real deal. Arrived right on time at my apartment and set up in minutes. The fade is cleaner than any shop I've been to. Highly recommend!"
+            </p>
+</div>
+</div>
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-dark/90 backdrop-blur-lg border-t border-gray-800 z-50">
+<div class="flex items-center gap-4 max-w-lg mx-auto w-full">
+<div class="flex flex-col">
+<span class="text-xs text-gray-400">Total</span>
+<span class="text-xl font-bold text-white">$55.00</span>
+</div>
+<button class="flex-1 bg-primary hover:bg-blue-600 text-white font-bold h-12 rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/25 active:scale-[0.98]">
+<span>Book Appointment</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+<div class="h-1 w-full flex justify-center mt-2">
+<div class="w-1/3 h-1 bg-white/20 rounded-full"></div>
+</div>
+</div>
+</body></html>

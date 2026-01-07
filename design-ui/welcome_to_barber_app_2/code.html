@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Welcome to Barber App</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-slate-900 dark:text-white">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-hidden max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark">
+<!-- Top App Bar -->
+<div class="flex items-center px-4 py-4 pt-10 justify-between absolute top-0 w-full z-10 bg-gradient-to-b from-background-dark/80 to-transparent">
+<div class="text-white flex size-10 shrink-0 items-center justify-center rounded-full bg-background-dark/30 backdrop-blur-sm border border-white/10">
+<span class="material-symbols-outlined text-white" style="font-size: 20px;">content_cut</span>
+</div>
+<h2 class="text-white text-sm font-semibold tracking-wide uppercase opacity-80 flex-1 text-center pr-10">Barber App</h2>
+</div>
+<!-- Hero Image Section -->
+<div class="relative flex-1 w-full min-h-[50vh] flex flex-col justify-end">
+<!-- Background Image -->
+<div class="absolute inset-0 w-full h-full bg-center bg-no-repeat bg-cover" data-alt="Close up of a barber styling a client's hair in a moody, modern barbershop setting" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB37DVbg6xJaNXUCu1hghXfOAQ3s02D-MlKsO0KuaHGyXTYXGHjBBC74p8SZEYxH3e_WkMAFMCRPCZJkCS33qOQBG_SgBeSKCFbCwedgkTKuQ7LrGnBXU1pD4IiLyWlZHnQAs0CUOrdRG2lTFYtZHav54qJQ5Wq8NhqmgeS7R8ljGCVzs-2wBxIrvBRdfdsJsdqofrmF8mL48ygQRGYBU0BNJ2422g1tmOt35VjbmNW6Fz-Yqkh2VNJ_HuVJWNECWvwzJeQBSy6YXvi");'>
+<!-- Gradient Overlay for readability -->
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/60 to-transparent"></div>
+</div>
+<!-- Content Container -->
+<div class="relative z-10 px-6 pb-6 pt-20 flex flex-col gap-2">
+<!-- Badge -->
+<div class="self-start inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 backdrop-blur-md mb-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+<span class="text-xs font-medium text-blue-200">Live in your area</span>
+</div>
+<!-- Headline -->
+<h1 class="text-white tracking-tight text-[40px] font-extrabold leading-[1.1]">
+                    Your Barber,<br/> <span class="text-primary">Your Terms.</span>
+</h1>
+<!-- Body Text -->
+<p class="text-gray-300 text-lg font-normal leading-relaxed max-w-[90%]">
+                    Book a professional barber to your doorstep or find an open chair near you in minutes.
+                </p>
+</div>
+</div>
+<!-- Features Grid -->
+<div class="bg-background-dark px-4 pb-2">
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col gap-2 rounded-xl border border-white/5 bg-white/5 p-4 transition-colors hover:bg-white/10">
+<div class="text-primary p-2 bg-primary/10 rounded-lg w-fit">
+<span class="material-symbols-outlined" style="font-size: 24px;">star</span>
+</div>
+<div>
+<h2 class="text-white text-sm font-bold leading-tight">Top-rated Pros</h2>
+<p class="text-gray-400 text-xs mt-1">4.8+ Average Rating</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl border border-white/5 bg-white/5 p-4 transition-colors hover:bg-white/10">
+<div class="text-primary p-2 bg-primary/10 rounded-lg w-fit">
+<span class="material-symbols-outlined" style="font-size: 24px;">verified_user</span>
+</div>
+<div>
+<h2 class="text-white text-sm font-bold leading-tight">Sanitized Kits</h2>
+<p class="text-gray-400 text-xs mt-1">Health &amp; Safety First</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="bg-background-dark p-6 pb-10 flex flex-col gap-3">
+<button class="group relative w-full flex items-center justify-center gap-3 bg-primary hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-xl transition-all shadow-lg shadow-primary/20 active:scale-[0.98]">
+<span class="material-symbols-outlined">home_pin</span>
+<span>Book a House Call</span>
+<span class="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</span>
+</button>
+<button class="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold py-4 px-6 rounded-xl transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">storefront</span>
+<span>Find a Shop Nearby</span>
+</button>
+<div class="pt-4 text-center">
+<p class="text-sm text-gray-500">
+                    Already have an account? 
+                    <a class="text-primary font-medium hover:text-blue-400 hover:underline transition-colors" href="#">Log in</a>
+</p>
+</div>
+</div>
+</div>
+</body></html>

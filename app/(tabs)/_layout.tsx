@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { Map, Calendar, User, MessageCircle } from 'lucide-react-native';
+import { Home, Map, Calendar, User, MessageCircle } from 'lucide-react-native';
 import { COLORS } from '@/constants/theme';
 
 export default function TabsLayout(): React.JSX.Element {
@@ -25,9 +25,16 @@ export default function TabsLayout(): React.JSX.Element {
       }}
     >
       <Tabs.Screen
+        name="home"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, size }) => <Home size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="index"
         options={{
-          title: 'Find Barber',
+          title: 'Map',
           tabBarIcon: ({ color, size }) => <Map size={size} color={color} />,
         }}
       />

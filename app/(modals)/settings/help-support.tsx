@@ -22,10 +22,7 @@ import {
   ExternalLink,
   Send,
 } from 'lucide-react-native';
-
-const GOLD = '#DAA520';
-const DARK_GOLD = '#B8860B';
-const BURGUNDY = '#722F37';
+import { DARK_COLORS } from '@/constants/theme';
 
 interface FAQItem {
   id: string;
@@ -73,7 +70,7 @@ function FAQSection({ item, isExpanded, onToggle }: { item: FAQItem; isExpanded:
         <Text style={styles.faqQuestion}>{item.question}</Text>
         <ChevronRight
           size={20}
-          color="#6B7280"
+          color={DARK_COLORS.textMuted}
           style={{
             transform: [{ rotate: isExpanded ? '90deg' : '0deg' }],
           }}
@@ -137,10 +134,11 @@ export default function HelpSupportScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Help & Support',
-          headerTitleStyle: { fontWeight: '700', color: BURGUNDY },
+          headerStyle: { backgroundColor: DARK_COLORS.background },
+          headerTitleStyle: { fontWeight: '700', color: DARK_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
-              <ArrowLeft size={24} color={BURGUNDY} />
+              <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
             </Pressable>
           ),
         }}
@@ -152,7 +150,7 @@ export default function HelpSupportScreen(): React.JSX.Element {
           { paddingBottom: insets.bottom + 24 },
         ]}
       >
-        <Surface style={styles.contactCard} elevation={1}>
+        <Surface style={styles.contactCard} elevation={0}>
           <Text style={styles.sectionTitle}>Contact Us</Text>
           <Text style={styles.contactSubtitle}>
             We're here to help! Reach out through any of these channels:
@@ -173,7 +171,7 @@ export default function HelpSupportScreen(): React.JSX.Element {
               style={styles.contactMethod}
               onPress={() => handleContact('email')}
             >
-              <View style={[styles.contactIcon, { backgroundColor: DARK_GOLD }]}>
+              <View style={[styles.contactIcon, { backgroundColor: DARK_COLORS.primary }]}>
                 <Mail size={22} color="#FFFFFF" />
               </View>
               <Text style={styles.contactLabel}>Email</Text>
@@ -183,7 +181,7 @@ export default function HelpSupportScreen(): React.JSX.Element {
               style={styles.contactMethod}
               onPress={() => handleContact('phone')}
             >
-              <View style={[styles.contactIcon, { backgroundColor: BURGUNDY }]}>
+              <View style={[styles.contactIcon, { backgroundColor: DARK_COLORS.accent }]}>
                 <Phone size={22} color="#FFFFFF" />
               </View>
               <Text style={styles.contactLabel}>Call</Text>
@@ -191,17 +189,19 @@ export default function HelpSupportScreen(): React.JSX.Element {
           </View>
         </Surface>
 
-        <Surface style={styles.messageCard} elevation={1}>
+        <Surface style={styles.messageCard} elevation={0}>
           <Text style={styles.sectionTitle}>Send Us a Message</Text>
           <TextInput
             value={message}
             onChangeText={setMessage}
             placeholder="Describe your issue or question..."
+            placeholderTextColor={DARK_COLORS.textMuted}
             mode="outlined"
             style={styles.messageInput}
             outlineStyle={styles.inputOutline}
-            outlineColor="#E5E7EB"
-            activeOutlineColor={DARK_GOLD}
+            outlineColor={DARK_COLORS.border}
+            activeOutlineColor={DARK_COLORS.primary}
+            textColor={DARK_COLORS.textPrimary}
             multiline
             numberOfLines={4}
           />
@@ -213,7 +213,7 @@ export default function HelpSupportScreen(): React.JSX.Element {
             icon={() => <Send size={18} color="#FFFFFF" />}
             style={styles.sendButton}
             contentStyle={styles.sendButtonContent}
-            buttonColor={DARK_GOLD}
+            buttonColor={DARK_COLORS.primary}
           >
             Send Message
           </Button>
@@ -221,7 +221,7 @@ export default function HelpSupportScreen(): React.JSX.Element {
 
         <Text style={styles.faqTitle}>Frequently Asked Questions</Text>
 
-        <Surface style={styles.faqCard} elevation={1}>
+        <Surface style={styles.faqCard} elevation={0}>
           {FAQ_ITEMS.map((item, index) => (
             <View key={item.id}>
               <FAQSection
@@ -238,16 +238,16 @@ export default function HelpSupportScreen(): React.JSX.Element {
 
         <Text style={styles.legalTitle}>Legal</Text>
 
-        <Surface style={styles.legalCard} elevation={1}>
+        <Surface style={styles.legalCard} elevation={0}>
           <Pressable
             style={styles.legalItem}
             onPress={() => handleOpenLink('terms')}
           >
             <View style={styles.legalIcon}>
-              <FileText size={20} color={DARK_GOLD} />
+              <FileText size={20} color={DARK_COLORS.primary} />
             </View>
             <Text style={styles.legalLabel}>Terms of Service</Text>
-            <ExternalLink size={18} color="#9CA3AF" />
+            <ExternalLink size={18} color={DARK_COLORS.textMuted} />
           </Pressable>
 
           <Divider style={styles.divider} />
@@ -257,10 +257,10 @@ export default function HelpSupportScreen(): React.JSX.Element {
             onPress={() => handleOpenLink('privacy')}
           >
             <View style={styles.legalIcon}>
-              <Shield size={20} color={DARK_GOLD} />
+              <Shield size={20} color={DARK_COLORS.primary} />
             </View>
             <Text style={styles.legalLabel}>Privacy Policy</Text>
-            <ExternalLink size={18} color="#9CA3AF" />
+            <ExternalLink size={18} color={DARK_COLORS.textMuted} />
           </Pressable>
         </Surface>
 
@@ -276,7 +276,7 @@ export default function HelpSupportScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: DARK_COLORS.background,
   },
   scrollContent: {
     padding: 16,
@@ -286,19 +286,21 @@ const styles = StyleSheet.create({
   },
   contactCard: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     padding: 20,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   sectionTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: BURGUNDY,
+    color: DARK_COLORS.textPrimary,
     marginBottom: 8,
   },
   contactSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: DARK_COLORS.textMuted,
     marginBottom: 20,
     lineHeight: 20,
   },
@@ -320,16 +322,18 @@ const styles = StyleSheet.create({
   contactLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#374151',
+    color: DARK_COLORS.textSecondary,
   },
   messageCard: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     padding: 20,
     marginBottom: 24,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   messageInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surfaceLight,
     marginBottom: 16,
   },
   inputOutline: {
@@ -344,7 +348,7 @@ const styles = StyleSheet.create({
   faqTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: DARK_COLORS.textMuted,
     marginBottom: 12,
     marginLeft: 4,
     textTransform: 'uppercase',
@@ -352,9 +356,11 @@ const styles = StyleSheet.create({
   },
   faqCard: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     overflow: 'hidden',
     marginBottom: 24,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   faqItem: {
     padding: 16,
@@ -367,25 +373,25 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: DARK_COLORS.textPrimary,
     paddingRight: 12,
   },
   faqAnswer: {
     fontSize: 14,
-    color: '#6B7280',
+    color: DARK_COLORS.textSecondary,
     lineHeight: 22,
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: DARK_COLORS.border,
   },
   divider: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: DARK_COLORS.border,
   },
   legalTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: DARK_COLORS.textMuted,
     marginBottom: 12,
     marginLeft: 4,
     textTransform: 'uppercase',
@@ -393,9 +399,11 @@ const styles = StyleSheet.create({
   },
   legalCard: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     overflow: 'hidden',
     marginBottom: 24,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   legalItem: {
     flexDirection: 'row',
@@ -406,7 +414,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: 'rgba(218, 165, 32, 0.1)',
+    backgroundColor: DARK_COLORS.primaryMuted,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -415,7 +423,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     fontWeight: '500',
-    color: '#111827',
+    color: DARK_COLORS.textPrimary,
   },
   versionInfo: {
     alignItems: 'center',
@@ -424,11 +432,11 @@ const styles = StyleSheet.create({
   versionText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: DARK_COLORS.textMuted,
     marginBottom: 4,
   },
   copyrightText: {
     fontSize: 12,
-    color: '#D1D5DB',
+    color: DARK_COLORS.textMuted,
   },
 });

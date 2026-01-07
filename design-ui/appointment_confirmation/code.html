@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Appointment Confirmation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1C2333",
+                        "text-secondary-light": "#6b7280",
+                        "text-secondary-dark": "#9ca3af",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem", 
+                        "lg": "0.5rem", 
+                        "xl": "0.75rem", 
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-gray-900 dark:text-white transition-colors duration-200">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto shadow-2xl">
+<!-- Header -->
+<header class="flex items-center p-4 justify-between sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined text-gray-900 dark:text-white" style="font-size: 24px;">close</span>
+</button>
+<h2 class="text-lg font-bold leading-tight tracking-tight">Confirmation</h2>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<!-- Success Animation & Message -->
+<div class="flex flex-col items-center px-6 pt-4 pb-8 text-center animate-fade-in">
+<div class="flex items-center justify-center w-20 h-20 rounded-full bg-primary/20 mb-6">
+<span class="material-symbols-outlined text-primary" style="font-size: 48px;">check_circle</span>
+</div>
+<h1 class="text-2xl font-bold leading-tight mb-2">Appointment Confirmed!</h1>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm">
+                Your booking ID is <span class="font-mono font-medium text-gray-900 dark:text-white">#83921</span>.
+                <br/>We've sent the details to your email.
+            </p>
+</div>
+<!-- Scrollable Content Area -->
+<div class="flex-1 px-4 flex flex-col gap-4 pb-24">
+<!-- Barber Profile Card -->
+<div class="bg-card-light dark:bg-card-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-4">
+<div class="relative">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-16 w-16 border-2 border-primary/20" data-alt="Portrait of a professional barber named Mike" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBH2aaBVmH759K0x7j2BVXiPYoLEY99gXBgkZCr8xUqYhwacfwPYoFOGvTL_ofueYp8YqLUrlIokwKHl0Eu3ZsrlJLpYOjFwJ9-zT8wirZowEXb6Zct17O6oGZPMpWW6iYpQAb6Z1TeZzWCP9sK1vFuCgpFp-F2Xcvqs9wVghTCj8QjrQp1elHs3WDVb8LsI-4uKv8JeRhNNovDqq3iKtLhMxBRTLAYfocmTG8-KxUU1BFcaBJdJG6iTirLKa6Pb1xYyJbHuijB8Rz2");'>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-primary text-white rounded-full p-1 border-2 border-card-light dark:border-card-dark flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 14px;">verified</span>
+</div>
+</div>
+<div class="flex flex-col">
+<h3 class="text-lg font-bold">Barber Mike</h3>
+<div class="flex items-center gap-1 text-sm text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined text-yellow-400 filled" style="font-size: 16px; font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-medium text-gray-900 dark:text-white">4.9</span>
+<span>•</span>
+<span>Traveling to you</span>
+</div>
+</div>
+<div class="ml-auto">
+<button class="p-2 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-size: 24px;">chat_bubble</span>
+</button>
+</div>
+</div>
+<!-- Booking Details Card -->
+<div class="bg-card-light dark:bg-card-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col gap-4">
+<h3 class="text-sm uppercase tracking-wider font-bold text-text-secondary-light dark:text-text-secondary-dark">Itinerary</h3>
+<!-- Time -->
+<div class="flex items-start gap-3">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white">
+<span class="material-symbols-outlined">calendar_month</span>
+</div>
+<div class="flex flex-col">
+<p class="font-bold text-base">Friday, Oct 24</p>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">14:00 - 15:00</p>
+</div>
+<div class="ml-auto">
+<button class="text-primary text-sm font-semibold hover:underline">Add to Calendar</button>
+</div>
+</div>
+<!-- Divider -->
+<div class="h-px w-full bg-gray-200 dark:bg-gray-700"></div>
+<!-- Location -->
+<div class="flex items-start gap-3">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div class="flex flex-col w-full">
+<p class="font-bold text-base">Home</p>
+<p class="text-sm text-text-secondary-light dark:text-text-secondary-dark mb-3">123 Main Street, Apt 4B, New York</p>
+<!-- Map Snippet -->
+<div class="relative w-full h-32 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="Map showing the location of the appointment in New York" data-location="New York" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuClu_riJrIA3UTFsCJZoIO0TOGLHT4Qk3ZXUNdZ9DJqBFozAQArxjntHCv5Ubzs20pEgsvvNyqP1bbWq28yfGYYJ_3oLTWvaBZVpjuRUsGtVDoNcgTRzlr97F7UxO5IvKKONRK4aWGPgbut4ySQrru2bVnYC5s88T79dR3RPoN6FhIzWZzrdFPk180gvE9xec2viYLL0HUwP9oVdz9hL7Mojg5oKbSwhjhnJMDO4Nwr5nZhgoMPp2H2W_l_aVhgdc9AkUmUNzTd5-ky");'>
+</div>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary drop-shadow-lg filled" style="font-size: 36px; font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Receipt Card -->
+<div class="bg-card-light dark:bg-card-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col gap-3">
+<h3 class="text-sm uppercase tracking-wider font-bold text-text-secondary-light dark:text-text-secondary-dark mb-1">Receipt</h3>
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-700 dark:text-gray-300">Skin Fade</span>
+<span class="font-medium">$45.00</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-700 dark:text-gray-300">Beard Trim</span>
+<span class="font-medium">$15.00</span>
+</div>
+<div class="h-px w-full bg-gray-200 dark:bg-gray-700 my-1"></div>
+<div class="flex justify-between items-center text-base font-bold">
+<span>Total</span>
+<span>$60.00</span>
+</div>
+</div>
+<!-- Help Link -->
+<div class="flex justify-center py-2">
+<button class="text-sm text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 16px;">help</span>
+                    Need to reschedule?
+                </button>
+</div>
+</div>
+<!-- Sticky Footer Action -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 max-w-md mx-auto z-20">
+<button class="w-full bg-primary hover:bg-blue-600 text-white font-bold h-12 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+<span>Done</span>
+</button>
+</div>
+</div>
+</body></html>

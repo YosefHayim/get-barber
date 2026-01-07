@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add New Card</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-dark": "#192233",
+                        "border-dark": "#324467",
+                        "text-secondary": "#92a4c9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        /* Custom scrollbar hide for clean mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-gray-900 dark:text-white">
+<div class="relative flex min-h-screen w-full flex-col overflow-hidden max-w-md mx-auto shadow-2xl">
+<!-- Header -->
+<div class="flex items-center p-4 pb-2 justify-between sticky top-0 z-10 bg-background-light dark:bg-background-dark/95 backdrop-blur-sm">
+<button class="text-gray-900 dark:text-white flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h2 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Add New Card</h2>
+</div>
+<!-- Main Content Scroll Area -->
+<div class="flex-1 overflow-y-auto px-4 py-2 pb-32">
+<!-- Card Visualization -->
+<div class="mt-4 mb-8">
+<div class="relative w-full aspect-[1.586/1] rounded-xl overflow-hidden shadow-xl transform transition-transform duration-500 hover:scale-[1.02]">
+<!-- Abstract Background -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary to-purple-600" data-alt="Blue and purple gradient background representing a credit card design"></div>
+<!-- Card Noise Texture Overlay (Simulated with CSS) -->
+<div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-between text-white">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-4xl opacity-80">contactless</span>
+<span class="font-bold text-lg italic opacity-90">VISA</span>
+</div>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="font-mono text-2xl tracking-widest drop-shadow-md">
+                                    4242 4242 4242 4242
+                                </div>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-xs uppercase opacity-70 mb-1">Card Holder</p>
+<p class="font-medium tracking-wide uppercase truncate max-w-[180px]">John Doe</p>
+</div>
+<div>
+<p class="text-xs uppercase opacity-70 mb-1 text-right">Expires</p>
+<p class="font-medium tracking-wide">12/25</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Form Fields -->
+<div class="space-y-5">
+<!-- Headline -->
+<h3 class="text-gray-900 dark:text-white tracking-tight text-xl font-bold leading-tight pt-2">Card Details</h3>
+<!-- Card Number Input -->
+<label class="flex flex-col w-full">
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal pb-2">Card Number</p>
+<div class="flex w-full items-stretch rounded-lg group focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent transition-all duration-200">
+<div class="relative flex-1">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-l-lg border border-gray-300 dark:border-border-dark bg-white dark:bg-surface-dark h-12 px-4 text-base font-normal leading-normal text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-text-secondary focus:outline-0 focus:ring-0 border-r-0" inputmode="numeric" pattern="[0-9]*" placeholder="0000 0000 0000 0000" type="text"/>
+</div>
+<button class="text-primary dark:text-primary flex items-center justify-center px-4 rounded-r-lg border border-l-0 border-gray-300 dark:border-border-dark bg-white dark:bg-surface-dark hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[24px]">photo_camera</span>
+</button>
+</div>
+</label>
+<!-- Cardholder Name Input -->
+<label class="flex flex-col w-full">
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal pb-2">Cardholder Name</p>
+<input class="form-input flex w-full resize-none overflow-hidden rounded-lg border border-gray-300 dark:border-border-dark bg-white dark:bg-surface-dark h-12 px-4 text-base font-normal leading-normal text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-transparent focus:outline-0 transition-all duration-200" placeholder="John Doe" type="text"/>
+</label>
+<!-- Expiry and CVV Row -->
+<div class="flex gap-4">
+<label class="flex flex-col flex-1">
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal pb-2">Expiry Date</p>
+<input class="form-input flex w-full resize-none overflow-hidden rounded-lg border border-gray-300 dark:border-border-dark bg-white dark:bg-surface-dark h-12 px-4 text-base font-normal leading-normal text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-transparent focus:outline-0 transition-all duration-200" inputmode="numeric" placeholder="MM/YY" type="text"/>
+</label>
+<label class="flex flex-col flex-1">
+<div class="flex items-center gap-1 pb-2">
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal">CVV</p>
+<span class="material-symbols-outlined text-gray-400 text-[16px] cursor-help" title="3 digits on back of card">help</span>
+</div>
+<input class="form-input flex w-full resize-none overflow-hidden rounded-lg border border-gray-300 dark:border-border-dark bg-white dark:bg-surface-dark h-12 px-4 text-base font-normal leading-normal text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-transparent focus:outline-0 transition-all duration-200" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="123" type="password"/>
+</label>
+</div>
+<!-- Save Checkbox (Optional but common in flow) -->
+<div class="flex items-center gap-3 py-2">
+<div class="relative flex items-center">
+<input checked="" class="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 dark:border-border-dark bg-white dark:bg-surface-dark checked:bg-primary checked:border-primary focus:ring-offset-0 focus:ring-0 transition-all" id="save-future" type="checkbox"/>
+<span class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
+<span class="material-symbols-outlined text-[16px] font-bold">check</span>
+</span>
+</div>
+<label class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer select-none" for="save-future">Set as default payment method</label>
+</div>
+</div>
+<!-- Security Badge -->
+<div class="mt-8 flex items-center justify-center gap-2 opacity-60">
+<span class="material-symbols-outlined text-green-500 text-sm">lock</span>
+<p class="text-xs text-gray-500 dark:text-gray-400">128-bit SSL Secured. Your data is safe.</p>
+</div>
+<!-- Bottom Spacer for Fixed Button -->
+<div class="h-20"></div>
+</div>
+<!-- Sticky Footer Action -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-light dark:bg-background-dark border-t border-gray-200 dark:border-border-dark/50 z-20 max-w-md mx-auto">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-primary/25 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+<span>Save Card</span>
+</button>
+</div>
+</div>
+</body></html>

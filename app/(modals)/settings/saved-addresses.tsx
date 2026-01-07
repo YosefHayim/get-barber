@@ -6,7 +6,7 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
-import { Text, Surface, Button, TextInput, Portal, Modal } from 'react-native-paper';
+import { Text, Button, TextInput, Portal, Modal } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, Stack } from 'expo-router';
 import {
@@ -15,15 +15,11 @@ import {
   Home,
   Briefcase,
   Plus,
-  MoreVertical,
   Trash2,
   Edit3,
   Star,
 } from 'lucide-react-native';
-
-const GOLD = '#DAA520';
-const DARK_GOLD = '#B8860B';
-const BURGUNDY = '#722F37';
+import { DARK_COLORS } from '@/constants/theme';
 
 interface SavedAddress {
   id: string;
@@ -53,11 +49,11 @@ const MOCK_ADDRESSES: SavedAddress[] = [
 function AddressIcon({ type }: { type: SavedAddress['type'] }) {
   switch (type) {
     case 'home':
-      return <Home size={20} color={DARK_GOLD} />;
+      return <Home size={20} color={DARK_COLORS.primary} />;
     case 'work':
-      return <Briefcase size={20} color={DARK_GOLD} />;
+      return <Briefcase size={20} color={DARK_COLORS.primary} />;
     default:
-      return <MapPin size={20} color={DARK_GOLD} />;
+      return <MapPin size={20} color={DARK_COLORS.primary} />;
   }
 }
 
@@ -124,10 +120,11 @@ export default function SavedAddressesScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Saved Addresses',
-          headerTitleStyle: { fontWeight: '700', color: BURGUNDY },
+          headerStyle: { backgroundColor: DARK_COLORS.background },
+          headerTitleStyle: { fontWeight: '700', color: DARK_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
-              <ArrowLeft size={24} color={BURGUNDY} />
+              <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
             </Pressable>
           ),
         }}
@@ -141,7 +138,7 @@ export default function SavedAddressesScreen(): React.JSX.Element {
       >
         {addresses.length === 0 ? (
           <View style={styles.emptyState}>
-            <MapPin size={64} color="#D1D5DB" />
+            <MapPin size={64} color={DARK_COLORS.textMuted} />
             <Text style={styles.emptyTitle}>No saved addresses</Text>
             <Text style={styles.emptyText}>
               Add your frequently used addresses for quick booking
@@ -149,7 +146,7 @@ export default function SavedAddressesScreen(): React.JSX.Element {
           </View>
         ) : (
           addresses.map((address) => (
-            <Surface key={address.id} style={styles.addressCard} elevation={1}>
+            <View key={address.id} style={styles.addressCard}>
               <View style={styles.addressHeader}>
                 <View style={styles.iconContainer}>
                   <AddressIcon type={address.type} />
@@ -175,20 +172,20 @@ export default function SavedAddressesScreen(): React.JSX.Element {
                     style={styles.actionButton}
                     onPress={() => handleSetDefault(address.id)}
                   >
-                    <Star size={18} color="#6B7280" />
+                    <Star size={18} color={DARK_COLORS.textSecondary} />
                   </Pressable>
                 )}
                 <Pressable style={styles.actionButton}>
-                  <Edit3 size={18} color="#6B7280" />
+                  <Edit3 size={18} color={DARK_COLORS.textSecondary} />
                 </Pressable>
                 <Pressable
                   style={styles.actionButton}
                   onPress={() => handleDeleteAddress(address.id)}
                 >
-                  <Trash2 size={18} color="#EF4444" />
+                  <Trash2 size={18} color={DARK_COLORS.error} />
                 </Pressable>
               </View>
-            </Surface>
+            </View>
           ))
         )}
       </ScrollView>
@@ -200,7 +197,7 @@ export default function SavedAddressesScreen(): React.JSX.Element {
           icon={() => <Plus size={20} color="#FFFFFF" />}
           style={styles.addButton}
           contentStyle={styles.addButtonContent}
-          buttonColor={DARK_GOLD}
+          buttonColor={DARK_COLORS.primary}
         >
           Add New Address
         </Button>
@@ -241,22 +238,26 @@ export default function SavedAddressesScreen(): React.JSX.Element {
             value={newLabel}
             onChangeText={setNewLabel}
             placeholder="Label (e.g., Home, Office)"
+            placeholderTextColor={DARK_COLORS.textMuted}
             mode="outlined"
             style={styles.modalInput}
             outlineStyle={styles.inputOutline}
-            outlineColor="#E5E7EB"
-            activeOutlineColor={DARK_GOLD}
+            outlineColor={DARK_COLORS.border}
+            activeOutlineColor={DARK_COLORS.primary}
+            textColor={DARK_COLORS.textPrimary}
           />
 
           <TextInput
             value={newAddress}
             onChangeText={setNewAddress}
             placeholder="Full address"
+            placeholderTextColor={DARK_COLORS.textMuted}
             mode="outlined"
             style={styles.modalInput}
             outlineStyle={styles.inputOutline}
-            outlineColor="#E5E7EB"
-            activeOutlineColor={DARK_GOLD}
+            outlineColor={DARK_COLORS.border}
+            activeOutlineColor={DARK_COLORS.primary}
+            textColor={DARK_COLORS.textPrimary}
             multiline
             numberOfLines={2}
           />
@@ -266,7 +267,7 @@ export default function SavedAddressesScreen(): React.JSX.Element {
               mode="outlined"
               onPress={() => setShowAddModal(false)}
               style={styles.modalButton}
-              textColor="#6B7280"
+              textColor={DARK_COLORS.textSecondary}
             >
               Cancel
             </Button>
@@ -274,7 +275,7 @@ export default function SavedAddressesScreen(): React.JSX.Element {
               mode="contained"
               onPress={handleAddAddress}
               style={styles.modalButton}
-              buttonColor={DARK_GOLD}
+              buttonColor={DARK_COLORS.primary}
             >
               Save
             </Button>
@@ -288,7 +289,7 @@ export default function SavedAddressesScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: DARK_COLORS.background,
   },
   scrollContent: {
     padding: 16,
@@ -303,21 +304,23 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: DARK_COLORS.textPrimary,
     marginTop: 16,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: DARK_COLORS.textMuted,
     textAlign: 'center',
     maxWidth: 240,
   },
   addressCard: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     padding: 16,
     marginBottom: 12,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   addressHeader: {
     flexDirection: 'row',
@@ -327,7 +330,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: 'rgba(218, 165, 32, 0.1)',
+    backgroundColor: DARK_COLORS.primaryMuted,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -344,13 +347,13 @@ const styles = StyleSheet.create({
   addressLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: DARK_COLORS.textPrimary,
   },
   defaultBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: DARK_GOLD,
+    backgroundColor: DARK_COLORS.primary,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 10,
@@ -362,7 +365,7 @@ const styles = StyleSheet.create({
   },
   addressText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: DARK_COLORS.textSecondary,
     lineHeight: 20,
   },
   addressActions: {
@@ -370,14 +373,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     gap: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: DARK_COLORS.border,
     paddingTop: 12,
   },
   actionButton: {
     width: 36,
     height: 36,
     borderRadius: 8,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: DARK_COLORS.surfaceLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -387,9 +390,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: DARK_COLORS.border,
   },
   addButton: {
     borderRadius: 14,
@@ -398,7 +401,7 @@ const styles = StyleSheet.create({
     height: 52,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     margin: 20,
     borderRadius: 20,
     padding: 24,
@@ -406,7 +409,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: BURGUNDY,
+    color: DARK_COLORS.textPrimary,
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -423,24 +426,24 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: DARK_COLORS.surfaceLight,
     borderWidth: 2,
     borderColor: 'transparent',
   },
   typeButtonActive: {
-    backgroundColor: 'rgba(218, 165, 32, 0.1)',
-    borderColor: DARK_GOLD,
+    backgroundColor: DARK_COLORS.primaryMuted,
+    borderColor: DARK_COLORS.primary,
   },
   typeText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#6B7280',
+    color: DARK_COLORS.textSecondary,
   },
   typeTextActive: {
-    color: DARK_GOLD,
+    color: DARK_COLORS.primary,
   },
   modalInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.input,
     marginBottom: 12,
   },
   inputOutline: {

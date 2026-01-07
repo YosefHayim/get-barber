@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Bookings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-dark": "#192233",
+                        "surface-dark-highlight": "#232f48",
+                        "text-secondary": "#92a4c9",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Hide scrollbar for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased selection:bg-primary selection:text-white">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+<div class="flex items-center justify-between px-4 py-4">
+<div class="w-10 h-10 flex items-center justify-center -ml-2">
+<button class="flex items-center justify-center w-full h-full text-slate-900 dark:text-white rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+</div>
+<h1 class="text-lg font-bold tracking-tight">My Bookings</h1>
+<div class="w-10 h-10 flex items-center justify-center -mr-2">
+<button class="flex items-center justify-center w-full h-full text-slate-900 dark:text-white rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">history</span>
+</button>
+</div>
+</div>
+<!-- Segmented Control -->
+<div class="px-4 pb-4">
+<div class="flex h-12 w-full items-center justify-center rounded-xl bg-gray-200 dark:bg-surface-dark-highlight p-1">
+<label class="flex cursor-pointer h-full flex-1 items-center justify-center rounded-lg has-[:checked]:bg-white dark:has-[:checked]:bg-background-dark has-[:checked]:shadow-sm transition-all duration-200">
+<input checked="" class="hidden peer" name="booking-type" type="radio" value="confirmed"/>
+<span class="text-sm font-semibold text-gray-500 dark:text-text-secondary peer-checked:text-primary transition-colors">Confirmed</span>
+</label>
+<label class="flex cursor-pointer h-full flex-1 items-center justify-center rounded-lg has-[:checked]:bg-white dark:has-[:checked]:bg-background-dark has-[:checked]:shadow-sm transition-all duration-200">
+<input class="hidden peer" name="booking-type" type="radio" value="pending"/>
+<span class="text-sm font-semibold text-gray-500 dark:text-text-secondary peer-checked:text-primary transition-colors">Pending</span>
+</label>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-4 py-6 space-y-6">
+<!-- Section Title: Upcoming -->
+<div class="flex items-center justify-between">
+<h2 class="text-base font-semibold text-gray-900 dark:text-white">Upcoming Appointments</h2>
+<button class="text-xs font-medium text-primary hover:underline">See Calendar</button>
+</div>
+<!-- Card 1: Today Immediate -->
+<article class="relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800/50 hover:border-primary/50 transition-all duration-300 group">
+<!-- Urgency Indicator Stripe -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex p-4 gap-4">
+<!-- Barber Image -->
+<div class="relative shrink-0 w-20 h-20">
+<div class="w-full h-full rounded-lg bg-gray-200 dark:bg-gray-700 bg-cover bg-center" data-alt="Barber with beard trimming a customer" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDN9mme2EgXi2zY1ygchFsW9YIxgIj3KNI_v1Ve5gtneqEzZRGW2qMtDW7wafybTxZFCA9LbvNf1sN6BoNWJNOwpZZsMY00FD1zK6E1iLlnDz1y0Mh5gz8Tp86Zlm_0ImQgsYsYBC0FCGDspAv8LV1eaan8CMJKn7N-GlzwX2PFD5wI_GPCiZLbsBUcJVVsUfEddccanKJ8u5HgQFEj068EmhBsbcOAgeUCoS0N0Miy8_8CJuRY2Myt031wAaRI0SsS9fRSQlVwgZx6");'></div>
+<div class="absolute -bottom-2 -right-2 bg-green-500 border-2 border-white dark:border-surface-dark w-5 h-5 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[10px] text-white font-bold">check</span>
+</div>
+</div>
+<!-- Details -->
+<div class="flex flex-col flex-1 justify-between min-w-0">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="text-base font-bold text-gray-900 dark:text-white truncate pr-2">The Fade Master</h3>
+<span class="shrink-0 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400">
+                                    Confirmed
+                                </span>
+</div>
+<p class="text-sm text-gray-500 dark:text-text-secondary mt-0.5 truncate">Skin Fade + Beard Trim</p>
+</div>
+<div class="flex items-center gap-2 mt-3 text-sm font-medium">
+<span class="material-symbols-outlined text-primary text-lg">schedule</span>
+<span class="text-gray-900 dark:text-white">Today, 16:30</span>
+<span class="text-xs text-gray-400">•</span>
+<span class="text-xs text-gray-400">in 2 hrs</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-2 px-4 pb-4 mt-1">
+<button class="flex-1 flex items-center justify-center gap-2 h-10 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-blue-600 transition-colors">
+<span class="material-symbols-outlined text-[18px]">near_me</span>
+                        Track Arrival
+                    </button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-surface-dark-highlight text-gray-600 dark:text-text-secondary hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+</div>
+</article>
+<!-- Card 2: Tomorrow -->
+<article class="relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark shadow-sm border border-gray-100 dark:border-gray-800/50">
+<div class="flex p-4 gap-4">
+<div class="relative shrink-0 w-20 h-20">
+<div class="w-full h-full rounded-lg bg-gray-200 dark:bg-gray-700 bg-cover bg-center" data-alt="Interior of a modern barbershop" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDEUTMkT6bJvbv_aZe3WDm0KDHZJftby4bFDWgApdoK0d0glVLNOw6fAYKk1AY_chPQIj7Gk0DMYXkPdEyPwMht0Wui8iCr5EGKBAj7EjLbAsGv2duLXQ7BWQaBGO-kp3rdw-yZlAqnwfAYlb8GkRUHNF7K2UNWImhtq5kmkRiur1UY0qvwIhHayoK0EZIuexjLfyXZqlL5u4DkGSkY6CERYel4sVDEa3WSeYwnFQ6-blx6nP-XVv3HlYU_MAcfaFGgzLQ1JUhltor2");'></div>
+</div>
+<div class="flex flex-col flex-1 justify-between min-w-0">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="text-base font-bold text-gray-900 dark:text-white truncate pr-2">BarberShop Elite</h3>
+<span class="shrink-0 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400">
+                                    Upcoming
+                                </span>
+</div>
+<p class="text-sm text-gray-500 dark:text-text-secondary mt-0.5 truncate">Classic Cut</p>
+</div>
+<div class="flex items-center gap-2 mt-3 text-sm font-medium">
+<span class="material-symbols-outlined text-gray-400 text-lg">calendar_today</span>
+<span class="text-gray-900 dark:text-white">Tomorrow, 10:00</span>
+</div>
+</div>
+</div>
+<div class="px-4 pb-4 mt-1 border-t border-gray-100 dark:border-gray-800 pt-3 flex justify-end">
+<button class="text-sm font-medium text-gray-500 dark:text-text-secondary hover:text-primary transition-colors mr-auto">
+                        Cancel
+                    </button>
+<button class="flex items-center justify-center px-4 py-2 rounded-lg bg-gray-100 dark:bg-surface-dark-highlight text-gray-900 dark:text-white text-sm font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        View Details
+                    </button>
+</div>
+</article>
+<!-- Section Title: Requests -->
+<div class="pt-4 flex items-center justify-between opacity-60 hover:opacity-100 transition-opacity">
+<h2 class="text-base font-semibold text-gray-900 dark:text-white">Pending Requests</h2>
+<span class="bg-yellow-500/20 text-yellow-500 text-xs font-bold px-2 py-0.5 rounded-full">1 New</span>
+</div>
+<!-- Card 3: Pending Request -->
+<article class="relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark shadow-sm border border-dashed border-gray-300 dark:border-gray-700 opacity-90">
+<div class="flex p-4 gap-4">
+<div class="relative shrink-0 w-20 h-20">
+<div class="w-full h-full rounded-lg bg-gray-200 dark:bg-gray-700 bg-cover bg-center grayscale opacity-80" data-alt="Barber tools on a wooden table" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD7alvJEwP30MEH4N3DPEN9shFRwA8nk9pDDZBENOat1433eWsBN6-2rpuhMS2dZdQXT_kKohk9Q6B4hlAnkgwSZM2XUtJ1DC4R7iyEWivZqrCpL8w87o-xFhoNXCJtZEPCtPwR-2CM_mQaWwRlu0miRoC4pmyOvLsVEWVif_uD05uMR2NtfNE80wwHs5WUwKjceObt6k5lER07WZBHDbWFkky-iUG4YZbRlenHOF1Bz05Jo_NG8FcHVAZ7uaxMiBFMYyPyUa13NnEV");'></div>
+<div class="absolute -top-1 -right-1">
+<span class="flex h-3 w-3 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
+</span>
+</div>
+</div>
+<div class="flex flex-col flex-1 justify-between min-w-0">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="text-base font-bold text-gray-900 dark:text-white truncate pr-2">Quick Cuts Mobile</h3>
+<span class="shrink-0 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-400">
+                                    Pending
+                                </span>
+</div>
+<p class="text-sm text-gray-500 dark:text-text-secondary mt-0.5 truncate">Buzz Cut • At Home Service</p>
+</div>
+<div class="flex items-center gap-2 mt-3 text-sm font-medium">
+<span class="material-symbols-outlined text-yellow-500 text-lg">hourglass_empty</span>
+<span class="text-gray-900 dark:text-white">Req: Today, 18:00</span>
+</div>
+</div>
+</div>
+<div class="px-4 pb-4 mt-1">
+<button class="w-full flex items-center justify-center h-9 rounded-lg border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                        Cancel Request
+                    </button>
+</div>
+</article>
+<!-- Empty Space at bottom for scroll -->
+<div class="h-20"></div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 z-50 w-full max-w-md bg-white/90 dark:bg-background-dark/95 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800 pb-safe">
+<div class="flex justify-around items-center h-16 px-2">
+<a class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="text-[10px] font-medium mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">search</span>
+<span class="text-[10px] font-medium mt-1">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-primary" href="#">
+<span class="material-symbols-outlined text-[24px] fill-current">calendar_month</span>
+<span class="text-[10px] font-medium mt-1">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="text-[10px] font-medium mt-1">Profile</span>
+</a>
+</div>
+<!-- Safe area spacing for iOS home indicator -->
+<div class="h-1 bg-transparent"></div>
+</nav>
+</div>
+<script>
+        // Simple script to handle tab switching visual state only (no React/framework)
+        const radios = document.querySelectorAll('input[name="booking-type"]');
+        radios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                // In a real app this would filter content. 
+                // For this demo, we just rely on CSS :checked classes for the tabs themselves.
+            });
+        });
+    </script>
+</body></html>

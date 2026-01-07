@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { LayoutDashboard, Briefcase, Calendar, User, TrendingUp } from 'lucide-react-native';
+import { LayoutDashboard, Briefcase, Calendar, User, TrendingUp, Users } from 'lucide-react-native';
 import { COLORS } from '@/constants/theme';
 
 export default function BarberTabsLayout(): React.JSX.Element {
@@ -50,6 +50,13 @@ export default function BarberTabsLayout(): React.JSX.Element {
         options={{
           title: 'Schedule',
           tabBarIcon: ({ color, size }) => <Calendar size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="clients"
+        options={{
+          title: 'Clients',
+          tabBarIcon: ({ color, size }) => <Users size={size} color={color} />,
         }}
       />
       <Tabs.Screen

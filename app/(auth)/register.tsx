@@ -1,25 +1,51 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Pressable } from 'react-native';
-import { Text, TextInput, Button } from 'react-native-paper';
+import {
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  ImageBackground,
+  Pressable,
+  Text,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Scissors, Mail, Lock, User, ArrowLeft, Sparkles } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import {
+  Mail,
+  Lock,
+  User,
+  ChevronLeft,
+  Eye,
+  EyeOff,
+  Phone,
+} from 'lucide-react-native';
+import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@/features/auth/context/AuthContext';
+import { useGoogleAuth, useAppleAuth } from '@/features/auth/hooks';
+import { useToast } from '@/hooks/useToast';
+import { DARK_COLORS } from '@/constants/theme';
 
-const GOLD = '#DAA520';
-const DARK_GOLD = '#B8860B';
-const BURGUNDY = '#722F37';
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export default function RegisterScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
-  const { signUp, isLoading } = useAuth();
-  
+  const { signUp, isLoading: authLoading } = useAuth();
+  const { signInWithGoogle, isLoading: googleLoading } = useGoogleAuth();
+  const { signInWithApple, isLoading: appleLoading } = useAppleAuth();
+  const toast = useToast();
+
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+
+  const isLoading = authLoading || googleLoading || appleLoading;
 
   const handleRegister = async () => {
     if (!displayName || !email || !password || !confirmPassword) {
@@ -39,7 +65,7 @@ export default function RegisterScreen(): React.JSX.Element {
 
     setError('');
     const { error: signUpError } = await signUp(email, password, displayName);
-    
+
     if (signUpError) {
       setError(signUpError.message);
     } else {
@@ -47,220 +73,508 @@ export default function RegisterScreen(): React.JSX.Element {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    setError('');
+    const result = await signInWithGoogle();
+
+    if (result.error) {
+      toast.error(result.error);
+    } else if (result.success) {
+      router.replace('/(tabs)');
+    }
+  };
+
+  const handleAppleSignIn = async () => {
+    setError('');
+    const result = await signInWithApple();
+
+    if (result.error) {
+      toast.error(result.error);
+    } else if (result.success) {
+      router.replace('/(tabs)');
+    }
+  };
+
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView
-        contentContainerStyle={[
-          styles.scrollContent,
-          { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 24 },
-        ]}
-        keyboardShouldPersistTaps="handled"
+    <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <Button
-          mode="text"
-          onPress={() => router.back()}
-          icon={() => <ArrowLeft size={20} color="#6B7280" />}
-          style={styles.backButton}
-          contentStyle={styles.backButtonContent}
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          Back
-        </Button>
-
-        <Animated.View style={styles.header} entering={FadeInDown.duration(500).delay(100)}>
-          <View style={styles.logoContainer}>
-            <View style={styles.logoInner}>
-              <Scissors size={32} color="#FFFFFF" style={{ transform: [{ rotate: '-45deg' }] }} />
-            </View>
-            <View style={styles.sparkle}>
-              <Sparkles size={14} color={GOLD} fill={GOLD} />
-            </View>
-          </View>
-          <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Join BarberConnect today</Text>
-        </Animated.View>
-
-        <View style={styles.form}>
-          {error ? (
-            <View style={styles.errorContainer}>
-              <Text style={styles.errorText}>{error}</Text>
-            </View>
-          ) : null}
-
-          <TextInput
-            mode="outlined"
-            label="Full Name"
-            value={displayName}
-            onChangeText={setDisplayName}
-            autoCapitalize="words"
-            left={<TextInput.Icon icon={() => <User size={20} color="#6B7280" />} />}
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-          />
-
-          <TextInput
-            mode="outlined"
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-            left={<TextInput.Icon icon={() => <Mail size={20} color="#6B7280" />} />}
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-          />
-
-          <TextInput
-            mode="outlined"
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            left={<TextInput.Icon icon={() => <Lock size={20} color="#6B7280" />} />}
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-          />
-
-          <TextInput
-            mode="outlined"
-            label="Confirm Password"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-            left={<TextInput.Icon icon={() => <Lock size={20} color="#6B7280" />} />}
-            style={styles.input}
-            outlineStyle={styles.inputOutline}
-          />
-
-          <Button
-            mode="contained"
-            onPress={handleRegister}
-            loading={isLoading}
-            disabled={isLoading}
-            style={styles.button}
-            contentStyle={styles.buttonContent}
+          <ImageBackground
+            source={{
+              uri: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&q=80',
+            }}
+            style={styles.heroImage}
+            resizeMode="cover"
           >
-            Create Account
-          </Button>
+            <LinearGradient
+              colors={['rgba(0,0,0,0.5)', 'transparent']}
+              style={styles.heroGradientTop}
+            />
+            <LinearGradient
+              colors={['transparent', DARK_COLORS.background]}
+              style={styles.heroGradientBottom}
+            />
 
-          <Text style={styles.termsText}>
-            By creating an account, you agree to our Terms of Service and Privacy Policy
-          </Text>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+            <Animated.View
+              entering={FadeIn.duration(400)}
+              style={[styles.header, { paddingTop: insets.top + 8 }]}
+            >
+              <Pressable
+                style={styles.backButton}
+                onPress={() => router.back()}
+              >
+                <ChevronLeft size={24} color="#FFFFFF" />
+              </Pressable>
+              <View style={styles.headerBadge}>
+                <Text style={styles.headerBadgeText}>SIGN UP</Text>
+              </View>
+              <View style={styles.headerSpacer} />
+            </Animated.View>
+          </ImageBackground>
+
+          <View style={styles.content}>
+            <Animated.View
+              entering={FadeInDown.delay(100).duration(500)}
+              style={styles.titleSection}
+            >
+              <Text style={styles.title}>Join the Hub</Text>
+              <Text style={styles.subtitle}>
+                Connect with top-rated barbers.{'\n'}Choose your preferred way
+                to start.
+              </Text>
+            </Animated.View>
+
+            <Animated.View
+              entering={FadeInDown.delay(200).duration(500)}
+              style={styles.socialGrid}
+            >
+              <Pressable
+                style={styles.socialGridButton}
+                onPress={handleAppleSignIn}
+                disabled={isLoading}
+              >
+                <View style={styles.socialIconContainer}>
+                  <Text style={styles.appleIcon}>⌘</Text>
+                </View>
+                <Text style={styles.socialGridText}>Apple</Text>
+              </Pressable>
+
+              <Pressable
+                style={styles.socialGridButton}
+                onPress={handleGoogleSignIn}
+                disabled={isLoading}
+              >
+                <View style={styles.googleIconContainer}>
+                  <Text style={styles.googleIcon}>G</Text>
+                </View>
+                <Text style={styles.socialGridText}>Google</Text>
+              </Pressable>
+
+              <Pressable
+                style={styles.socialGridButton}
+                onPress={() => router.push('/(auth)/phone-login')}
+                disabled={isLoading}
+              >
+                <View style={styles.phoneIconContainer}>
+                  <Phone size={20} color={DARK_COLORS.primary} />
+                </View>
+                <Text style={styles.socialGridText}>Phone</Text>
+              </Pressable>
+
+              <Pressable
+                style={[styles.socialGridButton, styles.emailButton]}
+                onPress={() => {}}
+                disabled={isLoading}
+              >
+                <View style={styles.emailIconContainer}>
+                  <Mail size={20} color="#FFFFFF" />
+                </View>
+                <Text style={[styles.socialGridText, styles.emailText]}>
+                  Email
+                </Text>
+              </Pressable>
+            </Animated.View>
+
+            {error ? (
+              <Animated.View
+                entering={FadeInDown.duration(300)}
+                style={styles.errorContainer}
+              >
+                <Text style={styles.errorText}>{error}</Text>
+              </Animated.View>
+            ) : null}
+
+            <Animated.View
+              entering={FadeInDown.delay(300).duration(500)}
+              style={styles.dividerContainer}
+            >
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>or sign up with email</Text>
+              <View style={styles.dividerLine} />
+            </Animated.View>
+
+            <Animated.View
+              entering={FadeInDown.delay(400).duration(500)}
+              style={styles.form}
+            >
+              <View style={styles.inputContainer}>
+                <User size={20} color={DARK_COLORS.textMuted} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Full Name"
+                  placeholderTextColor={DARK_COLORS.textMuted}
+                  value={displayName}
+                  onChangeText={setDisplayName}
+                  autoCapitalize="words"
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Mail size={20} color={DARK_COLORS.textMuted} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  placeholderTextColor={DARK_COLORS.textMuted}
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Lock size={20} color={DARK_COLORS.textMuted} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  placeholderTextColor={DARK_COLORS.textMuted}
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                />
+                <Pressable
+                  onPress={() => setShowPassword(!showPassword)}
+                  hitSlop={8}
+                >
+                  {showPassword ? (
+                    <EyeOff size={20} color={DARK_COLORS.textMuted} />
+                  ) : (
+                    <Eye size={20} color={DARK_COLORS.textMuted} />
+                  )}
+                </Pressable>
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Lock size={20} color={DARK_COLORS.textMuted} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Confirm Password"
+                  placeholderTextColor={DARK_COLORS.textMuted}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={!showPassword}
+                />
+              </View>
+
+              <Pressable
+                style={[
+                  styles.primaryButton,
+                  isLoading && styles.buttonDisabled,
+                ]}
+                onPress={handleRegister}
+                disabled={isLoading}
+              >
+                {authLoading ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <Text style={styles.primaryButtonText}>Create Account</Text>
+                )}
+              </Pressable>
+            </Animated.View>
+
+            <Animated.View
+              entering={FadeInDown.delay(500).duration(500)}
+              style={styles.termsContainer}
+            >
+              <Text style={styles.termsText}>
+                By creating an account, you agree to our{' '}
+                <Text style={styles.termsLink}>Terms of Service</Text> &{' '}
+                <Text style={styles.termsLink}>Privacy Policy</Text>.
+              </Text>
+            </Animated.View>
+
+            <Animated.View
+              entering={FadeInDown.delay(600).duration(500)}
+              style={[styles.footer, { paddingBottom: insets.bottom + 16 }]}
+            >
+              <Text style={styles.footerText}>Already have an account?</Text>
+              <Pressable onPress={() => router.push('/(auth)/login')}>
+                <Text style={styles.footerLink}>Log in</Text>
+              </Pressable>
+            </Animated.View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
+    backgroundColor: DARK_COLORS.background,
+  },
+  flex: {
+    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
-    padding: 28,
   },
-  backButton: {
-    alignSelf: 'flex-start',
-    marginBottom: 20,
+  heroImage: {
+    height: 280,
+    width: '100%',
   },
-  backButtonContent: {
-    flexDirection: 'row-reverse',
+  heroGradientTop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 120,
+  },
+  heroGradientBottom: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 100,
   },
   header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 36,
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
   },
-  logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 22,
-    backgroundColor: BURGUNDY,
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+  },
+  headerBadgeText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: 'rgba(255,255,255,0.9)',
+    letterSpacing: 1.5,
+  },
+  headerSpacer: {
+    width: 40,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
+    marginTop: -40,
+  },
+  titleSection: {
     alignItems: 'center',
     marginBottom: 24,
-    shadowColor: BURGUNDY,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 10,
   },
-  logoInner: {
-    width: 60,
-    height: 60,
+  title: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: DARK_COLORS.textPrimary,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: DARK_COLORS.textSecondary,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  socialGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+    marginBottom: 20,
+  },
+  socialGridButton: {
+    width: '47%',
+    aspectRatio: 1.6,
     borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: DARK_COLORS.surface,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+  },
+  emailButton: {
+    backgroundColor: DARK_COLORS.primary,
+    borderColor: DARK_COLORS.primary,
+  },
+  socialIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: DARK_COLORS.surfaceLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  sparkle: {
-    position: 'absolute',
-    top: -3,
-    right: -3,
+  googleIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    padding: 3,
-    shadowColor: GOLD,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  title: {
-    fontSize: 30,
-    fontWeight: '800',
-    color: '#1A1A1A',
-    marginBottom: 8,
-    letterSpacing: -0.5,
+  phoneIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: DARK_COLORS.primaryMuted,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#757575',
-    fontWeight: '500',
+  emailIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  form: {
-    flex: 1,
+  appleIcon: {
+    fontSize: 22,
+    color: DARK_COLORS.textPrimary,
+  },
+  googleIcon: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#4285F4',
+  },
+  socialGridText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: DARK_COLORS.textPrimary,
+  },
+  emailText: {
+    color: '#FFFFFF',
   },
   errorContainer: {
-    backgroundColor: 'rgba(220, 38, 38, 0.1)',
+    backgroundColor: DARK_COLORS.errorMuted,
     padding: 14,
     borderRadius: 12,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: 'rgba(220, 38, 38, 0.2)',
+    borderColor: 'rgba(239, 68, 68, 0.3)',
   },
   errorText: {
-    color: '#DC2626',
+    color: DARK_COLORS.errorLight,
     fontSize: 14,
     textAlign: 'center',
     fontWeight: '500',
   },
-  input: {
-    marginBottom: 16,
-    backgroundColor: '#FFFFFF',
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  inputOutline: {
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: DARK_COLORS.border,
+  },
+  dividerText: {
+    marginHorizontal: 16,
+    fontSize: 12,
+    color: DARK_COLORS.textMuted,
+    fontWeight: '500',
+  },
+  form: {
+    gap: 12,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: DARK_COLORS.surface,
     borderRadius: 14,
-    borderWidth: 1.5,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
+    paddingHorizontal: 16,
+    height: 52,
+    gap: 12,
   },
-  button: {
-    marginTop: 10,
-    borderRadius: 16,
-    backgroundColor: DARK_GOLD,
+  input: {
+    flex: 1,
+    fontSize: 15,
+    color: DARK_COLORS.textPrimary,
   },
-  buttonContent: {
-    height: 56,
+  primaryButton: {
+    height: 52,
+    borderRadius: 14,
+    backgroundColor: DARK_COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  buttonDisabled: {
+    opacity: 0.7,
+  },
+  primaryButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  termsContainer: {
+    marginTop: 20,
+    paddingHorizontal: 20,
   },
   termsText: {
-    marginTop: 28,
-    fontSize: 13,
-    color: '#9CA3AF',
+    fontSize: 11,
+    color: DARK_COLORS.textMuted,
     textAlign: 'center',
-    lineHeight: 20,
-    paddingHorizontal: 16,
+    lineHeight: 18,
+  },
+  termsLink: {
+    color: DARK_COLORS.textSecondary,
+    fontWeight: '500',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 'auto',
+    paddingTop: 20,
+    gap: 6,
+  },
+  footerText: {
+    fontSize: 14,
+    color: DARK_COLORS.textSecondary,
+  },
+  footerLink: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: DARK_COLORS.primary,
   },
 });

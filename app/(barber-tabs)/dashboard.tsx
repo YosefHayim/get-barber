@@ -16,6 +16,8 @@ import {
   AlertCircle,
   Users,
   DollarSign,
+  Megaphone,
+  Bell,
 } from 'lucide-react-native';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { Avatar } from '@/components/ui/Avatar';
@@ -25,6 +27,7 @@ import {
   MOCK_BARBER_STATS,
   MOCK_SERVICE_REQUESTS,
   MOCK_BOOKINGS_BARBER,
+  MOCK_NOTIFICATIONS,
   type MockServiceRequest,
 } from '@/constants/mockData';
 
@@ -136,6 +139,7 @@ export default function BarberDashboardScreen(): React.JSX.Element {
   const upcomingBookings = MOCK_BOOKINGS_BARBER.filter(
     (b) => b.status === 'confirmed' || b.status === 'in_progress'
   );
+  const unreadNotificationsCount = MOCK_NOTIFICATIONS.filter((n) => !n.isRead).length;
 
   const handleRequestPress = useCallback((requestId: string) => {
     router.push(`/(modals)/chat/${requestId}`);
@@ -153,7 +157,22 @@ export default function BarberDashboardScreen(): React.JSX.Element {
             <Text style={styles.greeting}>Good morning!</Text>
             <Text style={styles.businessName}>Yossi's Barbershop</Text>
           </View>
-          <Avatar uri={null} name="Yossi Cohen" size={52} />
+          <View style={styles.headerActions}>
+            <Pressable
+              style={styles.notificationButton}
+              onPress={() => router.push('/(modals)/notifications')}
+            >
+              <Bell size={22} color={COLORS.textInverse} />
+              {unreadNotificationsCount > 0 && (
+                <View style={styles.notificationBadge}>
+                  <Text style={styles.notificationBadgeText}>
+                    {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
+                  </Text>
+                </View>
+              )}
+            </Pressable>
+            <Avatar uri={null} name="Yossi Cohen" size={52} />
+          </View>
         </View>
 
         <Surface style={styles.statusCard} elevation={3}>
@@ -306,23 +325,32 @@ export default function BarberDashboardScreen(): React.JSX.Element {
       <View style={styles.quickActions}>
         <Text style={styles.quickActionsTitle}>Quick Actions</Text>
         <View style={styles.quickActionsGrid}>
-          <Pressable style={styles.quickActionButton}>
+          <Pressable
+            style={styles.quickActionButton}
+            onPress={() => router.push('/(barber-tabs)/clients')}
+          >
             <View style={[styles.quickActionIcon, { backgroundColor: COLORS.goldMuted }]}>
               <Users size={20} color={COLORS.goldDark} />
             </View>
             <Text style={styles.quickActionLabel}>My Clients</Text>
           </Pressable>
-          <Pressable style={styles.quickActionButton}>
+          <Pressable
+            style={styles.quickActionButton}
+            onPress={() => router.push('/(modals)/analytics')}
+          >
             <View style={[styles.quickActionIcon, { backgroundColor: COLORS.infoLight }]}>
               <TrendingUp size={20} color={COLORS.info} />
             </View>
             <Text style={styles.quickActionLabel}>Analytics</Text>
           </Pressable>
-          <Pressable style={styles.quickActionButton}>
+          <Pressable
+            style={styles.quickActionButton}
+            onPress={() => router.push('/(modals)/advertising')}
+          >
             <View style={[styles.quickActionIcon, { backgroundColor: COLORS.successLight }]}>
-              <Sparkles size={20} color={COLORS.success} />
+              <Megaphone size={20} color={COLORS.success} />
             </View>
-            <Text style={styles.quickActionLabel}>Promotions</Text>
+            <Text style={styles.quickActionLabel}>Advertising</Text>
           </Pressable>
         </View>
       </View>
@@ -346,6 +374,39 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.md,
+  },
+  notificationButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: COLORS.darkGray,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  notificationBadge: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: COLORS.error,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 4,
+    borderWidth: 2,
+    borderColor: COLORS.charcoal,
+  },
+  notificationBadgeText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: COLORS.textInverse,
   },
   greeting: {
     fontSize: TYPOGRAPHY.sm,

@@ -6,6 +6,8 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from '@/features/auth/context/AuthContext';
 import { ShabbatOverlay } from '@/features/shabbat';
+import { ToastProvider } from './ToastProvider';
+import { GluestackUIProvider } from '../../components/ui/gluestack-ui-provider';
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -66,17 +68,21 @@ export function AppProviders({ children }: AppProvidersProps): React.JSX.Element
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <PaperProvider theme={theme}>
-            <BottomSheetModalProvider>
-              <AuthProvider>
-                <ShabbatOverlay>
-                  {children}
-                </ShabbatOverlay>
-              </AuthProvider>
-            </BottomSheetModalProvider>
-          </PaperProvider>
-        </QueryClientProvider>
+        <GluestackUIProvider mode="light">
+          <QueryClientProvider client={queryClient}>
+            <PaperProvider theme={theme}>
+              <BottomSheetModalProvider>
+                <AuthProvider>
+                  <ToastProvider>
+                    <ShabbatOverlay>
+                      {children}
+                    </ShabbatOverlay>
+                  </ToastProvider>
+                </AuthProvider>
+              </BottomSheetModalProvider>
+            </PaperProvider>
+          </QueryClientProvider>
+        </GluestackUIProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

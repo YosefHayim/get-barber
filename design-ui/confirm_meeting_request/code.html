@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Confirm Meeting Request</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11a4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2c33",
+                        "text-main-light": "#0d181b",
+                        "text-main-dark": "#e0e6e8",
+                        "text-secondary-light": "#4c869a",
+                        "text-secondary-dark": "#8daab5",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hide for cleaner UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark transition-colors duration-200">
+<div class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto overflow-hidden bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- TopAppBar -->
+<div class="flex items-center bg-surface-light dark:bg-surface-dark p-4 pb-4 justify-between border-b border-gray-100 dark:border-gray-800 sticky top-0 z-20">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer text-text-main-light dark:text-text-main-dark">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</div>
+<h2 class="text-text-main-light dark:text-text-main-dark text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">Confirm Request</h2>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto pb-32 no-scrollbar">
+<!-- Map Snapshot -->
+<div class="relative w-full h-40 bg-gray-200 dark:bg-gray-800">
+<div class="absolute inset-0 bg-cover bg-center opacity-80" data-alt="Map view showing route from barber to user location" data-location="New York City" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBsJlOIVaapMDnH6EQzYjxUyKoPK2oXa02LsTsMxMxedSpQZlQCT2MNgHFVGGYyixhkJcWaRVZDoUQS3UR42z6dXAgZDUHyfUOXRKe0P6usb_2Y0G3VMZP1PjHWfFg5Wb3mu0L2DLLk6wjk208n3vV1Vm7uiawZOE97VKfl2r96_vcWlrE9ryCrrmR9b7CpWcX5Be7EbpKRyIuylTCXhqa_qIaIBxwpf60D4_4SzhSp7E_EjF94WCUfQySzdI_EE-wFzXGXXryxHQTA");'></div>
+<div class="absolute inset-0 bg-gradient-to-b from-transparent to-background-light dark:to-background-dark"></div>
+<!-- Route Line overlay simulation -->
+<div class="absolute top-1/2 left-1/4 size-3 bg-primary rounded-full ring-4 ring-white dark:ring-surface-dark shadow-lg animate-pulse"></div>
+<div class="absolute top-1/3 right-1/4 size-8 bg-surface-light dark:bg-surface-dark rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-primary text-sm">content_cut</span>
+</div>
+</div>
+<!-- Profile Header - Lifted up to overlap map -->
+<div class="relative -mt-10 px-4 mb-2">
+<div class="flex flex-col gap-4 bg-surface-light dark:bg-surface-dark p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+<div class="flex gap-4 items-center">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-16 w-16 border-2 border-white dark:border-surface-dark shadow-sm" data-alt="Portrait of Barber Mike smiling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAczu343KHVndDU9vI9dPxs-KQRPKTGHLw2gzxpXc9EXrVhm4GjjPBXTek38inAMy-bgVdmE4d2tMzpSuCVwsQoOsthdP2JLjOSLVcY2KBWDcGNh-UfFmtQDja5OdV56rAHiag3WUhBUepHcYlN0laXsw6xc59YIeLv7saH5oG9Crb036skH4s4W629gBAOL4SgKvkHqWQfrnZxOkm2XrPowFwBH9KI19s-yaeVFN2b0oZ791qdLXlFYLav3HFCq5lyJTsNIoT3j8S0");'></div>
+<div class="absolute -bottom-1 -right-1 bg-green-500 size-4 rounded-full border-2 border-white dark:border-surface-dark"></div>
+</div>
+<div class="flex flex-col justify-center flex-1">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-text-main-light dark:text-text-main-dark text-xl font-bold leading-tight tracking-tight">Barber Mike</p>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-yellow-400 text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<p class="text-text-main-light dark:text-text-main-dark text-sm font-semibold">4.9 <span class="text-text-secondary-light dark:text-text-secondary-dark font-normal">(120 reviews)</span></p>
+</div>
+</div>
+<div class="bg-primary/10 text-primary px-2 py-1 rounded text-xs font-semibold whitespace-nowrap">
+                                    1.2 km away
+                                </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="px-4 py-2">
+<h3 class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-semibold uppercase tracking-wider mb-2 ml-1">Service Details</h3>
+<!-- Service Item -->
+<div class="flex flex-col gap-3 bg-surface-light dark:bg-surface-dark rounded-xl p-2 shadow-sm border border-gray-100 dark:border-gray-800">
+<!-- Service -->
+<div class="flex items-center gap-4 px-2 py-2">
+<div class="text-text-main-light dark:text-text-main-dark flex items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 shrink-0 size-12">
+<span class="material-symbols-outlined text-primary">content_cut</span>
+</div>
+<div class="flex flex-col justify-center flex-1">
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-normal">Skin Fade + Beard Trim</p>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal leading-normal">45 min duration</p>
+</div>
+<div class="text-text-main-light dark:text-text-main-dark font-bold text-lg">$45.00</div>
+</div>
+<div class="h-px w-full bg-gray-100 dark:bg-gray-800 mx-2"></div>
+<!-- Location -->
+<div class="flex items-center gap-4 px-2 py-2">
+<div class="text-text-main-light dark:text-text-main-dark flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 shrink-0 size-12">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">location_on</span>
+</div>
+<div class="flex flex-col justify-center flex-1">
+<p class="text-text-main-light dark:text-text-main-dark text-sm font-semibold leading-normal line-clamp-1">123 Main St, Apt 4B</p>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-xs font-normal leading-normal">Delivery Location</p>
+</div>
+<div class="text-primary text-sm font-medium cursor-pointer">Edit</div>
+</div>
+<!-- Time -->
+<div class="flex items-center gap-4 px-2 py-2">
+<div class="text-text-main-light dark:text-text-main-dark flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 shrink-0 size-12">
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">schedule</span>
+</div>
+<div class="flex flex-col justify-center flex-1">
+<p class="text-text-main-light dark:text-text-main-dark text-sm font-semibold leading-normal line-clamp-1">ASAP (approx. 15 mins)</p>
+<p class="text-text-secondary-light dark:text-text-secondary-dark text-xs font-normal leading-normal">Estimated Arrival</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Notes Section -->
+<div class="px-4 py-4">
+<h3 class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-semibold uppercase tracking-wider mb-2 ml-1">Special Instructions</h3>
+<div class="relative">
+<textarea class="w-full bg-surface-light dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-xl p-4 text-text-main-light dark:text-text-main-dark placeholder-text-secondary-light dark:placeholder-text-secondary-dark focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none h-24 text-sm shadow-sm" placeholder="e.g. Gate code is 1234, please call when you arrive..."></textarea>
+<div class="absolute bottom-3 right-3 text-text-secondary-light dark:text-text-secondary-dark text-xs opacity-60">Optional</div>
+</div>
+</div>
+<!-- Payment Method Preview -->
+<div class="px-4 pb-4">
+<div class="flex items-center justify-between bg-surface-light dark:bg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+<div class="flex items-center gap-3">
+<div class="bg-gray-100 dark:bg-gray-800 p-2 rounded">
+<span class="material-symbols-outlined text-text-main-light dark:text-text-main-dark">credit_card</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-text-main-light dark:text-text-main-dark">Visa ending in 4242</p>
+<p class="text-xs text-text-secondary-light dark:text-text-secondary-dark">Personal</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark cursor-pointer">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom Action Bar -->
+<div class="absolute bottom-0 left-0 right-0 bg-surface-light dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 p-4 pb-8 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-30">
+<div class="flex justify-between items-center mb-4 px-1">
+<span class="text-text-secondary-light dark:text-text-secondary-dark text-sm">Total to pay</span>
+<span class="text-text-main-light dark:text-text-main-dark text-xl font-bold">$45.00</span>
+</div>
+<button class="w-full bg-primary hover:bg-opacity-90 active:scale-[0.98] transition-all text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-primary/30 flex items-center justify-center gap-2 group">
+                Send Request
+                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>

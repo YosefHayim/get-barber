@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Barber Comparison Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11a4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                        "comparison-grid-bg": "#f0f4f7","comparison-grid-bg-dark": "#1a2a33",
+                        "comparison-header-bg": "#e2e8f0",
+                        "comparison-header-bg-dark": "#2b3c48",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }.no-scrollbar {
+            -ms-overflow-style: none;scrollbar-width: none;}
+        .map-pin {
+            transform: translate(-50%, -100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .map-pin:hover, .map-pin.active {
+            transform: translate(-50%, -110%) scale(1.1);
+            z-index: 20;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white h-screen w-full overflow-hidden relative">
+<div class="absolute inset-0 z-0 w-full h-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center opacity-80 dark:opacity-40" data-alt="Abstract map view of city streets top down" data-location="New York City" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBfvBfihE69P74Xf6cgqELjArtvfeQKljeUEqxUuusaaipsKVA2R51rrbZTjVcY8568W0Q_UV5g_a-uuUgf9hBODrwDkhZzCFQ6pTVLTZ7gVgFkhYYN7KGwRwNEl5w77OO5k_1GZb_1Bv3kfIjnDlE9pNLDJYOTOrROeJHmWztFTvefy2x9WvtRfMm1-JaLOd4FNowydF2-RLGInv8XhF8cVVd9geIded1XhisuMVdP_sV6pBT3lB9tUkuorx3fbh6LfRGH-iBIml3L');">
+</div>
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+<div class="w-16 h-16 bg-primary/20 rounded-full animate-ping absolute"></div>
+<div class="w-4 h-4 bg-primary border-2 border-white dark:border-gray-900 rounded-full relative shadow-lg"></div>
+</div>
+<div class="map-pin active absolute top-[40%] left-[20%] flex flex-col items-center group cursor-pointer z-10">
+<div class="relative">
+<div class="bg-primary text-white px-3 py-1.5 rounded-lg shadow-xl text-xs font-bold mb-1 whitespace-nowrap">
+                $35 • 5 min
+            </div>
+<div class="bg-primary p-2 rounded-full shadow-lg border-2 border-white dark:border-gray-900 mx-auto w-fit">
+<span class="material-symbols-outlined text-white text-[24px]">content_cut</span>
+</div>
+<div class="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[10px] border-t-primary mx-auto mt-[-2px]"></div>
+</div>
+</div>
+<div class="map-pin active absolute top-[30%] left-[60%] flex flex-col items-center group cursor-pointer z-10">
+<div class="relative">
+<div class="bg-primary text-white px-3 py-1.5 rounded-lg shadow-xl text-xs font-bold mb-1 whitespace-nowrap">
+                $40 • 10 min
+            </div>
+<div class="bg-primary p-2 rounded-full shadow-lg border-2 border-white dark:border-gray-900 mx-auto w-fit">
+<span class="material-symbols-outlined text-white text-[24px]">content_cut</span>
+</div>
+<div class="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[10px] border-t-primary mx-auto mt-[-2px]"></div>
+</div>
+</div>
+<div class="map-pin absolute top-[55%] left-[75%] flex flex-col items-center group cursor-pointer">
+<div class="bg-white dark:bg-gray-800 p-1.5 rounded-full shadow-lg border border-gray-100 dark:border-gray-700">
+<span class="material-symbols-outlined text-gray-600 dark:text-gray-300 text-[20px]">content_cut</span>
+</div>
+<div class="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-white dark:border-t-gray-800 mt-[-1px]"></div>
+</div>
+</div>
+<div class="absolute top-0 left-0 right-0 z-10 p-4 pt-12 bg-gradient-to-b from-white/90 via-white/50 to-transparent dark:from-black/80 dark:via-black/40 pointer-events-none">
+<div class="flex flex-col gap-3 pointer-events-auto">
+<div class="flex w-full items-center gap-3">
+<label class="flex flex-1 h-12 shadow-lg shadow-slate-200/50 dark:shadow-black/20">
+<div class="flex w-full items-stretch rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 overflow-hidden">
+<div class="text-gray-400 dark:text-gray-500 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="flex w-full min-w-0 flex-1 bg-transparent border-none text-slate-900 dark:text-white placeholder:text-gray-400 focus:ring-0 px-3 text-base font-normal leading-normal" placeholder="Find a barber nearby..." value=""/>
+<button class="px-4 border-l border-gray-100 dark:border-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+</label>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-primary text-white shadow-lg shadow-primary/30 pl-3 pr-4 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<p class="text-sm font-semibold">Available Now</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 shadow-sm pl-3 pr-4 transition-transform active:scale-95">
+<p class="text-sm font-medium">Rating 4.5+</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 shadow-sm pl-3 pr-4 transition-transform active:scale-95">
+<p class="text-sm font-medium">Price Range</p>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 shadow-sm pl-3 pr-4 transition-transform active:scale-95">
+<p class="text-sm font-medium">Type</p>
+</button>
+</div>
+</div>
+</div>
+<div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-3 z-10">
+<button class="flex size-11 items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-lg text-slate-700 dark:text-gray-200 active:bg-gray-50 dark:active:bg-gray-700">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+<button class="flex size-11 items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-lg text-slate-700 dark:text-gray-200 active:bg-gray-50 dark:active:bg-gray-700">
+<span class="material-symbols-outlined">layers</span>
+</button>
+</div>
+<div class="absolute inset-x-0 bottom-0 h-1/2 z-20 bg-comparison-grid-bg dark:bg-comparison-grid-bg-dark rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.12)] flex flex-col animate-in slide-in-from-bottom duration-300 overflow-hidden">
+<div class="flex items-center justify-between p-4 pb-2 bg-comparison-header-bg dark:bg-comparison-header-bg-dark border-b border-gray-200 dark:border-gray-700 rounded-t-3xl">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">Compare Barbers</h2>
+<button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-x-auto no-scrollbar scroll-snap-x p-2">
+<div class="grid grid-flow-col auto-cols-[minmax(250px,_1fr)] gap-4 h-full">
+<div class="w-full shrink-0 flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden snap-start">
+<div class="p-4 border-b border-gray-100 dark:border-gray-700 flex flex-col items-center">
+<div class="relative mb-2">
+<div class="w-16 h-16 rounded-full bg-cover bg-center border-2 border-primary shadow-md" data-alt="Portrait of barber Fade Master Mike" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDuRO-RJSyPba6Pk8Gpmuscutrw_mgcbWznWhW0Nm2M8phPprIJ9j34c2i9h3wax_gnAbn7Yj0Bq-d_7C_rL_Z_QHOJIymsMvGMFdn7BrUSEd5NNtBIW9MoSRUSnnm0VOGYbzU6aaQIFUFMW-1_u8FLG0GIfhcsw1rpFZ_oYPQkbb3DKnsS-_tsuH7mJ1bn_757o5XiUXfBY5Oo3xLZvpald5Anr5yLtLsRjfXyyLBmEorYx1_uhtJEQzDuQYym3HBnWP_cQsfH4cwo');"></div>
+<div class="absolute -bottom-1 -right-1 bg-green-500 border-2 border-white dark:border-gray-900 w-4 h-4 rounded-full"></div>
+</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Fade Master Mike</h3>
+<div class="flex items-center gap-1 mt-1 text-sm text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined text-[16px] text-yellow-500 fill-current">star</span>
+<span class="font-medium text-slate-800 dark:text-slate-200">4.9</span>
+<span>(120)</span>
+<span class="mx-1">•</span>
+<span>1.2 mi</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col divide-y divide-gray-100 dark:divide-gray-700 text-sm overflow-y-auto no-scrollbar">
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Avg. Wait Time</span>
+<span class="font-semibold text-primary">5 min</span>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Open Until</span>
+<span class="font-semibold text-green-600 dark:text-green-400">8:00 PM</span>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Cancellation Policy</span>
+<span class="font-semibold text-slate-800 dark:text-slate-200">24h notice</span>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Loyalty Program</span>
+<span class="font-semibold text-primary">Gold Tier</span>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Brands Used</span>
+<span class="font-semibold text-slate-800 dark:text-slate-200">Reuzel, Suavecito</span>
+</div>
+<div class="px-4 py-2">
+<span class="font-medium text-gray-600 dark:text-gray-300 block mb-1">Pricing Matrix</span>
+<ul class="list-disc list-inside text-xs text-slate-700 dark:text-slate-300 ml-2">
+<li>Haircut: <span class="font-bold">$35.00</span></li>
+<li>Haircut + Beard Trim: <span class="font-bold">$55.00</span></li>
+<li>Shave: <span class="font-bold">$30.00</span></li>
+</ul>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Next Availability</span>
+<span class="font-semibold text-primary">Today, 3:00 PM</span>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Payment Options</span>
+<span class="font-semibold text-slate-800 dark:text-slate-200">Card, Cash, App</span>
+</div>
+</div>
+<div class="p-4 pt-2">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold h-10 rounded-lg shadow-lg shadow-primary/25 flex items-center justify-center gap-2 text-sm transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">calendar_clock</span>
+                        Book Now
+                    </button>
+</div>
+</div>
+<div class="w-full shrink-0 flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden snap-start">
+<div class="p-4 border-b border-gray-100 dark:border-gray-700 flex flex-col items-center">
+<div class="relative mb-2">
+<div class="w-16 h-16 rounded-full bg-cover bg-center border-2 border-primary shadow-md" data-alt="Portrait of barber Barber B" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDjc8rEnyIJBMjprZ0Eh7yTDUtiHY9MkGkaCvwp5T0z-EVVyqKDdZ8RJUVkYlYm7574FJRaq8Hv_Uj5KxI2IKcmQS0xhowilKE740AMtEaefprwF8GwJNme4qNRgS0O890loMb6XDOSVDawi5Vf8p8Rw_RJMSmD_PV9Pw_zBBazaR13cmBL795XslC3DD1to5QCo9hmJDdSJJoEo8AHy0l4kV57_KmkONiDw-iNDvM2pbKre5FSf84faC_VIPl6k5svjtrYqXxr-VvJ');"></div>
+<div class="absolute -bottom-1 -right-1 bg-green-500 border-2 border-white dark:border-gray-900 w-4 h-4 rounded-full"></div>
+</div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">The Sharp Blade</h3>
+<div class="flex items-center gap-1 mt-1 text-sm text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined text-[16px] text-yellow-500 fill-current">star</span>
+<span class="font-medium text-slate-800 dark:text-slate-200">4.7</span>
+<span>(85)</span>
+<span class="mx-1">•</span>
+<span>0.8 mi</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col divide-y divide-gray-100 dark:divide-gray-700 text-sm overflow-y-auto no-scrollbar">
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Avg. Wait Time</span>
+<span class="font-semibold text-amber-500">10 min</span>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Open Until</span>
+<span class="font-semibold text-red-600 dark:text-red-400">6:00 PM</span>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Cancellation Policy</span>
+<span class="font-semibold text-slate-800 dark:text-slate-200">12h notice</span>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Loyalty Program</span>
+<span class="font-semibold text-amber-500">Bronze Tier</span>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Brands Used</span>
+<span class="font-semibold text-slate-800 dark:text-slate-200">Layrite, Imperial</span>
+</div>
+<div class="px-4 py-2">
+<span class="font-medium text-gray-600 dark:text-gray-300 block mb-1">Pricing Matrix</span>
+<ul class="list-disc list-inside text-xs text-slate-700 dark:text-slate-300 ml-2">
+<li>Haircut: <span class="font-bold">$40.00</span></li>
+<li>Haircut + Beard Trim: <span class="font-bold">$60.00</span></li>
+<li>Shave: <span class="font-bold">$35.00</span></li>
+</ul>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Next Availability</span>
+<span class="font-semibold text-primary">Today, 2:30 PM</span>
+</div>
+<div class="px-4 py-2 flex justify-between items-center">
+<span class="font-medium text-gray-600 dark:text-gray-300">Payment Options</span>
+<span class="font-semibold text-slate-800 dark:text-slate-200">Card, Cash</span>
+</div>
+</div>
+<div class="p-4 pt-2">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold h-10 rounded-lg shadow-lg shadow-primary/25 flex items-center justify-center gap-2 text-sm transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">calendar_clock</span>
+                        Book Now
+                    </button>
+</div>
+</div>
+<div class="w-full shrink-0 flex flex-col justify-center items-center bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 snap-start">
+<button class="flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 rounded-lg hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-4xl">add_circle</span>
+<span class="mt-2 text-lg font-semibold">Add Barber</span>
+<span class="text-sm">Tap a pin on map to add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-[80px] bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex justify-around items-start pt-3 z-30 pb-safe">
+<button class="flex flex-col items-center gap-1 w-16 group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">map</span>
+<span class="text-[10px] font-medium text-primary">Map</span>
+</button>
+<button class="flex flex-col items-center gap-1 w-16 group">
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">explore</span>
+<span class="text-[10px] font-medium text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300">Explore</span>
+</button>
+<button class="flex flex-col items-center gap-1 w-16 group">
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">calendar_month</span>
+<span class="text-[10px] font-medium text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300">Bookings</span>
+</button>
+<button class="flex flex-col items-center gap-1 w-16 group">
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">person</span>
+<span class="text-[10px] font-medium text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300">Profile</span>
+</button>
+</div>
+
+</body></html>

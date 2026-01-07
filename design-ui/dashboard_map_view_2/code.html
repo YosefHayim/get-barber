@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Barber Dashboard Map View</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11a4d4",
+                        "secondary": "#ef4444","background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    keyframes: {
+                        pulseAvatar: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' },
+                        },
+                        bounceTooltip: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '25%': { transform: 'translateY(-5px)' },
+                            '75%': { transform: 'translateY(5px)' },
+                        }
+                    },
+                    animation: {
+                        pulseAvatar: 'pulseAvatar 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        bounceTooltip: 'bounceTooltip 3s ease-in-out infinite'
+                    }
+                },
+            },
+        }
+    </script>
+<style>.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }.no-scrollbar {
+            -ms-overflow-style: none;scrollbar-width: none;}
+        .map-avatar {
+            transform: translate(-50%, -50%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            perspective: 1000px;}
+        .map-avatar:hover .avatar-image, .map-avatar.active .avatar-image {
+             transform: scale(1.08);
+             box-shadow: 0 0 0 4px var(--tw-colors-primary), 0 0 0 8px rgba(var(--tw-colors-primary), 0.3);
+             z-index: 20;
+        }
+        .map-avatar .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease-out;
+        }
+        .map-avatar:hover .tooltip, .map-avatar.active .tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }.discovery-journal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--tw-colors-background-light);z-index: 40;transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .discovery-journal.open {
+            transform: translateY(0);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white h-screen w-full overflow-hidden relative">
+<div class="absolute inset-0 z-0 w-full h-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center opacity-80 dark:opacity-40" data-alt="Abstract map view of city streets top down" data-location="New York City" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBfvBfihE69P74Xf6cgqELjArtvfeQKljeUEqxUuusaaipsKVA2R51rrbZTjVcY8568W0Q_UV5g_a-uuUgf9hBODrwDkhZzCFQ6pTVLTZ7gVgFkhYYN7KGwRwNEl5w77OO5k_1GZb_1Bv3kfIjnDlE9pNLDJYOTOrROeJHmWztFTvefy2x9WvtRfMm1-JaLOd4FNowydF2-RLGInv8XhF8cVVd9geIded1XhisuMVdP_sV6pBT3lB9tUkuorx3fbh6LfRGH-iBIml3L');">
+</div>
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+<div class="w-16 h-16 bg-primary/20 rounded-full animate-ping absolute"></div>
+<div class="w-4 h-4 bg-primary border-2 border-white dark:border-gray-900 rounded-full relative shadow-lg"></div>
+</div>
+<div class="map-avatar absolute top-[40%] left-[20%] flex flex-col items-center group cursor-pointer z-10" onclick="document.getElementById('discoveryJournal').classList.add('open')">
+<div class="relative flex flex-col items-center">
+<div class="avatar-image w-20 h-20 rounded-full bg-cover bg-center border-4 border-white dark:border-gray-900 shadow-xl animate-pulseAvatar transition-all duration-300 ease-out" data-alt="Portrait of barber Max Precision" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDjc8rEnyIJBMjprZ0Eh7yTDUtiHY9MkGkaCvwp5T0z-EVVyqKDdZ8RJUVkYlYm7574FJRaq8Hv_Uj5KxI2IKcmQS0xhowilKE740AMtEaefprwF8GwJNme4qNRgS0O890loMb6XDOSVDawi5Vf8p8Rw_RJMSmD_PV9Pw_zBBazaR13cmBL795XslC3DD1to5QCo9hmJDdSJJoEo8AHy0l4kV57_KmkONiDw-iNDvM2pbKre5FSf84faC_VIPl6k5svjtrYqXxr-VvJ');"></div>
+<div class="absolute -bottom-1 -right-1 bg-green-500 border-2 border-white dark:border-gray-900 w-4 h-4 rounded-full"></div>
+<div class="tooltip absolute -top-12 px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold rounded-lg shadow-md animate-bounceTooltip whitespace-nowrap">
+                    First-time customer discount!
+                </div>
+</div>
+</div>
+<div class="map-avatar absolute top-[30%] left-[60%] flex flex-col items-center group cursor-pointer z-10" onclick="document.getElementById('discoveryJournal').classList.add('open')">
+<div class="relative flex flex-col items-center">
+<div class="avatar-image w-20 h-20 rounded-full bg-cover bg-center border-4 border-white dark:border-gray-900 shadow-xl animate-pulseAvatar transition-all duration-300 ease-out" data-alt="Portrait of barber The Scissorhand" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDuRO-RJSyPba6Pk8Gpmuscutrw_mgcbWznWhW0Nm2M8phPprIJ9j34c2i9h3wax_gnAbn7Yj0Bq-d_7C_rL_Z_QHOJIymsMvGMFdn7BrUSEd5NNtBIW9MoSRUSnnm0VOGYbzU6aaQIFUFMW-1_u8FLG0GIfhcsw1rpFZ_oYPQkbb3DKnsS-_tsuH7mJ1bn_757o5XiUXfBY5Oo3xLZvpald5Anr5yLtLsRjfXyyLBmEorYx1_uhtJEQzDuQYym3HBnWP_cQsfH4cwo');"></div>
+<div class="absolute -bottom-1 -right-1 bg-green-500 border-2 border-white dark:border-gray-900 w-4 h-4 rounded-full"></div>
+<div class="tooltip absolute -top-12 px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-xs font-bold rounded-lg shadow-md animate-bounceTooltip whitespace-nowrap">
+                    Try our signature hot towel!
+                </div>
+</div>
+</div>
+<div class="map-avatar active absolute top-[55%] left-[75%] flex flex-col items-center cursor-pointer z-10" onclick="document.getElementById('discoveryJournal').classList.add('open')">
+<div class="relative flex flex-col items-center">
+<div class="avatar-image w-20 h-20 rounded-full bg-cover bg-center border-4 border-white dark:border-gray-900 shadow-xl animate-pulseAvatar transition-all duration-300 ease-out" data-alt="Portrait of barber Razor's Edge Rob" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3YTUJTfAei7KrcUTdwUlirfFylDXq-qC67rjufEPQPwfIxuGfSLSeDMFdaSNptdn4hjm1CXBhlcEYI5ZZZK6Yu5ez1J4dx2rMwTza-2BrHNdKP-XosOhc3kgpqkkbCKy-eEMgI_1sLVTMUAfU1DcZDdITGscbMTmr_A58JtxQRYAHdidSdSYPNQjnqsYzkd_8sIZdZleaPSBpaUNNzAdvrhxUq7QEc206TAuqJF3cxOxhGecZOoeC8KSmktEQ4x4cUitluD63lVaF');"></div>
+<div class="absolute -bottom-1 -right-1 bg-secondary border-2 border-white dark:border-gray-900 w-4 h-4 rounded-full"></div>
+<div class="tooltip absolute -top-12 px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xs font-bold rounded-lg shadow-md animate-bounceTooltip whitespace-nowrap">
+                    Walk-in accepted for next 30 min!
+                </div>
+</div>
+</div>
+</div>
+<div class="absolute top-0 left-0 right-0 z-20 p-4 pt-12 bg-gradient-to-b from-white/90 via-white/50 to-transparent dark:from-black/80 dark:via-black/40 pointer-events-none">
+<div class="flex flex-col gap-3 pointer-events-auto">
+<div class="flex w-full items-center gap-3">
+<label class="flex flex-1 h-12 shadow-lg shadow-slate-200/50 dark:shadow-black/20">
+<div class="flex w-full items-stretch rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 overflow-hidden">
+<div class="text-gray-400 dark:text-gray-500 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="flex w-full min-w-0 flex-1 bg-transparent border-none text-slate-900 dark:text-white placeholder:text-gray-400 focus:ring-0 px-3 text-base font-normal leading-normal" placeholder="Quest for a new look..." value=""/>
+<button class="px-4 border-l border-gray-100 dark:border-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+</label>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-primary text-white shadow-lg shadow-primary/30 pl-3 pr-4 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<p class="text-sm font-semibold">Ready for Battle</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 shadow-sm pl-3 pr-4 transition-transform active:scale-95">
+<p class="text-sm font-medium">Top Rated Quests</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 shadow-sm pl-3 pr-4 transition-transform active:scale-95">
+<p class="text-sm font-medium">Budget Friendly</p>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 shadow-sm pl-3 pr-4 transition-transform active:scale-95">
+<p class="text-sm font-medium">Epic Styles</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 shadow-sm pl-3 pr-4 transition-transform active:scale-95">
+<p class="text-sm font-medium">New Challengers</p>
+</button>
+</div>
+</div>
+</div>
+<div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-3 z-10">
+<button class="flex size-11 items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-lg text-slate-700 dark:text-gray-200 active:bg-gray-50 dark:active:bg-gray-700">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+<button class="flex size-11 items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-lg text-slate-700 dark:text-gray-200 active:bg-gray-50 dark:active:bg-gray-700">
+<span class="material-symbols-outlined">layers</span>
+</button>
+</div>
+<div class="discovery-journal discovery-journal fixed top-0 left-0 w-full h-full bg-background-light dark:bg-background-dark z-40 overflow-y-auto transform translate-y-full transition-transform duration-300 ease-out flex flex-col" id="discoveryJournal">
+<div class="absolute top-0 left-0 right-0 p-4 pt-12 flex justify-end z-10">
+<button class="size-10 flex items-center justify-center rounded-full bg-white/70 backdrop-blur-sm text-gray-800 dark:bg-gray-800/70 dark:text-white shadow-lg" onclick="document.getElementById('discoveryJournal').classList.remove('open')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="relative w-full h-64 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCoQVQ7Yn_a_WpqL5OciDixD3p0XlOArCIHTHmgfLlaYMxz87E0Bz5yR_jwqavi0C4YNlZdwby6i565Q2PZWU6vVlZT1HauRy3PFb94Rj-aaPSNTSXIyjqfHTqITcCikOqg-7qvQucTA_hY-AIQWkDfXIGvXRVdVQlH8waBRR3rEQPeLnAn43bdQ3wypRADfQoo6cgR3eLEQI13Zkt-c0I1_mxo-8Ebbv0jW5cZtaufT0IBMBmSfmdZvFBDMFlpkVC1AT-Qdmlz3KCv');">
+<div class="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark to-transparent"></div>
+</div>
+<div class="relative flex-1 -mt-16 bg-background-light dark:bg-background-dark rounded-t-3xl shadow-lg z-10 p-5 overflow-y-auto no-scrollbar">
+<div class="flex flex-col items-center text-center -mt-8">
+<div class="w-24 h-24 rounded-full bg-cover bg-center border-4 border-white dark:border-gray-900 shadow-xl" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDuRO-RJSyPba6Pk8Gpmuscutrw_mgcbWznWhW0Nm2M8phPprIJ9j34c2i9h3wax_gnAbn7Yj0Bq-d_7C_rL_Z_QHOJIymsMvGMFdn7BrUSEd5NNtBIW9MoSRUSnnm0VOGYbzU6aaQIFUFMW-1_u8FLG0GIfhcsw1rpFZ_oYPQkbb3DKnsS-_tsuH7mJ1bn_757o5XiUXfBY5Oo3xLZvpald5Anr5yLtLsRjfXyyLBmEorYx1_uhtJEQzDuQYym3HBnWP_cQsfH4cwo');"></div>
+<h2 class="text-3xl font-extrabold mt-4 text-slate-900 dark:text-white">Fade Master Mike</h2>
+<p class="text-sm text-gray-500 dark:text-gray-400">The Legendary Sculptor</p>
+<div class="flex items-center gap-2 mt-2 text-md text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined text-[20px] text-yellow-500 fill-current">star</span>
+<span class="font-bold text-slate-800 dark:text-slate-200">4.9</span>
+<span class="text-sm">(120 Quests Completed)</span>
+<span class="mx-1">•</span>
+<span>1.2 mi</span>
+</div>
+</div>
+<div class="flex flex-wrap justify-center gap-3 mt-6">
+<div class="flex items-center gap-1.5 px-4 py-2 bg-green-500 text-white rounded-full shadow-lg">
+<span class="material-symbols-outlined text-[18px]">hourglass_bottom</span>
+<span class="text-sm font-semibold">Quest Available: Walk-in for next 30 min!</span>
+</div>
+<div class="flex items-center gap-1.5 px-4 py-2 bg-orange-500 text-white rounded-full shadow-lg">
+<span class="material-symbols-outlined text-[18px]">local_offer</span>
+<span class="text-sm font-semibold">Special Offer: Hot Towel Treatment!</span>
+</div>
+<div class="flex items-center gap-1.5 px-4 py-2 bg-indigo-500 text-white rounded-full shadow-lg">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+<span class="text-sm font-semibold">Starting Price: $35</span>
+</div>
+</div>
+<div class="mt-8">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">About My Lair</h3>
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify">
+                    Step into Fade Master Mike's sanctuary where every cut is a masterpiece and every client leaves a legend. With over a decade of wielding the clippers, Mike specializes in razor-sharp fades, intricate designs, and beard sculpting that would make a Viking proud. He's not just a barber; he's an artist dedicated to crafting your ultimate look. Come, embark on your style quest!
+                </p>
+</div>
+<div class="mt-8">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Quest Menu &amp; Rewards</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col items-center">
+<div class="w-full h-32 rounded-xl bg-cover bg-center shadow-md border-2 border-gray-100 dark:border-gray-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3YTUJTfAei7KrcUTdwUlirfFylDXq-qC67rjufEPQPwfIxuGfSLSeDMFdaSNptdn4hjm1CXBhlcEYI5ZZZK6Yu5ez1J4dx2rMwTza-2BrHNdKP-XosOhc3kgpqkkbCKy-eEMgI_1sLVTMUAfU1DcZDdITGscbMTmr_A58JtxQRYAHdidSdSYPNQjnqsYzkd_8sIZdZleaPSBpaUNNzAdvrhxUq7QEc206TAuqJF3cxOxhGecZOoeC8KSmktEQ4x4cUitluD63lVaF');"></div>
+<p class="mt-2 text-sm font-medium text-slate-800 dark:text-slate-200">Classic Fade ($40)</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-full h-32 rounded-xl bg-cover bg-center shadow-md border-2 border-gray-100 dark:border-gray-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDjc8rEnyIJBMjprZ0Eh7yTDUtiHY9MkGkaCvwp5T0z-EVVyqKDdZ8RJUVkYlYm7574FJRaq8Hv_Uj5KxI2IKcmQS0xhowilKE740AMtEaefprwF8GwJNme4qNRgS0O890loMb6XDOSVDawi5Vf8p8Rw_RJMSmD_PV9Pw_zBBazaR13cmBL795XslC3DD1to5QCo9hmJDdSJJoEo8AHy0l4kV57_KmkONiDw-iNDvM2pbKre5FSf84faC_VIPl6k5svjtrYqXxr-VvJ');"></div>
+<p class="mt-2 text-sm font-medium text-slate-800 dark:text-slate-200">Beard Trim &amp; Shape ($25)</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-full h-32 rounded-xl bg-cover bg-center shadow-md border-2 border-gray-100 dark:border-gray-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDAcGRXHJjI1WMIIaHU4neCPsrpBS9sFFPXIgFRRN1WT-vsolKNyl3claEGTTK0wwV2cfC8eMI2ksIioOCHHOkDe18C9wzf9uaN_uAzd05fUSnsq_bTAjmwORY6QfVAFU7EH8MNd-mptHNH1HLUh4OZK-nZjcLO9oAPE3Y6zlZJgFOBT8LChMox2vaCdm-_jScAiwpoKpF-eAcXkFGCo_Oy6GRjumyXIzPfyjXnoxEj03xKS-L0VoXnTT9AgCsPVmSQ7d9RAimzEd7V');"></div>
+<p class="mt-2 text-sm font-medium text-slate-800 dark:text-slate-200">Hot Towel Shave ($30)</p>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-full h-32 rounded-xl bg-cover bg-center shadow-md border-2 border-gray-100 dark:border-gray-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAapbt6u4IO5nVv0KxbqxlSfeyydJrIklzYRLr4YxbWynPwfLGQAJ63j3jdd4xEGTatk0023IyfjC88B8J6-iGkbc9K6w6gu-pd1CezgTvFl6W01cUY_6lcRMyNA-f6K3SLlOLVx-E9orAyNaTQUt5ByTNYPQwCw8lDutcyYIdY-ueZFhwSWr57TXL6LgXGJswcTsQFIpK1tmovH0Cxp5CeethO3aIgo-DNrlvNLeMG8JalcD1C5bKL9LzA1jRcctENHFhDUXMDkDfG');"></div>
+<p class="mt-2 text-sm font-medium text-slate-800 dark:text-slate-200">Modern Texturized Cut ($50)</p>
+</div>
+</div>
+</div>
+<div class="mt-8 mb-10">
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Join My Guild</h3>
+<div class="flex gap-4 justify-center">
+<a aria-label="Facebook" class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg hover:scale-105 transition-transform" href="#">
+<span class="material-symbols-outlined text-[24px]">public</span>
+</a>
+<a aria-label="Instagram" class="w-12 h-12 rounded-full bg-pink-500 flex items-center justify-center text-white shadow-lg hover:scale-105 transition-transform" href="#">
+<img alt="Instagram" class="w-6 h-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuB0jboMThKJFyBv-JMwlwvgqRL1qG7NcI3-JOcrHg9m82VT3w_YNO1EK9vf8xqCAT8N_qEGiBV9GFXIG9ZF6QJo_CnA3ocwtP0ja18f_6-V3llwf7k8X2blLJqSQwh5uOPSfsGwMXUv-QZDCu4SLnFCC_ptAQ-4SD1gLfTaEzmd0Nfz4e2Dubvpk067cgm_Vd9n3zWfnIv-p9c2SLs0rT2-O_7vFHVokApGtDqrm5_OlPKZbe11YvQlcbuppcyqOxlZng9uuIfOyO"/>
+</a>
+<a aria-label="TikTok" class="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-white shadow-lg hover:scale-105 transition-transform" href="#">
+<span class="material-symbols-outlined text-[24px]">attractions</span>
+</a>
+<a aria-label="Contact" class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white shadow-lg hover:scale-105 transition-transform" href="#">
+<span class="material-symbols-outlined text-[24px]">chat</span>
+</a>
+</div>
+</div>
+</div>
+<div class="sticky bottom-0 bg-background-light dark:bg-background-dark p-5 pt-3 shadow-[0_-8px_30px_rgba(0,0,0,0.05)] dark:shadow-[0_-8px_30px_rgba(255,255,255,0.05)] z-20 pb-safe">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold h-12 rounded-xl shadow-lg shadow-primary/25 flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">calendar_clock</span>
+                    Book Your Quest!
+                </button>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-[80px] bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex justify-around items-start pt-3 z-30 pb-safe">
+<button class="flex flex-col items-center gap-1 w-16 group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">map</span>
+<span class="text-[10px] font-medium text-primary">Map</span>
+</button>
+<button class="flex flex-col items-center gap-1 w-16 group">
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">explore</span>
+<span class="text-[10px] font-medium text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300">Quests</span>
+</button>
+<button class="flex flex-col items-center gap-1 w-16 group">
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">calendar_month</span>
+<span class="text-[10px] font-medium text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300">Adventures</span>
+</button>
+<button class="flex flex-col items-center gap-1 w-16 group">
+<span class="material-symbols-outlined text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">person</span>
+<span class="text-[10px] font-medium text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300">Hero</span>
+</button>
+</div>
+</body></html>

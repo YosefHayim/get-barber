@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Barber En Route</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px"},
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom map marker pulse effect */
+        .marker-pulse {
+            box-shadow: 0 0 0 0 rgba(19, 91, 236, 0.7);
+            animation: pulse-blue 2s infinite;
+        }
+        @keyframes pulse-blue {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(19, 91, 236, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 20px rgba(19, 91, 236, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(19, 91, 236, 0);
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-white overflow-hidden h-screen w-full relative">
+<!-- Full Screen Map Background -->
+<div class="absolute inset-0 z-0 bg-[#111722]">
+<!-- Map Image with dark filter -->
+<div class="absolute inset-0 bg-cover bg-center filter brightness-[0.4] contrast-[1.1] grayscale-[0.2]" data-alt="Dark minimal city map view showing streets and blocks" data-location="Downtown Grid" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAurQVRD_YPQOAoCCq59IgFzVcW1CReRwjSS5dGHPQU8_W1eaHOT8Tq43qWNUAuvZzVXTE50GCMb44X993AATDagrbpD2rJ9sXapW733RhWl_rVXoN3eb1usM0YACu9aS0sgiSX1HwoD440MBq0cWNeErUCSJeRcCEpvuPq7s-8WYJvISfUgB8G7-sOeVd9lqAqbs2gIZRs8rf6d_O-51bZrWpKJqZD7wWEBfq3LCZansQnm7mAtb17y_tnOD4UqQbXYgrXImeIScmU');">
+</div>
+<!-- Simulated Route Path (SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-80" preserveaspectratio="none" viewbox="0 0 375 812">
+<!-- Glow Effect -->
+<path d="M120 700 C 150 600, 220 500, 200 400 S 280 200, 300 150" fill="none" stroke="#135bec" stroke-linecap="round" stroke-opacity="0.3" stroke-width="8"></path>
+<!-- Main Line -->
+<path class="animate-pulse" d="M120 700 C 150 600, 220 500, 200 400 S 280 200, 300 150" fill="none" stroke="#135bec" stroke-dasharray="10 6" stroke-linecap="round" stroke-width="4"></path>
+</svg>
+<!-- Barber Pin (Moving) -->
+<div class="absolute top-[38%] left-[55%] -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
+<div class="bg-primary text-white p-2.5 rounded-full marker-pulse flex items-center justify-center border-2 border-white/20">
+<span class="material-symbols-outlined text-[20px]">content_cut</span>
+</div>
+</div>
+<!-- User Pin (Home) -->
+<div class="absolute bottom-[20%] left-[32%] -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
+<div class="bg-white text-background-dark p-2 rounded-full shadow-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px] filled">home</span>
+</div>
+<div class="bg-white/90 text-background-dark text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 shadow-md">You</div>
+</div>
+</div>
+<!-- Top Floating UI -->
+<div class="absolute top-0 left-0 w-full p-4 pt-14 z-30 flex justify-between items-start pointer-events-none">
+<!-- Back Button -->
+<button class="pointer-events-auto flex items-center justify-center w-10 h-10 rounded-full bg-[#192233]/80 backdrop-blur-md text-white shadow-lg border border-white/5 hover:bg-[#192233] transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<!-- ETA Pill (Primary Focus) -->
+<div class="pointer-events-auto flex items-center gap-3 bg-primary/90 backdrop-blur-md px-5 py-2.5 rounded-full shadow-xl shadow-primary/20 border border-white/10 animate-fade-in-down">
+<span class="material-symbols-outlined text-white text-[20px]">schedule</span>
+<div class="flex flex-col items-start leading-none">
+<span class="text-[10px] uppercase tracking-wider opacity-80 font-medium">Arriving in</span>
+<span class="text-sm font-bold">12 mins</span>
+</div>
+</div>
+<!-- Empty spacer for balance -->
+<div class="w-10"></div>
+</div>
+<!-- Floating Map Controls -->
+<div class="absolute right-4 bottom-[280px] z-30 flex flex-col gap-3 pointer-events-auto">
+<button class="flex size-10 items-center justify-center rounded-lg bg-[#192233]/90 backdrop-blur text-white shadow-lg border border-white/5 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[24px]">my_location</span>
+</button>
+<div class="flex flex-col gap-0.5 rounded-lg overflow-hidden shadow-lg border border-white/5">
+<button class="flex size-10 items-center justify-center bg-[#192233]/90 backdrop-blur text-white hover:bg-[#232f48] active:bg-[#232f48]">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</button>
+<div class="h-px bg-white/10 w-full"></div>
+<button class="flex size-10 items-center justify-center bg-[#192233]/90 backdrop-blur text-white hover:bg-[#232f48] active:bg-[#232f48]">
+<span class="material-symbols-outlined text-[24px]">remove</span>
+</button>
+</div>
+</div>
+<!-- Bottom Sheet (Barber Details) -->
+<div class="absolute bottom-0 left-0 w-full z-40 bg-[#111722]/95 backdrop-blur-xl rounded-t-3xl border-t border-white/10 shadow-[0_-10px_40px_rgba(0,0,0,0.6)] pb-8 pt-2 transform transition-transform duration-300">
+<!-- Drag Handle -->
+<div class="w-full flex justify-center py-3">
+<div class="w-12 h-1 rounded-full bg-[#324467]"></div>
+</div>
+<!-- Content -->
+<div class="px-6 pb-2">
+<!-- Barber Header -->
+<div class="flex items-center gap-4 mb-6">
+<!-- Avatar with status indicator -->
+<div class="relative shrink-0">
+<div class="w-16 h-16 rounded-full bg-cover bg-center border-2 border-primary/50 shadow-lg" data-alt="Profile picture of barber James smiling" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDiWzmYWDMNjLZLgXQbq7yNScSl3jTRFUoD7xLWVohPrJKEUNAznMyDnTUH2D-W50YcxJ0CJMWreViuN0zNADThO6DKOiUjElPGayJZ1s5sWCOM26LIwA-LFGB6IQVJzlMphvGNr4uUQlXq_R9ADrTpLosie_mYxyja4C4bBTzV6eVyFzb67wOx9lVoju7u_94fiCRmW1Q-HX17aRXK2U8-wXEMsC2qyQaOUc3Rl3LvYmxQVAnxoqLU5iY9PU97RskjgeeqTs4eCpz2');">
+</div>
+<div class="absolute -bottom-1 -right-1 bg-green-500 w-5 h-5 rounded-full border-[3px] border-[#111722] flex items-center justify-center"></div>
+</div>
+<!-- Text Info -->
+<div class="flex-1 min-w-0">
+<h3 class="text-white text-lg font-bold leading-tight truncate">James is on the way</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="flex items-center bg-[#232f48] px-1.5 py-0.5 rounded text-xs font-medium text-white">
+<span class="material-symbols-outlined text-[12px] mr-1 text-yellow-400 fill-current">star</span>
+                            4.9
+                        </span>
+<span class="text-[#92a4c9] text-sm truncate">• Barber Pro • 800+ cuts</span>
+</div>
+</div>
+</div>
+<!-- Contextual Info (Ride/Service) -->
+<div class="flex items-center justify-between bg-[#192233] rounded-xl p-3 mb-5 border border-white/5">
+<div class="flex items-center gap-3">
+<div class="bg-[#232f48] p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">electric_scooter</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-[#92a4c9] font-medium uppercase tracking-wide">Vehicle</span>
+<span class="text-sm text-white font-medium">Blue Yamaha • AB 123 CD</span>
+</div>
+</div>
+<button class="text-[#92a4c9] hover:text-white transition-colors">
+<span class="material-symbols-outlined">info</span>
+</button>
+</div>
+<!-- Action Buttons -->
+<div class="grid grid-cols-[1fr_1fr_auto] gap-3">
+<button class="group flex items-center justify-center gap-2 bg-[#232f48] hover:bg-[#2d3b55] active:bg-[#1f2937] text-white py-3.5 rounded-xl transition-all duration-200 border border-transparent hover:border-white/5">
+<span class="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform">call</span>
+<span class="font-medium text-sm">Call</span>
+</button>
+<button class="group flex items-center justify-center gap-2 bg-primary hover:bg-blue-600 active:bg-blue-700 text-white py-3.5 rounded-xl shadow-lg shadow-primary/25 transition-all duration-200">
+<span class="material-symbols-outlined text-[22px] group-hover:scale-110 transition-transform">chat</span>
+<span class="font-medium text-sm">Message</span>
+</button>
+<!-- Safety/More options -->
+<button class="flex items-center justify-center bg-[#232f48] hover:bg-[#2d3b55] text-[#92a4c9] hover:text-white w-14 rounded-xl transition-colors border border-transparent hover:border-white/5">
+<span class="material-symbols-outlined">shield</span>
+</button>
+</div>
+<!-- Cancel text link -->
+<div class="mt-6 text-center">
+<button class="text-xs font-medium text-[#92a4c9] hover:text-white transition-colors">Cancel booking</button>
+</div>
+</div>
+</div>
+</body></html>

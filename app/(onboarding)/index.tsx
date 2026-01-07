@@ -1,9 +1,22 @@
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import { Text, Button } from 'react-native-paper';
+import React, { useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+  Pressable,
+  Text,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Scissors, Sparkles, MapPin, MessageCircle, Star } from 'lucide-react-native';
+import {
+  Scissors,
+  Home,
+  Store,
+  ChevronRight,
+  LogIn,
+  UserPlus,
+} from 'lucide-react-native';
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -12,54 +25,52 @@ import Animated, {
   withRepeat,
   withTiming,
   withSequence,
-  withDelay,
+  Easing,
 } from 'react-native-reanimated';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const { width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
-function FloatingIcon({ 
-  icon: Icon, 
-  color, 
-  size, 
-  top, 
-  left, 
-  delay 
-}: { 
-  icon: typeof Sparkles; 
-  color: string; 
-  size: number; 
-  top: number; 
-  left: number; 
-  delay: number; 
-}) {
-  const translateY = useSharedValue(0);
-  const opacity = useSharedValue(0);
+const DARK_COLORS = {
+  background: '#101622',
+  surface: '#181b21',
+  surfaceLight: '#1C2333',
+  primary: '#3b82f6',
+  primaryDark: '#2563eb',
+  accent: '#f59e0b',
+  textPrimary: '#FFFFFF',
+  textSecondary: '#9CA3AF',
+  textMuted: '#6B7280',
+  border: 'rgba(255, 255, 255, 0.1)',
+  borderLight: 'rgba(255, 255, 255, 0.05)',
+};
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+function PingDot() {
+  const opacity = useSharedValue(1);
 
   useEffect(() => {
-    opacity.value = withDelay(delay, withTiming(1, { duration: 500 }));
-    translateY.value = withDelay(
-      delay,
-      withRepeat(
-        withSequence(
-          withTiming(-10, { duration: 1500 }),
-          withTiming(10, { duration: 1500 })
-        ),
-        -1,
-        true
-      )
+    opacity.value = withRepeat(
+      withSequence(
+        withTiming(0.3, { duration: 1000, easing: Easing.out(Easing.ease) }),
+        withTiming(1, { duration: 1000, easing: Easing.in(Easing.ease) })
+      ),
+      -1,
+      false
     );
   }, []);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
+  const pingStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
+    transform: [{ scale: 1 + (1 - opacity.value) * 0.5 }],
   }));
 
   return (
-    <Animated.View style={[styles.floatingIcon, { top, left }, animatedStyle]}>
-      <Icon size={size} color={color} />
-    </Animated.View>
+    <View style={styles.pingContainer}>
+      <Animated.View style={[styles.pingOuter, pingStyle]} />
+      <View style={styles.pingInner} />
+    </View>
   );
 }
 
@@ -70,8 +81,8 @@ export default function WelcomeScreen(): React.JSX.Element {
   useEffect(() => {
     pulseScale.value = withRepeat(
       withSequence(
-        withTiming(1.05, { duration: 1000 }),
-        withTiming(1, { duration: 1000 })
+        withTiming(1.02, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(1, { duration: 2000, easing: Easing.inOut(Easing.ease) })
       ),
       -1,
       true
@@ -82,76 +93,158 @@ export default function WelcomeScreen(): React.JSX.Element {
     transform: [{ scale: pulseScale.value }],
   }));
 
-  const handleGetStarted = () => {
+  const handleBookHome = () => {
     router.push('/(onboarding)/user-type');
   };
 
+  const handleFindBarbers = () => {
+    router.push('/(tabs)/home');
+  };
+
+  const handleLogin = () => {
+    router.push('/(auth)/login');
+  };
+
+  const handleSignUp = () => {
+    router.push('/(auth)/register');
+  };
+
   return (
-    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-      <FloatingIcon icon={Sparkles} color={COLORS.gold} size={24} top={100} left={40} delay={0} />
-      <FloatingIcon icon={Star} color={COLORS.goldDark} size={20} top={150} left={width - 80} delay={200} />
-      <FloatingIcon icon={MapPin} color={COLORS.burgundy} size={22} top={250} left={60} delay={400} />
-      <FloatingIcon icon={MessageCircle} color={COLORS.gold} size={18} top={220} left={width - 100} delay={600} />
-
-      <View style={styles.content}>
-        <Animated.View
-          entering={FadeIn.duration(800)}
-          style={[styles.logoContainer, logoAnimatedStyle]}
-        >
-          <View style={styles.logoOuter}>
-            <View style={styles.logoInner}>
-              <Scissors size={48} color={COLORS.textInverse} style={styles.scissorsIcon} />
-            </View>
-          </View>
-          <View style={styles.sparklePosition}>
-            <Sparkles size={20} color={COLORS.gold} fill={COLORS.gold} />
-          </View>
-        </Animated.View>
-
-        <Animated.View entering={FadeInDown.delay(300).duration(600)}>
-          <Text style={styles.title}>BarberConnect</Text>
-          <Text style={styles.tagline}>Premium barbers at your doorstep</Text>
-        </Animated.View>
-
-        <Animated.View entering={FadeInDown.delay(500).duration(600)} style={styles.features}>
-          <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <MapPin size={20} color={COLORS.gold} />
-            </View>
-            <Text style={styles.featureText}>On-demand service at your location</Text>
-          </View>
-          <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <Star size={20} color={COLORS.gold} />
-            </View>
-            <Text style={styles.featureText}>Top-rated professional barbers</Text>
-          </View>
-          <View style={styles.featureItem}>
-            <View style={styles.featureIcon}>
-              <MessageCircle size={20} color={COLORS.gold} />
-            </View>
-            <Text style={styles.featureText}>Negotiate prices directly</Text>
-          </View>
-        </Animated.View>
-      </View>
-
-      <Animated.View
-        entering={FadeInDown.delay(700).duration(600)}
-        style={[styles.bottomSection, { paddingBottom: insets.bottom + SPACING.xl }]}
+    <View style={styles.container}>
+      <ImageBackground
+        source={{
+          uri: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&q=80',
+        }}
+        style={styles.backgroundImage}
+        resizeMode="cover"
       >
-        <Button
-          mode="contained"
-          onPress={handleGetStarted}
-          style={styles.button}
-          contentStyle={styles.buttonContent}
-          labelStyle={styles.buttonLabel}
+        <LinearGradient
+          colors={['rgba(0,0,0,0.6)', 'transparent', 'transparent']}
+          style={styles.gradientTop}
+        />
+        <LinearGradient
+          colors={['transparent', DARK_COLORS.background, DARK_COLORS.background]}
+          locations={[0, 0.4, 1]}
+          style={styles.gradientBottom}
+        />
+
+        <Animated.View
+          entering={FadeIn.duration(600)}
+          style={[styles.header, { paddingTop: insets.top + 12 }]}
         >
-          Get Started
-        </Button>
-        <Text style={styles.termsText}>
-          By continuing, you agree to our Terms of Service and Privacy Policy
-        </Text>
-      </Animated.View>
+          <Animated.View style={[styles.logoRow, logoAnimatedStyle]}>
+            <View style={styles.logoContainer}>
+              <Scissors size={20} color="#FFFFFF" style={styles.scissorsIcon} />
+            </View>
+            <Text style={styles.brandName}>
+              Barber<Text style={styles.brandAccent}>Hub</Text>
+            </Text>
+          </Animated.View>
+        </Animated.View>
+
+        <View style={styles.mainContent}>
+          <Animated.View
+            entering={FadeInDown.delay(200).duration(500)}
+            style={styles.badge}
+          >
+            <PingDot />
+            <Text style={styles.badgeText}>PREMIUM SERVICE</Text>
+          </Animated.View>
+
+          <Animated.View entering={FadeInDown.delay(300).duration(600)}>
+            <Text style={styles.headline}>
+              Style that{'\n'}
+              <Text style={styles.headlineGradient}>comes to you.</Text>
+            </Text>
+          </Animated.View>
+
+          <Animated.Text
+            entering={FadeInDown.delay(400).duration(600)}
+            style={styles.subtext}
+          >
+            Experience the luxury of a personal barber at home, or find the
+            finest chairs in your city instantly.
+          </Animated.Text>
+        </View>
+
+        <Animated.View
+          entering={FadeInDown.delay(500).duration(600)}
+          style={[styles.bottomSection, { paddingBottom: insets.bottom + 16 }]}
+        >
+          <AnimatedPressable
+            entering={FadeInDown.delay(600).duration(500)}
+            onPress={handleBookHome}
+            style={({ pressed }) => [
+              styles.primaryButton,
+              pressed && styles.buttonPressed,
+            ]}
+          >
+            <View style={styles.buttonContent}>
+              <View style={styles.buttonIconContainer}>
+                <Home size={22} color="#FFFFFF" />
+              </View>
+              <View style={styles.buttonTextContainer}>
+                <Text style={styles.buttonTitle}>Book at Home</Text>
+                <Text style={styles.buttonSubtitle}>Barber comes to your door</Text>
+              </View>
+            </View>
+            <ChevronRight size={20} color="rgba(255,255,255,0.6)" />
+          </AnimatedPressable>
+
+          <AnimatedPressable
+            entering={FadeInDown.delay(700).duration(500)}
+            onPress={handleFindBarbers}
+            style={({ pressed }) => [
+              styles.secondaryButton,
+              pressed && styles.buttonPressed,
+            ]}
+          >
+            <View style={styles.buttonContent}>
+              <View style={styles.secondaryIconContainer}>
+                <Store size={22} color="#FFFFFF" />
+              </View>
+              <View style={styles.buttonTextContainer}>
+                <Text style={styles.buttonTitle}>Find a Shop</Text>
+                <Text style={styles.secondarySubtitle}>Book a chair nearby</Text>
+              </View>
+            </View>
+            <ChevronRight size={20} color="rgba(255,255,255,0.4)" />
+          </AnimatedPressable>
+
+          <Animated.View
+            entering={FadeInDown.delay(800).duration(500)}
+            style={styles.authRow}
+          >
+            <Pressable
+              onPress={handleLogin}
+              style={({ pressed }) => [
+                styles.authButton,
+                pressed && styles.authButtonPressed,
+              ]}
+            >
+              <LogIn size={18} color="#FFFFFF" />
+              <Text style={styles.authButtonText}>Log In</Text>
+            </Pressable>
+            <Pressable
+              onPress={handleSignUp}
+              style={({ pressed }) => [
+                styles.authButton,
+                pressed && styles.authButtonPressed,
+              ]}
+            >
+              <UserPlus size={18} color="#FFFFFF" />
+              <Text style={styles.authButtonText}>Sign Up</Text>
+            </Pressable>
+          </Animated.View>
+
+          <Animated.Text
+            entering={FadeInDown.delay(900).duration(500)}
+            style={styles.termsText}
+          >
+            By continuing, you agree to our Terms & Privacy Policy
+          </Animated.Text>
+        </Animated.View>
+      </ImageBackground>
     </View>
   );
 }
@@ -159,112 +252,218 @@ export default function WelcomeScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: DARK_COLORS.background,
   },
-  floatingIcon: {
-    position: 'absolute',
-    zIndex: 1,
-  },
-  content: {
+  backgroundImage: {
     flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  gradientTop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: height * 0.3,
+  },
+  gradientBottom: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: height * 0.7,
+  },
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 24,
+    zIndex: 10,
+  },
+  logoRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: SPACING.xl,
+    gap: 10,
   },
   logoContainer: {
-    marginBottom: SPACING['2xl'],
-  },
-  logoOuter: {
-    width: 120,
-    height: 120,
-    borderRadius: 32,
-    backgroundColor: COLORS.burgundy,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: COLORS.burgundy,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 12,
-  },
-  logoInner: {
-    width: 90,
-    height: 90,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
   },
   scissorsIcon: {
     transform: [{ rotate: '-45deg' }],
   },
-  sparklePosition: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    backgroundColor: COLORS.surface,
-    borderRadius: 14,
-    padding: 4,
-    shadowColor: COLORS.gold,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 4,
+  brandName: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
   },
-  title: {
-    fontSize: 36,
-    fontWeight: '800',
-    color: COLORS.textPrimary,
-    textAlign: 'center',
-    letterSpacing: -0.5,
+  brandAccent: {
+    color: DARK_COLORS.primary,
   },
-  tagline: {
-    fontSize: TYPOGRAPHY.lg,
-    color: COLORS.textSecondary,
-    textAlign: 'center',
-    marginTop: SPACING.sm,
+  mainContent: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 24,
+    paddingBottom: 32,
   },
-  features: {
-    marginTop: SPACING['3xl'],
-    gap: SPACING.lg,
-  },
-  featureItem: {
+  badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.md,
+    alignSelf: 'flex-start',
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+    borderWidth: 1,
+    borderColor: 'rgba(59, 130, 246, 0.3)',
+    marginBottom: 16,
   },
-  featureIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: COLORS.goldMuted,
+  pingContainer: {
+    width: 10,
+    height: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  featureText: {
-    fontSize: TYPOGRAPHY.md,
-    color: COLORS.textPrimary,
-    fontWeight: '500',
+  pingOuter: {
+    position: 'absolute',
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: DARK_COLORS.primary,
+  },
+  pingInner: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: DARK_COLORS.primary,
+  },
+  badgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#93C5FD',
+    letterSpacing: 1,
+  },
+  headline: {
+    fontSize: 44,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    lineHeight: 50,
+    marginBottom: 16,
+  },
+  headlineGradient: {
+    color: '#60A5FA',
+  },
+  subtext: {
+    fontSize: 17,
+    color: DARK_COLORS.textSecondary,
+    lineHeight: 26,
+    maxWidth: '95%',
   },
   bottomSection: {
-    paddingHorizontal: SPACING.xl,
-    gap: SPACING.lg,
+    paddingHorizontal: 24,
+    gap: 12,
   },
-  button: {
-    borderRadius: RADIUS.lg,
-    backgroundColor: COLORS.goldDark,
+  primaryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: DARK_COLORS.primary,
+    borderRadius: 24,
+    padding: 6,
+    paddingRight: 20,
+  },
+  secondaryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: DARK_COLORS.surface,
+    borderRadius: 24,
+    padding: 6,
+    paddingRight: 20,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
+  },
+  buttonPressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.98 }],
   },
   buttonContent: {
-    height: 56,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
   },
-  buttonLabel: {
-    fontSize: TYPOGRAPHY.md,
-    fontWeight: '600',
+  buttonIconContainer: {
+    width: 52,
+    height: 52,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  secondaryIconContainer: {
+    width: 52,
+    height: 52,
+    borderRadius: 18,
+    backgroundColor: DARK_COLORS.surfaceLight,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.borderLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonTextContainer: {
+    gap: 2,
+  },
+  buttonTitle: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  buttonSubtitle: {
+    fontSize: 13,
+    color: 'rgba(147, 197, 253, 0.9)',
+  },
+  secondarySubtitle: {
+    fontSize: 13,
+    color: DARK_COLORS.textMuted,
+  },
+  authRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
+  },
+  authButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 16,
+    borderRadius: 16,
+    backgroundColor: DARK_COLORS.surface,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.borderLight,
+  },
+  authButtonPressed: {
+    backgroundColor: DARK_COLORS.surfaceLight,
+  },
+  authButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#FFFFFF',
   },
   termsText: {
-    fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    fontSize: 11,
+    color: DARK_COLORS.textMuted,
     textAlign: 'center',
-    lineHeight: 18,
+    marginTop: 8,
   },
 });

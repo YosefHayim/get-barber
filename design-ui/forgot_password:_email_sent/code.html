@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Forgot Password - Email Sent</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11a4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden transition-colors duration-200" style='font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;'>
+<!-- TopAppBar -->
+<div class="flex items-center px-4 py-4 justify-between sticky top-0 z-10">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-[#111618] dark:text-white">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-[#111618] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-10">
+<!-- Title is intentionally empty or minimal to focus on content below, mimicking clean modal styles -->
+</h2>
+</div>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col items-center justify-center px-6 pb-12 w-full max-w-md mx-auto">
+<!-- Success Illustration (Modified from EmptyState) -->
+<div class="flex flex-col items-center gap-8 w-full">
+<!-- Illustration Container -->
+<div class="relative flex items-center justify-center">
+<!-- Decorative background blur -->
+<div class="absolute inset-0 bg-primary/20 blur-2xl rounded-full transform scale-150" data-alt="Soft cyan glow effect behind the envelope icon"></div>
+<!-- Icon Circle -->
+<div class="relative w-32 h-32 bg-white dark:bg-[#1a2c32] rounded-full flex items-center justify-center shadow-sm z-10">
+<span class="material-symbols-outlined text-[64px] text-primary" style="font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;">mark_email_read</span>
+</div>
+</div>
+<!-- Text Content -->
+<div class="flex max-w-[480px] flex-col items-center gap-3">
+<h1 class="text-[#111618] dark:text-white text-2xl font-bold leading-tight tracking-[-0.015em] text-center">
+                        Email Sent!
+                    </h1>
+<p class="text-[#617f89] dark:text-gray-400 text-base font-normal leading-relaxed text-center max-w-[320px]">
+                        We have sent password recovery instructions to your email.
+                    </p>
+</div>
+<!-- Actions -->
+<div class="w-full flex flex-col gap-3 mt-4">
+<!-- Primary Button (Modified EmptyState Button) -->
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-primary hover:bg-primary/90 text-white text-base font-bold leading-normal tracking-[0.015em] transition-all active:scale-[0.98] shadow-lg shadow-primary/25">
+<span class="truncate">Open Email App</span>
+</button>
+<!-- Secondary Button (Modified SingleButton) -->
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-transparent hover:bg-black/5 dark:hover:bg-white/5 text-[#617f89] dark:text-gray-300 text-base font-bold leading-normal tracking-[0.015em] transition-colors">
+<span class="truncate">Skip, I'll confirm later</span>
+</button>
+</div>
+</div>
+<!-- MetaText / Footer -->
+<div class="mt-8">
+<p class="text-[#617f89] dark:text-gray-500 text-sm font-medium leading-normal text-center px-4">
+                    Did not receive the email? <br class="hidden sm:block"/> Check your spam filter, or <button class="text-primary hover:text-primary/80 font-bold underline decoration-2 underline-offset-4 transition-colors">Resend</button>.
+                </p>
+</div>
+</div>
+<!-- Bottom Spacer -->
+<div class="h-5"></div>
+</div>
+</body></html>

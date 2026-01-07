@@ -1,83 +1,305 @@
 /**
- * BarberConnect Premium Theme
- * A luxurious, warm theme inspired by upscale barbershops
+ * BarberConnect Premium Theme - Wolt-Style Redesign
+ * A sophisticated, modern barber aesthetic with navy and copper accents
  */
 
-// Primary Colors - Gold/Bronze Palette
+// =============================================================================
+// PRIMARY COLORS - Navy & Copper Palette (Classic Barbershop)
+// =============================================================================
 export const COLORS = {
-  // Gold Spectrum
-  gold: '#DAA520',
-  goldLight: '#F5DEB3',
-  goldDark: '#B8860B',
-  goldMuted: 'rgba(218, 165, 32, 0.15)',
-  goldAccent: '#FFD700',
-  
-  // Rich Accent Colors
-  burgundy: '#722F37',
-  burgundyLight: '#8B3A42',
-  burgundyDark: '#5A252C',
-  
+  // Navy Spectrum - Primary
+  navy: '#1B2838',
+  navyLight: '#2C3E50',
+  navyDark: '#0F1C24',
+  navyMuted: 'rgba(27, 40, 56, 0.15)',
+
+  // Copper Spectrum - Accent
+  copper: '#B87333',
+  copperLight: '#D4956A',
+  copperDark: '#8B5A2B',
+  copperMuted: 'rgba(184, 115, 51, 0.15)',
+
+  // Brass - Premium/VIP
+  brass: '#C9A959',
+  brassLight: '#E0C97A',
+  brassDark: '#A08338',
+
+  // Legacy colors (for backward compatibility)
+  gold: '#B87333', // Now maps to copper
+  goldLight: '#D4956A',
+  goldDark: '#8B5A2B',
+  goldMuted: 'rgba(184, 115, 51, 0.15)',
+  goldAccent: '#C9A959',
+  burgundy: '#1B2838', // Now maps to navy
+  burgundyLight: '#2C3E50',
+  burgundyDark: '#0F1C24',
+
   // Warm Neutrals
-  cream: '#FDF8E8',
-  ivory: '#FFFFF0',
-  warmWhite: '#FAF9F6',
-  
+  cream: '#F5F0E6',
+  ivory: '#FAF8F5',
+  warmWhite: '#FAFAF8',
+
   // Dark Tones
   charcoal: '#1A1A1A',
   darkGray: '#2D2D2D',
   mediumGray: '#4A4A4A',
-  
-  // Text Colors
+
+  // =============================================================================
+  // TEXT COLORS
+  // =============================================================================
   textPrimary: '#1A1A1A',
   textSecondary: '#4A4A4A',
-  textMuted: '#6B7280',
-  textLight: '#9CA3AF',
+  textMuted: '#64748B',
+  textLight: '#94A3B8',
   textInverse: '#FFFFFF',
-  
-  // Background Colors
-  background: '#FAF9F6',
-  backgroundSecondary: '#F5F5F0',
+
+  // =============================================================================
+  // BACKGROUND COLORS
+  // =============================================================================
+  background: '#FAFAF8',
+  backgroundSecondary: '#F5F0E6',
   surface: '#FFFFFF',
   surfaceElevated: '#FFFFFF',
-  
-  // Status Colors
-  success: '#10B981',
-  successLight: '#D1FAE5',
-  warning: '#F59E0B',
-  warningLight: '#FEF3C7',
-  error: '#EF4444',
-  errorLight: '#FEE2E2',
-  info: '#3B82F6',
-  infoLight: '#DBEAFE',
-  
-  // Chat Bubbles
-  bubbleOwn: '#1A1A1A',
-  bubbleOther: '#FFFFFF',
-  bubbleOffer: '#F0F9FF',
-  
-  // Booking Status
-  statusPending: '#F59E0B',
-  statusConfirmed: '#10B981',
-  statusInProgress: '#3B82F6',
-  statusCompleted: '#059669',
-  statusCancelled: '#EF4444',
-  
-  // Barber Status
-  online: '#10B981',
-  offline: '#9CA3AF',
-  busy: '#F59E0B',
-  
-  // Border Colors
-  border: '#E5E7EB',
-  borderLight: '#F3F4F6',
-  borderDark: '#D1D5DB',
-  
-  // Overlay
+  surfaceHover: '#F8F6F3',
+
+  // =============================================================================
+  // STATUS COLORS
+  // =============================================================================
+  success: '#2E5A3C',
+  successLight: '#D1E7DD',
+  successDark: '#1E3D29',
+  warning: '#B8860B',
+  warningLight: '#FFF3CD',
+  warningDark: '#8B6508',
+  error: '#8B2942',
+  errorLight: '#F8D7DA',
+  errorDark: '#6B1F33',
+  info: '#4A6FA5',
+  infoLight: '#CFE2FF',
+  infoDark: '#3A5883',
+
+  // =============================================================================
+  // BOOKING STATUS COLORS
+  // =============================================================================
+  statusPending: '#B8860B',
+  statusConfirmed: '#2E5A3C',
+  statusInProgress: '#4A6FA5',
+  statusCompleted: '#1E3D29',
+  statusCancelled: '#8B2942',
+  statusNegotiating: '#B87333',
+
+  // =============================================================================
+  // BARBER STATUS COLORS
+  // =============================================================================
+  online: '#2E5A3C',
+  offline: '#94A3B8',
+  busy: '#B8860B',
+  available: '#2E5A3C',
+
+  // =============================================================================
+  // CHAT COLORS
+  // =============================================================================
+  bubbleOwn: '#1B2838',
+  bubbleOther: '#F5F0E6',
+  bubbleOffer: '#FFF8E7',
+  bubbleSystem: '#F1F5F9',
+
+  // =============================================================================
+  // BORDER COLORS
+  // =============================================================================
+  border: '#E2E8F0',
+  borderLight: '#F1F5F9',
+  borderDark: '#CBD5E1',
+  borderCopper: 'rgba(184, 115, 51, 0.3)',
+
+  // =============================================================================
+  // OVERLAY COLORS
+  // =============================================================================
   overlay: 'rgba(0, 0, 0, 0.5)',
   overlayLight: 'rgba(0, 0, 0, 0.3)',
+  overlayDark: 'rgba(0, 0, 0, 0.7)',
+
+  // =============================================================================
+  // MAP COLORS
+  // =============================================================================
+  mapMarkerAvailable: '#2E5A3C',
+  mapMarkerBusy: '#B8860B',
+  mapMarkerOffline: '#94A3B8',
+  mapRoute: '#B87333',
+  mapUserLocation: '#4A6FA5',
 } as const;
 
-// Typography
+export const DARK_COLORS = {
+  background: '#101622',
+  backgroundSecondary: '#0f1115',
+  surface: '#181b21',
+  surfaceLight: '#1C2333',
+  surfaceElevated: '#232f48',
+  surfaceHover: '#2a3a52',
+
+  primary: '#3b82f6',
+  primaryDark: '#2563eb',
+  primaryLight: '#60a5fa',
+  primaryMuted: 'rgba(59, 130, 246, 0.2)',
+
+  accent: '#f59e0b',
+  accentLight: '#fbbf24',
+  accentDark: '#d97706',
+
+  textPrimary: '#FFFFFF',
+  textSecondary: '#9CA3AF',
+  textMuted: '#6B7280',
+  textLight: '#4B5563',
+
+  border: 'rgba(255, 255, 255, 0.1)',
+  borderLight: 'rgba(255, 255, 255, 0.05)',
+  borderDark: 'rgba(255, 255, 255, 0.2)',
+
+  card: '#1A2638',
+  cardLight: '#1C2333',
+  cardDark: '#151c28',
+
+  input: '#232f48',
+  inputFocused: '#2a3a52',
+
+  success: '#22c55e',
+  successLight: '#4ade80',
+  successDark: '#16a34a',
+  successMuted: 'rgba(34, 197, 94, 0.2)',
+
+  warning: '#f59e0b',
+  warningLight: '#fbbf24',
+  warningDark: '#d97706',
+
+  error: '#ef4444',
+  errorLight: '#f87171',
+  errorDark: '#dc2626',
+  errorMuted: 'rgba(239, 68, 68, 0.2)',
+
+  info: '#3b82f6',
+  infoLight: '#60a5fa',
+  infoDark: '#2563eb',
+
+  overlay: 'rgba(0, 0, 0, 0.6)',
+  overlayLight: 'rgba(0, 0, 0, 0.4)',
+  overlayDark: 'rgba(0, 0, 0, 0.8)',
+
+  online: '#22c55e',
+  offline: '#6B7280',
+  busy: '#f59e0b',
+  available: '#22c55e',
+
+  bubbleOwn: '#3b82f6',
+  bubbleOther: '#1C2333',
+  bubbleSystem: '#232f48',
+} as const;
+
+export const DARK_MAP_STYLE = [
+  {
+    elementType: 'geometry',
+    stylers: [{ color: '#1d2c4d' }],
+  },
+  {
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#8ec3b9' }],
+  },
+  {
+    elementType: 'labels.text.stroke',
+    stylers: [{ color: '#1a3646' }],
+  },
+  {
+    featureType: 'road',
+    elementType: 'geometry',
+    stylers: [{ color: '#304a7d' }],
+  },
+  {
+    featureType: 'road',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#255763' }],
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry',
+    stylers: [{ color: '#2c6675' }],
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#255763' }],
+  },
+  {
+    featureType: 'poi',
+    elementType: 'geometry',
+    stylers: [{ color: '#283d6a' }],
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'geometry',
+    stylers: [{ color: '#023e58' }],
+  },
+  {
+    featureType: 'water',
+    elementType: 'geometry',
+    stylers: [{ color: '#0e1626' }],
+  },
+  {
+    featureType: 'transit',
+    elementType: 'geometry',
+    stylers: [{ color: '#2f3948' }],
+  },
+];
+
+export const DARK_COMMON_STYLES = {
+  screenContainer: {
+    flex: 1,
+    backgroundColor: DARK_COLORS.background,
+  },
+  card: {
+    backgroundColor: DARK_COLORS.card,
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
+  },
+  cardElevated: {
+    backgroundColor: DARK_COLORS.card,
+    borderRadius: 20,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
+  },
+  cardInteractive: {
+    backgroundColor: DARK_COLORS.card,
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
+  },
+  header: {
+    backgroundColor: DARK_COLORS.background,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: DARK_COLORS.border,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700' as const,
+    color: DARK_COLORS.textPrimary,
+    letterSpacing: 0.3,
+  },
+  primaryGradient: {
+    colors: [DARK_COLORS.primary, DARK_COLORS.primaryDark] as const,
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 1 },
+  },
+  accentGradient: {
+    colors: [DARK_COLORS.accent, DARK_COLORS.accentDark] as const,
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 1 },
+  },
+} as const;
+
 export const TYPOGRAPHY = {
   // Font Sizes
   xs: 11,
@@ -89,21 +311,29 @@ export const TYPOGRAPHY = {
   '2xl': 24,
   '3xl': 28,
   '4xl': 32,
-  
+  '5xl': 40,
+
   // Font Weights
   regular: '400' as const,
   medium: '500' as const,
   semibold: '600' as const,
   bold: '700' as const,
   extrabold: '800' as const,
-  
+
   // Line Heights
   lineHeightTight: 1.2,
   lineHeightNormal: 1.5,
   lineHeightRelaxed: 1.75,
+
+  // Letter Spacing
+  letterSpacingTight: -0.5,
+  letterSpacingNormal: 0,
+  letterSpacingWide: 0.5,
 } as const;
 
-// Spacing
+// =============================================================================
+// SPACING
+// =============================================================================
 export const SPACING = {
   xxs: 2,
   xs: 4,
@@ -115,9 +345,12 @@ export const SPACING = {
   '3xl': 32,
   '4xl': 40,
   '5xl': 48,
+  '6xl': 64,
 } as const;
 
-// Border Radius
+// =============================================================================
+// BORDER RADIUS
+// =============================================================================
 export const RADIUS = {
   xs: 4,
   sm: 8,
@@ -129,7 +362,9 @@ export const RADIUS = {
   full: 9999,
 } as const;
 
-// Shadows
+// =============================================================================
+// SHADOWS
+// =============================================================================
 export const SHADOWS = {
   sm: {
     shadowColor: '#000',
@@ -159,8 +394,30 @@ export const SHADOWS = {
     shadowRadius: 12,
     elevation: 8,
   },
+  '2xl': {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 12,
+  },
+  copper: {
+    shadowColor: COLORS.copper,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  navy: {
+    shadowColor: COLORS.navy,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  // Legacy
   gold: {
-    shadowColor: COLORS.gold,
+    shadowColor: COLORS.copper,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 6,
@@ -168,19 +425,87 @@ export const SHADOWS = {
   },
 } as const;
 
-// Animation Durations
+// =============================================================================
+// ANIMATION DURATIONS
+// =============================================================================
 export const ANIMATION = {
   fast: 150,
   normal: 250,
   slow: 400,
+  slower: 600,
   spring: {
     damping: 15,
     stiffness: 150,
     mass: 1,
   },
+  springBouncy: {
+    damping: 10,
+    stiffness: 200,
+    mass: 0.8,
+  },
 } as const;
 
-// Common Style Patterns
+// =============================================================================
+// MAP STYLE - Premium Warm Theme
+// =============================================================================
+export const MAP_STYLE = [
+  {
+    elementType: 'geometry',
+    stylers: [{ color: '#F5F0E6' }],
+  },
+  {
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#4A4A4A' }],
+  },
+  {
+    elementType: 'labels.text.stroke',
+    stylers: [{ color: '#FFFFFF' }],
+  },
+  {
+    featureType: 'road',
+    elementType: 'geometry',
+    stylers: [{ color: '#FFFFFF' }],
+  },
+  {
+    featureType: 'road',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#E2E8F0' }],
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry',
+    stylers: [{ color: '#F5F0E6' }],
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#CBD5E1' }],
+  },
+  {
+    featureType: 'poi',
+    elementType: 'geometry',
+    stylers: [{ color: '#E8E4DB' }],
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'geometry',
+    stylers: [{ color: '#D1E7DD' }],
+  },
+  {
+    featureType: 'water',
+    elementType: 'geometry',
+    stylers: [{ color: '#CFE2FF' }],
+  },
+  {
+    featureType: 'transit',
+    elementType: 'geometry',
+    stylers: [{ color: '#E2E8F0' }],
+  },
+];
+
+// =============================================================================
+// COMMON STYLE PATTERNS
+// =============================================================================
 export const COMMON_STYLES = {
   screenContainer: {
     flex: 1,
@@ -198,6 +523,14 @@ export const COMMON_STYLES = {
     padding: SPACING.xl,
     ...SHADOWS.lg,
   },
+  cardInteractive: {
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.lg,
+    padding: SPACING.lg,
+    ...SHADOWS.md,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
   header: {
     backgroundColor: COLORS.surface,
     paddingHorizontal: SPACING.xl,
@@ -211,29 +544,66 @@ export const COMMON_STYLES = {
     color: COLORS.textPrimary,
     letterSpacing: 0.3,
   },
+  navyGradient: {
+    colors: [COLORS.navy, COLORS.navyDark],
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 1 },
+  },
+  copperGradient: {
+    colors: [COLORS.copper, COLORS.copperDark],
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 1 },
+  },
+  // Legacy
   goldGradient: {
-    colors: [COLORS.gold, COLORS.goldDark],
+    colors: [COLORS.copper, COLORS.copperDark],
     start: { x: 0, y: 0 },
     end: { x: 1, y: 1 },
   },
 } as const;
 
-// User Modes
+// =============================================================================
+// BOTTOM SHEET SNAP POINTS
+// =============================================================================
+export const BOTTOM_SHEET_SNAPS = {
+  collapsed: '15%',
+  partial: '50%',
+  expanded: '90%',
+} as const;
+
+// =============================================================================
+// TYPE DEFINITIONS
+// =============================================================================
 export type UserMode = 'customer' | 'barber';
 
-// Booking Status Types
-export type BookingStatus = 
+export type BookingStatus =
   | 'pending'
+  | 'negotiating'
   | 'confirmed'
+  | 'barber_en_route'
+  | 'arrived'
   | 'in_progress'
   | 'completed'
   | 'cancelled';
 
-// Get status color helper
+export type BarberStatus = 'available' | 'busy' | 'offline';
+
+export type ServiceLocationType = 'barbershop' | 'home_service';
+
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
+/**
+ * Get color for booking status
+ */
 export function getStatusColor(status: BookingStatus): string {
   const statusColors: Record<BookingStatus, string> = {
     pending: COLORS.statusPending,
+    negotiating: COLORS.statusNegotiating,
     confirmed: COLORS.statusConfirmed,
+    barber_en_route: COLORS.info,
+    arrived: COLORS.info,
     in_progress: COLORS.statusInProgress,
     completed: COLORS.statusCompleted,
     cancelled: COLORS.statusCancelled,
@@ -241,14 +611,60 @@ export function getStatusColor(status: BookingStatus): string {
   return statusColors[status];
 }
 
-// Get status label helper
+/**
+ * Get label for booking status
+ */
 export function getStatusLabel(status: BookingStatus): string {
   const statusLabels: Record<BookingStatus, string> = {
     pending: 'Pending',
+    negotiating: 'Negotiating',
     confirmed: 'Confirmed',
+    barber_en_route: 'Barber En Route',
+    arrived: 'Barber Arrived',
     in_progress: 'In Progress',
     completed: 'Completed',
     cancelled: 'Cancelled',
   };
   return statusLabels[status];
+}
+
+/**
+ * Get color for barber status
+ */
+export function getBarberStatusColor(status: BarberStatus): string {
+  const statusColors: Record<BarberStatus, string> = {
+    available: COLORS.online,
+    busy: COLORS.busy,
+    offline: COLORS.offline,
+  };
+  return statusColors[status];
+}
+
+/**
+ * Format price in Israeli Shekel
+ */
+export function formatPrice(amount: number): string {
+  return `₪${amount.toFixed(0)}`;
+}
+
+/**
+ * Format distance
+ */
+export function formatDistance(meters: number): string {
+  if (meters < 1000) {
+    return `${Math.round(meters)}m`;
+  }
+  return `${(meters / 1000).toFixed(1)}km`;
+}
+
+/**
+ * Format duration in minutes
+ */
+export function formatDuration(minutes: number): string {
+  if (minutes < 60) {
+    return `${minutes} min`;
+  }
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
 }

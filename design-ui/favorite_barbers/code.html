@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Favorite Barbers</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11a4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                        "card-light": "#ffffff",
+                        "card-dark": "#19272c",
+                        "text-main": "#111618",
+                        "text-sub": "#617f89",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-white antialiased selection:bg-primary/30">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden pb-20">
+<!-- Sticky Header -->
+<header class="sticky top-0 z-30 flex items-center justify-between bg-card-light/90 dark:bg-card-dark/90 px-4 py-3 backdrop-blur-md shadow-sm">
+<button class="flex size-10 items-center justify-center rounded-full text-text-main dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+<h1 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Your Favorites</h1>
+</header>
+<!-- Filter Chips -->
+<div class="sticky top-[60px] z-20 w-full bg-background-light dark:bg-background-dark py-3 pl-4">
+<div class="flex gap-3 overflow-x-auto no-scrollbar pr-4">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary text-white px-4 shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="text-sm font-medium">All</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-card-dark border border-gray-100 dark:border-gray-700 px-4 shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-primary">bolt</span>
+<span class="text-sm font-medium text-text-main dark:text-gray-200">Available Now</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-card-dark border border-gray-100 dark:border-gray-700 px-4 shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-primary">home_pin</span>
+<span class="text-sm font-medium text-text-main dark:text-gray-200">Home Service</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-card-dark border border-gray-100 dark:border-gray-700 px-4 shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-primary">star</span>
+<span class="text-sm font-medium text-text-main dark:text-gray-200">Top Rated</span>
+</button>
+</div>
+</div>
+<!-- Main Content List -->
+<main class="flex flex-col gap-4 px-4 pt-2">
+<!-- Card 1: Available Now -->
+<div class="group relative flex w-full flex-col gap-3 rounded-xl bg-card-light dark:bg-card-dark p-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none dark:border dark:border-gray-800 transition-all hover:shadow-md">
+<div class="flex items-start gap-4">
+<div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gray-200">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Portrait of James The Clipper Smith" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCUkWg48eYnRg3ZBtk-A4gTboydeFMEGiE4yPiQFmhfMRjueeTwn2wuStjk9Orpe6R0R5va7CijFfKlb5-AMV0ds2Ymeg9d_HczfUzDJfZd0uLEy68qrfywPjjfizqAy_Chc_wkFLnMY3elcyLfE-vk8kJ9CenuDOLfnlSiy8FHIHpRzo4Xk4SUiSDNFbs54lsbH4Pgwqp91zXnF-HNsrxLcSYVsQHmcsxtSvTPgmSbCzSoG0bxLSFYGtviDZyF12R6eqknbPRQY1Fe");'></div>
+<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-1">
+<div class="flex justify-center">
+<span class="rounded-full bg-green-500/90 px-1.5 py-0.5 text-[10px] font-bold text-white backdrop-blur-sm">ONLINE</span>
+</div>
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-between self-stretch">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-base font-bold text-text-main dark:text-white leading-tight">James 'The Clipper' Smith</h3>
+<p class="text-xs text-primary font-medium mt-0.5">Fade Specialist</p>
+</div>
+<button class="text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined fill-current" style="font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;">favorite</span>
+</button>
+</div>
+<div class="mt-2 flex items-center gap-3 text-xs text-text-sub dark:text-gray-400">
+<div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded-md">
+<span class="material-symbols-outlined text-[14px] text-orange-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-text-main dark:text-white">4.9</span>
+<span class="text-gray-400">(120)</span>
+</div>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">near_me</span> 2.5 km
+                            </span>
+</div>
+</div>
+</div>
+<div class="mt-1 flex items-center justify-between gap-3 border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex items-center gap-2 text-xs text-text-sub dark:text-gray-400">
+<span class="material-symbols-outlined text-primary text-[18px]">schedule</span>
+<span>Available Now</span>
+</div>
+<button class="flex h-8 min-w-[100px] items-center justify-center rounded-lg bg-primary px-4 text-sm font-semibold text-white shadow-sm shadow-primary/30 transition-transform active:scale-95">
+                        Book Now
+                    </button>
+</div>
+</div>
+<!-- Card 2: Home Service -->
+<div class="group relative flex w-full flex-col gap-3 rounded-xl bg-card-light dark:bg-card-dark p-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none dark:border dark:border-gray-800 transition-all hover:shadow-md">
+<div class="flex items-start gap-4">
+<div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gray-200">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Mike's Cuts barbershop logo or portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC2EJ13ywX2S4V6C2Hk77aOmNnWNzxKS0ocBZm-zg8Zl0OLY0B1rJo_lOyh-RVJg_Jgwukv6_sqaU2nIvUdkRdJ-8jLN_NzaWkz0_VpZ-_vg10Hf7WNGCS0hl0pEYcD_5_gAU9i37JK6F7FOjCdacV-2n9FMvHMLTW_aEIgbJR_y1-ACeywf5Jokz0F4xIStq-XhO-5_GZ-dp6IyK79HFYSQkRS0M1eBeVHNALnaJkYCqxyXL4InvM2YYgBpSeDBdFFxZ0ymjvlGCG2");'></div>
+</div>
+<div class="flex flex-1 flex-col justify-between self-stretch">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-base font-bold text-text-main dark:text-white leading-tight">Mike's Cuts</h3>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px] text-purple-500">home_repair_service</span>
+<p class="text-xs text-text-sub dark:text-gray-400 font-medium">Home Service &amp; Shop</p>
+</div>
+</div>
+<button class="text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined fill-current" style="font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;">favorite</span>
+</button>
+</div>
+<div class="mt-2 flex items-center gap-3 text-xs text-text-sub dark:text-gray-400">
+<div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded-md">
+<span class="material-symbols-outlined text-[14px] text-orange-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-text-main dark:text-white">4.7</span>
+<span class="text-gray-400">(85)</span>
+</div>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">moped</span> 15 min
+                            </span>
+</div>
+</div>
+</div>
+<div class="mt-1 flex items-center justify-between gap-3 border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex items-center gap-2 text-xs text-text-sub dark:text-gray-400">
+<!-- Next slot specific time -->
+<span class="inline-block size-2 rounded-full bg-yellow-400"></span>
+<span>Next Slot: 2:00 PM</span>
+</div>
+<button class="flex h-8 min-w-[100px] items-center justify-center rounded-lg bg-primary/10 px-4 text-sm font-semibold text-primary hover:bg-primary hover:text-white transition-colors active:scale-95">
+                        Order Home
+                    </button>
+</div>
+</div>
+<!-- Card 3: Elegant Grooming -->
+<div class="group relative flex w-full flex-col gap-3 rounded-xl bg-card-light dark:bg-card-dark p-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none dark:border dark:border-gray-800 transition-all hover:shadow-md">
+<div class="flex items-start gap-4">
+<div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gray-200">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Elegant Grooming sophisticated styling chair" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA7fYvaGM8CQSLOSX2wS8BbhjqqpE2qT_8HzMj66q_wLROJ-8HENffZd3-G_BR4DvsXi_EbzruwK9o-uD8Iop9jw7P72kO94G7apev7esJlp2otIc2KOiB-u9bAAyHaDZeBoCqi4N671wFUM5OldVwFVcvUiPEQCz86x3rs3voG4NuQE-rsMQ3aRbo1xbtlRI4JpbZy-hTOu4NvYRnu1WcpNrRfuFWAvQAWdKk3p7tv-MwupvN1O8ebFdHVGwx4f8q9ohqY-lDw92gG");'></div>
+<div class="absolute top-1 left-1 bg-black/60 rounded px-1.5 py-0.5 backdrop-blur-md">
+<p class="text-[10px] font-bold text-white tracking-wide">LUXURY</p>
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-between self-stretch">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-base font-bold text-text-main dark:text-white leading-tight">Elegant Grooming</h3>
+<p class="text-xs text-primary font-medium mt-0.5">Luxury Shave &amp; Cut</p>
+</div>
+<button class="text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined fill-current" style="font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;">favorite</span>
+</button>
+</div>
+<div class="mt-2 flex items-center gap-3 text-xs text-text-sub dark:text-gray-400">
+<div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded-md">
+<span class="material-symbols-outlined text-[14px] text-orange-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-text-main dark:text-white">4.8</span>
+<span class="text-gray-400">(210)</span>
+</div>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">near_me</span> 5.2 km
+                            </span>
+</div>
+</div>
+</div>
+<div class="mt-1 flex items-center justify-between gap-3 border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex items-center gap-2 text-xs text-text-sub dark:text-gray-400">
+<span class="inline-block size-2 rounded-full bg-red-400"></span>
+<span>Fully Booked Today</span>
+</div>
+<button class="flex h-8 min-w-[100px] items-center justify-center rounded-lg bg-primary/10 px-4 text-sm font-semibold text-primary hover:bg-primary hover:text-white transition-colors active:scale-95">
+                        Schedule
+                    </button>
+</div>
+</div>
+<!-- Card 4: Barber King (Unavailable) -->
+<div class="group relative flex w-full flex-col gap-3 rounded-xl bg-card-light dark:bg-card-dark p-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none dark:border dark:border-gray-800 opacity-80 grayscale-[0.3]">
+<div class="flex items-start gap-4">
+<div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gray-200">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Barber King shop front" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD9SG4JOm8Q1IKN4rXfKssKeXRNHtXlLb4RBFAyfcbkc7zAcgYwYY01CEqnzco0OPWCSadh_zC7Q_jb7X96McwQMQYazIFw7QnakISrMugJanB_GHRate31kf46e3yRiikd33hmhD1bVyKYNY5Q1cCUia5EkXmvtFEMMVnMP7G3zL50cZCHi1S9-WGNJLtL7pYaNjMWVAEGN7kNf741FqqhurirOmFs-gHWfFr6izNbgGIUyP21WawjOrWc9I8IrFOgzxR3jjwhQgU3");'></div>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+<span class="text-[10px] font-bold text-white bg-black/50 px-2 py-1 rounded backdrop-blur-md">CLOSED</span>
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-between self-stretch">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-base font-bold text-text-main dark:text-white leading-tight">Barber King</h3>
+<p class="text-xs text-text-sub font-medium mt-0.5">Classic Cuts</p>
+</div>
+<button class="text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined fill-current" style="font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;">favorite</span>
+</button>
+</div>
+<div class="mt-2 flex items-center gap-3 text-xs text-text-sub dark:text-gray-400">
+<div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded-md">
+<span class="material-symbols-outlined text-[14px] text-orange-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-text-main dark:text-white">4.5</span>
+<span class="text-gray-400">(45)</span>
+</div>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">near_me</span> 1.1 km
+                            </span>
+</div>
+</div>
+</div>
+<div class="mt-1 flex items-center justify-between gap-3 border-t border-gray-100 dark:border-gray-700 pt-3">
+<div class="flex items-center gap-2 text-xs text-text-sub dark:text-gray-400">
+<span>Opens tomorrow 9:00 AM</span>
+</div>
+<button class="flex h-8 min-w-[100px] cursor-not-allowed items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700 px-4 text-sm font-semibold text-gray-400" disabled="">
+                        Details
+                    </button>
+</div>
+</div>
+<!-- Suggestion / Empty State Hint -->
+<div class="mt-4 flex flex-col items-center justify-center py-8 text-center">
+<div class="rounded-full bg-primary/10 p-4 mb-3">
+<span class="material-symbols-outlined text-primary text-4xl">search</span>
+</div>
+<h3 class="text-base font-bold text-text-main dark:text-white">Looking for more?</h3>
+<p class="text-sm text-text-sub max-w-[200px] mt-1 mb-4">Discover top-rated barbers near you.</p>
+<button class="rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-card-dark px-6 py-2.5 text-sm font-semibold text-text-main dark:text-white shadow-sm">
+                    Find Barbers
+                </button>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-40 bg-card-light dark:bg-card-dark border-t border-gray-200 dark:border-gray-800 pb-5 pt-2 shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
+<div class="flex items-end justify-around">
+<button class="group flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-primary">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="group flex flex-col items-center gap-1 p-2 text-primary">
+<span class="material-symbols-outlined text-2xl fill-current" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="text-[10px] font-medium">Favorites</span>
+</button>
+<div class="relative -top-6">
+<button class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/40 hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-3xl">calendar_month</span>
+</button>
+</div>
+<button class="group flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-primary">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">notifications</span>
+<span class="text-[10px] font-medium">Alerts</span>
+</button>
+<button class="group flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-primary">
+<span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</div>
+</nav>
+</div>
+</body></html>

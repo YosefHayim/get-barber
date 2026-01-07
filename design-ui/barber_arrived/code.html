@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Barber Arrived</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11a4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    boxShadow: {
+                        "card": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+                        "sheet": "0 -4px 20px rgba(0,0,0,0.1)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Map Marker Pulse Animation */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.33); opacity: 1; }
+            80%, 100% { opacity: 0; }
+        }
+        @keyframes pulse-dot {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1); }
+            100% { transform: scale(0.8); }
+        }
+        .marker-pulse::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0;
+            display: block;
+            width: 100%; height: 100%;
+            background-color: rgba(17, 164, 212, 0.4);
+            border-radius: 50%;
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        .marker-dot {
+            animation: pulse-dot 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111618] dark:text-white h-screen overflow-hidden flex flex-col">
+<!-- Top Navigation -->
+<div class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between z-10 shadow-sm relative">
+<div class="text-[#111618] dark:text-white flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-[#111618] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Current Order</h2>
+</div>
+<!-- Main Content Area: Map -->
+<div class="relative flex-1 w-full bg-gray-200 overflow-hidden">
+<!-- Map Background -->
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Map view of city streets with light colors" data-location="Downtown area" style="background-image: url('https://placeholder.pics/svg/300');">
+</div>
+<!-- Map Overlay Gradient for better contrast at top -->
+<div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white/80 to-transparent dark:from-background-dark/90 pointer-events-none"></div>
+<!-- Barber Pin on Map -->
+<div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="relative w-16 h-16 flex items-center justify-center marker-pulse">
+<div class="w-4 h-4 bg-primary rounded-full shadow-lg border-2 border-white marker-dot z-10"></div>
+</div>
+<div class="bg-white dark:bg-gray-800 px-3 py-1.5 rounded-lg shadow-lg -mt-4 z-20 flex items-center gap-2 animate-bounce">
+<span class="text-xs font-bold text-gray-900 dark:text-white">Alex is here</span>
+</div>
+</div>
+<!-- Map Controls -->
+<div class="absolute right-4 top-4 flex flex-col gap-2">
+<button class="flex size-10 items-center justify-center rounded-lg bg-white dark:bg-gray-800 shadow-md text-gray-700 dark:text-white">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+</div>
+</div>
+<!-- Bottom Sheet Notification Area -->
+<div class="relative bg-white dark:bg-background-dark shadow-sheet rounded-t-3xl pt-2 pb-6 px-0 z-20 -mt-6">
+<!-- Drag Handle -->
+<div class="flex flex-col items-center w-full pb-2">
+<div class="h-1.5 w-12 rounded-full bg-gray-300 dark:bg-gray-600 mb-2"></div>
+</div>
+<!-- Arrival Header -->
+<div class="px-6 text-center">
+<h1 class="text-[#111618] dark:text-white tracking-tight text-[28px] font-bold leading-tight pb-2 pt-2">
+                Your barber has arrived!
+            </h1>
+<p class="text-gray-500 dark:text-gray-400 text-base font-normal leading-normal">
+                Please meet <span class="font-semibold text-gray-900 dark:text-gray-200">Alex M.</span> at the entrance.
+            </p>
+</div>
+<!-- Barber Profile Card -->
+<div class="px-4 mt-6">
+<div class="bg-background-light dark:bg-gray-800 rounded-xl p-4 flex items-center gap-4 shadow-sm border border-gray-100 dark:border-gray-700">
+<!-- Profile Image -->
+<div class="relative">
+<img alt="Portrait of Alex the barber" class="w-16 h-16 rounded-full object-cover border-2 border-white dark:border-gray-600 shadow-sm" data-alt="Headshot of a professional barber named Alex" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe5qB_6AuFThTGuWj18QzdySMGCXBpGVOjIhBKC7iu7Pm0xOPPXya42l0qONPSxcBNNsEMbdX6UKMEvogX9eDL5gN8dViJUym9A1WVRWqVVfAoCJD9FbQ8t8t7uuZcxH9rAAdAMMBjGZ4mcXj35GRzp9FNIYjFxx-gi6Al8Va2EmeIzu200NOES0Vb_S2PbDa3WCifc3jl8hAvtZtWjWyr1gIQ_S84C_PB_xv3fRg_HW7UeeHMfYAcOaDsfryIuLR1xf9ltMo2MUuS"/>
+<div class="absolute -bottom-1 -right-1 bg-primary text-white rounded-full p-0.5 border-2 border-white dark:border-gray-800">
+<span class="material-symbols-outlined text-[14px] block">check</span>
+</div>
+</div>
+<!-- Info -->
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 mb-0.5">
+<h3 class="text-lg font-bold text-gray-900 dark:text-white truncate">Alex M.</h3>
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">Pro</span>
+</div>
+<div class="flex items-center text-sm text-gray-500 dark:text-gray-400 gap-3">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined icon-filled text-yellow-400 text-[16px]">star</span>
+<span class="font-medium text-gray-700 dark:text-gray-300">4.9</span>
+</span>
+<span class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+<span class="truncate">Blue Scooter • 821-XJ</span>
+</div>
+</div>
+<!-- Contact Actions -->
+<div class="flex gap-2 shrink-0">
+<button class="size-10 flex items-center justify-center rounded-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-primary hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm">
+<span class="material-symbols-outlined">call</span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-primary hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm relative">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-gray-700"></span>
+</button>
+</div>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="px-4 mt-6 mb-4">
+<button class="w-full bg-primary hover:bg-sky-500 text-white font-bold text-lg py-4 px-6 rounded-xl shadow-lg shadow-primary/30 flex items-center justify-center gap-2 transition-all transform active:scale-[0.98]">
+<span>I'm coming out</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="w-full mt-3 text-gray-500 dark:text-gray-400 text-sm font-medium py-2 rounded-lg hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
+                Report a problem
+            </button>
+</div>
+</div>
+</body></html>

@@ -15,11 +15,12 @@ import {
   Scissors,
   RefreshCw,
   Sparkles,
+  Gift,
 } from 'lucide-react-native';
 import { Avatar } from '@/components/ui/Avatar';
 import { useAuth } from '@/features/auth/context/AuthContext';
 import { useAppStore } from '@/stores/useAppStore';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
+import { COLORS, DARK_COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 
 interface MenuItemProps {
   icon: React.ReactNode;
@@ -35,7 +36,7 @@ function MenuItem({ icon, label, onPress, showBadge }: MenuItemProps): React.JSX
         <View style={styles.menuIcon}>{icon}</View>
         <Text style={styles.menuLabel}>{label}</Text>
         {showBadge && <View style={styles.badge} />}
-        <ChevronRight size={20} color={COLORS.textMuted} />
+        <ChevronRight size={20} color={DARK_COLORS.textMuted} />
       </View>
     </Pressable>
   );
@@ -61,7 +62,7 @@ export default function ProfileScreen(): React.JSX.Element {
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.loginPrompt}>
           <View style={styles.loginIconContainer}>
-            <User size={48} color={COLORS.gold} />
+            <User size={48} color={DARK_COLORS.primary} />
           </View>
           <Text style={styles.loginTitle}>Sign in to continue</Text>
           <Text style={styles.loginText}>
@@ -98,10 +99,10 @@ export default function ProfileScreen(): React.JSX.Element {
           </Text>
           <Text style={styles.profileEmail}>{user.email}</Text>
           <View style={styles.ratingRow}>
-            <Star size={14} color={COLORS.gold} fill={COLORS.gold} />
+            <Star size={14} color={DARK_COLORS.accent} fill={DARK_COLORS.accent} />
             <Text style={styles.ratingText}>5.0 rating</Text>
             <View style={styles.customerBadge}>
-              <Sparkles size={10} color={COLORS.goldDark} />
+              <Sparkles size={10} color={DARK_COLORS.accent} />
               <Text style={styles.customerBadgeText}>Gold Member</Text>
             </View>
           </View>
@@ -111,7 +112,7 @@ export default function ProfileScreen(): React.JSX.Element {
       <Surface style={styles.switchModeCard} elevation={2}>
         <View style={styles.switchModeContent}>
           <View style={styles.switchModeIcon}>
-            <Scissors size={24} color={COLORS.gold} />
+            <Scissors size={24} color={DARK_COLORS.primary} />
           </View>
           <View style={styles.switchModeInfo}>
             <Text style={styles.switchModeTitle}>Are you a barber?</Text>
@@ -122,7 +123,7 @@ export default function ProfileScreen(): React.JSX.Element {
         </View>
         <Button
           mode="contained"
-          icon={() => <RefreshCw size={16} color={COLORS.charcoal} />}
+          icon={() => <RefreshCw size={16} color="#FFFFFF" />}
           onPress={handleSwitchToBarber}
           style={styles.switchModeButton}
           labelStyle={styles.switchModeButtonLabel}
@@ -136,17 +137,22 @@ export default function ProfileScreen(): React.JSX.Element {
         <Text style={styles.sectionTitle}>Account</Text>
         <Surface style={styles.menuCard} elevation={1}>
           <MenuItem
-            icon={<User size={20} color={COLORS.goldDark} />}
+            icon={<User size={20} color={DARK_COLORS.primary} />}
             label="Edit Profile"
             onPress={() => router.push('/(modals)/settings/edit-profile')}
           />
           <MenuItem
-            icon={<MapPin size={20} color={COLORS.goldDark} />}
+            icon={<Gift size={20} color={DARK_COLORS.accent} />}
+            label="Rewards & Loyalty"
+            onPress={() => router.push('/(modals)/loyalty')}
+          />
+          <MenuItem
+            icon={<MapPin size={20} color={DARK_COLORS.primary} />}
             label="Saved Addresses"
             onPress={() => router.push('/(modals)/settings/saved-addresses')}
           />
           <MenuItem
-            icon={<CreditCard size={20} color={COLORS.goldDark} />}
+            icon={<CreditCard size={20} color={DARK_COLORS.primary} />}
             label="Payment Methods"
             onPress={() => router.push('/(modals)/settings/payment-methods')}
           />
@@ -157,13 +163,13 @@ export default function ProfileScreen(): React.JSX.Element {
         <Text style={styles.sectionTitle}>Preferences</Text>
         <Surface style={styles.menuCard} elevation={1}>
           <MenuItem
-            icon={<Bell size={20} color={COLORS.textMuted} />}
+            icon={<Bell size={20} color={DARK_COLORS.textSecondary} />}
             label="Notifications"
             onPress={() => router.push('/(modals)/settings/notifications')}
             showBadge
           />
           <MenuItem
-            icon={<HelpCircle size={20} color={COLORS.textMuted} />}
+            icon={<HelpCircle size={20} color={DARK_COLORS.textSecondary} />}
             label="Help & Support"
             onPress={() => router.push('/(modals)/settings/help-support')}
           />
@@ -174,8 +180,8 @@ export default function ProfileScreen(): React.JSX.Element {
         mode="outlined"
         onPress={handleSignOut}
         loading={isLoading}
-        icon={() => <LogOut size={18} color={COLORS.error} />}
-        textColor={COLORS.error}
+        icon={() => <LogOut size={18} color={DARK_COLORS.error} />}
+        textColor={DARK_COLORS.error}
         style={styles.signOutButton}
       >
         Sign Out
@@ -189,7 +195,7 @@ export default function ProfileScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: DARK_COLORS.background,
   },
   scrollContent: {
     padding: SPACING.lg,
@@ -205,7 +211,7 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 48,
-    backgroundColor: COLORS.goldMuted,
+    backgroundColor: DARK_COLORS.primaryMuted,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: SPACING.xl,
@@ -213,12 +219,12 @@ const styles = StyleSheet.create({
   loginTitle: {
     fontSize: TYPOGRAPHY.xl,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
     marginBottom: SPACING.sm,
   },
   loginText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
     textAlign: 'center',
     marginBottom: SPACING.xl,
     lineHeight: 20,
@@ -226,7 +232,7 @@ const styles = StyleSheet.create({
   loginButton: {
     borderRadius: RADIUS.md,
     paddingHorizontal: SPACING['3xl'],
-    backgroundColor: COLORS.goldDark,
+    backgroundColor: DARK_COLORS.primary,
   },
   loginButtonLabel: {
     fontSize: TYPOGRAPHY.md,
@@ -237,8 +243,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: SPACING.xl,
     borderRadius: RADIUS.xl,
-    backgroundColor: COLORS.surface,
+    backgroundColor: DARK_COLORS.surface,
     marginBottom: SPACING.lg,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   profileInfo: {
     flex: 1,
@@ -247,12 +255,12 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: TYPOGRAPHY.xl,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
     marginBottom: SPACING.xxs,
   },
   profileEmail: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
     marginBottom: SPACING.sm,
   },
   ratingRow: {
@@ -262,14 +270,14 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: DARK_COLORS.textSecondary,
     fontWeight: TYPOGRAPHY.medium,
   },
   customerBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: SPACING.xxs,
-    backgroundColor: COLORS.goldMuted,
+    backgroundColor: 'rgba(245, 158, 11, 0.2)',
     paddingHorizontal: SPACING.sm,
     paddingVertical: SPACING.xxs,
     borderRadius: RADIUS.sm,
@@ -278,16 +286,18 @@ const styles = StyleSheet.create({
   customerBadgeText: {
     fontSize: TYPOGRAPHY.xs,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.goldDark,
+    color: DARK_COLORS.accent,
   },
   switchModeCard: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: SPACING.lg,
     borderRadius: RADIUS.xl,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: DARK_COLORS.surfaceLight,
     marginBottom: SPACING.xl,
     gap: SPACING.md,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   switchModeContent: {
     flex: 1,
@@ -299,7 +309,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: COLORS.goldMuted,
+    backgroundColor: DARK_COLORS.primaryMuted,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -309,21 +319,21 @@ const styles = StyleSheet.create({
   switchModeTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: DARK_COLORS.textPrimary,
   },
   switchModeText: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
     marginTop: SPACING.xxs,
   },
   switchModeButton: {
-    backgroundColor: COLORS.gold,
+    backgroundColor: DARK_COLORS.primary,
     borderRadius: RADIUS.md,
   },
   switchModeButtonLabel: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.charcoal,
+    color: '#FFFFFF',
   },
   menuSection: {
     marginBottom: SPACING.xl,
@@ -331,7 +341,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
     marginBottom: SPACING.sm,
     marginLeft: SPACING.xxs,
     textTransform: 'uppercase',
@@ -339,21 +349,23 @@ const styles = StyleSheet.create({
   },
   menuCard: {
     borderRadius: RADIUS.lg,
-    backgroundColor: COLORS.surface,
+    backgroundColor: DARK_COLORS.surface,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderLight,
+    borderBottomColor: DARK_COLORS.borderLight,
   },
   menuIcon: {
     width: 40,
     height: 40,
     borderRadius: RADIUS.sm,
-    backgroundColor: COLORS.goldMuted,
+    backgroundColor: DARK_COLORS.primaryMuted,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: SPACING.md,
@@ -361,24 +373,24 @@ const styles = StyleSheet.create({
   menuLabel: {
     flex: 1,
     fontSize: TYPOGRAPHY.md,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
   },
   badge: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: COLORS.error,
+    backgroundColor: DARK_COLORS.error,
     marginRight: SPACING.sm,
   },
   signOutButton: {
-    borderColor: COLORS.errorLight,
+    borderColor: DARK_COLORS.errorMuted,
     borderRadius: RADIUS.md,
     marginTop: SPACING.lg,
   },
   versionText: {
     textAlign: 'center',
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
     marginTop: SPACING.xl,
   },
 });

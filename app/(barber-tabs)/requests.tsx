@@ -267,15 +267,17 @@ export default function BarberRequestsScreen(): React.JSX.Element {
           </Text>
         </View>
       ) : (
-        <FlashList
-          data={filteredRequests}
-          renderItem={renderRequest}
-          keyExtractor={keyExtractor}
-          estimatedItemSize={300}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-        />
+        <View style={styles.listContainer}>
+          <FlashList
+            data={filteredRequests}
+            renderItem={renderRequest}
+            keyExtractor={keyExtractor}
+            estimatedItemSize={300}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+          />
+        </View>
       )}
     </View>
   );
@@ -285,6 +287,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.charcoal,
+  },
+  listContainer: {
+    flex: 1,
   },
   header: {
     padding: SPACING.xl,

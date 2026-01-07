@@ -1,20 +1,26 @@
-import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import React, { useCallback, useRef, useEffect, useState, useMemo } from 'react';
+import { View, StyleSheet, Alert, TextInput, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import * as Location from 'expo-location';
 import BottomSheet from '@gorhom/bottom-sheet';
-import { Navigation } from 'lucide-react-native';
-import { BarberMapView } from '@/features/map/components';
-import { BookingBottomSheet } from '@/features/booking/components';
+import { Navigation, Search, X } from 'lucide-react-native';
+import { Text } from 'react-native-paper';
+import {
+  BarberMapView,
+  FilterChips,
+  MapBottomSheet,
+} from '@/features/map/components';
+import type { FilterType } from '@/features/map/components';
+import type { MapBarber } from '@/features/map/components';
 import { ActionFloatingButton } from '@/components/ui/ActionFloatingButton';
 import { useNearbyBarbers } from '@/features/booking/hooks/useNearbyBarbers';
-import { useServices } from '@/features/booking/hooks/useServices';
-import { useCreateRequest } from '@/features/booking/hooks/useCreateRequest';
 import { useBookingStore } from '@/stores/useBookingStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { useAuth } from '@/features/auth/context/AuthContext';
+import { COLORS, SHADOWS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 import type { GeoLocation } from '@/types/common.types';
+import type { BarberStatus } from '@/constants/theme';
 
 interface NearbyBarber {
   id: string;
@@ -37,20 +43,61 @@ export default function MapScreen(): React.JSX.Element {
   const { user } = useAuth();
   const [userLocation, setUserLocation] = useState<GeoLocation | null>(null);
   const [userAddress, setUserAddress] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFilters, setSelectedFilters] = useState<FilterType[]>(['available_now']);
   
   const setLocation = useUserStore((s) => s.setLocation);
   const selectedBarber = useBookingStore((s) => s.selectedBarber);
   const setSelectedBarber = useBookingStore((s) => s.setSelectedBarber);
-  const selectedServices = useBookingStore((s) => s.selectedServices);
   
-  const { data: barbers = [], isLoading: isLoadingBarbers } = useNearbyBarbers({
+  const { data: rawBarbers = [], isLoading: isLoadingBarbers } = useNearbyBarbers({
     location: userLocation,
     enabled: !!userLocation,
   });
-  
-  const { data: services = [], isLoading: isLoadingServices } = useServices();
-  
-  const createRequest = useCreateRequest();
+
+  const barbers: MapBarber[] = useMemo(() => {
+    return rawBarbers.map((barber: NearbyBarber) => ({
+      id: barber.id,
+      userId: barber.user_id,
+      displayName: barber.display_name,
+      avatarUrl: barber.avatar_url,
+      bio: barber.bio,
+      rating: barber.rating,
+      totalReviews: barber.total_reviews,
+      isVerified: barber.is_verified,
+      distanceMeters: barber.distance_meters,
+      priceMin: barber.price_min,
+      priceMax: barber.price_max,
+      status: 'available' as BarberStatus,
+      homeServiceAvailable: false,
+    }));
+  }, [rawBarbers]);
+
+  const filteredBarbers = useMemo(() => {
+    let result = barbers;
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter((b) =>
+        b.displayName.toLowerCase().includes(query)
+      );
+    }
+
+    if (selectedFilters.includes('available_now')) {
+      result = result.filter((b) => b.status === 'available');
+    }
+    if (selectedFilters.includes('top_rated')) {
+      result = result.filter((b) => b.rating >= 4.5);
+    }
+    if (selectedFilters.includes('nearby')) {
+      result = result.filter((b) => b.distanceMeters <= 2000);
+    }
+    if (selectedFilters.includes('home_service')) {
+      result = result.filter((b) => b.homeServiceAvailable);
+    }
+
+    return result;
+  }, [barbers, searchQuery, selectedFilters]);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -93,44 +140,27 @@ export default function MapScreen(): React.JSX.Element {
     getLocation();
   }, [setLocation]);
 
-  const handleBarberSelect = useCallback((barber: NearbyBarber) => {
-    setSelectedBarber(barber);
-    bottomSheetRef.current?.snapToIndex(2);
+  const handleBarberSelect = useCallback((barber: MapBarber) => {
+    const originalBarber: NearbyBarber = {
+      id: barber.id,
+      user_id: barber.userId,
+      display_name: barber.displayName,
+      avatar_url: barber.avatarUrl,
+      bio: barber.bio,
+      rating: barber.rating,
+      total_reviews: barber.totalReviews,
+      is_verified: barber.isVerified,
+      distance_meters: barber.distanceMeters,
+      price_min: barber.priceMin,
+      price_max: barber.priceMax,
+    };
+    setSelectedBarber(originalBarber);
+    bottomSheetRef.current?.snapToIndex(1);
   }, [setSelectedBarber]);
 
-  const handleRequestBarber = useCallback(async () => {
-    if (!user) {
-      router.push('/(auth)/login');
-      return;
-    }
-
-    if (!userLocation) {
-      Alert.alert('Location Required', 'Please enable location services.');
-      return;
-    }
-
-    if (selectedServices.length === 0) {
-      Alert.alert('Select Services', 'Please select at least one service.');
-      return;
-    }
-
-    try {
-      const requestId = await createRequest.mutateAsync({
-        serviceIds: selectedServices.map((s) => s.id),
-        location: {
-          latitude: userLocation.latitude,
-          longitude: userLocation.longitude,
-        },
-        address: userAddress || 'Current Location',
-      });
-
-      if (requestId) {
-        router.push(`/(modals)/chat/${requestId}`);
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to create request. Please try again.');
-    }
-  }, [user, userLocation, userAddress, selectedServices, createRequest]);
+  const handleBarberPress = useCallback((barber: MapBarber) => {
+    router.push(`/(modals)/barber-detail/${barber.id}`);
+  }, []);
 
   const handleMyLocation = useCallback(async () => {
     try {
@@ -150,16 +180,78 @@ export default function MapScreen(): React.JSX.Element {
     }
   }, [setLocation]);
 
+  const handleFilterChange = useCallback((filters: FilterType[]) => {
+    setSelectedFilters(filters);
+  }, []);
+
+  const clearSearch = useCallback(() => {
+    setSearchQuery('');
+  }, []);
+
+  const legacyBarbers = useMemo(() => {
+    return filteredBarbers.map((b) => ({
+      id: b.id,
+      user_id: b.userId,
+      display_name: b.displayName,
+      avatar_url: b.avatarUrl,
+      bio: b.bio,
+      rating: b.rating,
+      total_reviews: b.totalReviews,
+      is_verified: b.isVerified,
+      distance_meters: b.distanceMeters,
+      price_min: b.priceMin,
+      price_max: b.priceMax,
+    }));
+  }, [filteredBarbers]);
+
+  const handleLegacyBarberSelect = useCallback((barber: NearbyBarber) => {
+    setSelectedBarber(barber);
+    bottomSheetRef.current?.snapToIndex(1);
+  }, [setSelectedBarber]);
+
   return (
     <View style={styles.container}>
       <BarberMapView
         userLocation={userLocation}
-        barbers={barbers}
+        barbers={legacyBarbers}
         selectedBarberId={selectedBarber?.id ?? null}
-        onBarberSelect={handleBarberSelect}
+        onBarberSelect={handleLegacyBarberSelect}
       />
 
-      <View style={[styles.fabContainer, { top: insets.top + 16 }]}>
+      <View style={[styles.searchContainer, { top: insets.top + SPACING.md }]}>
+        <View style={styles.searchBar}>
+          <Search size={20} color={COLORS.textMuted} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search barbers..."
+            placeholderTextColor={COLORS.textMuted}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          {searchQuery.length > 0 && (
+            <Pressable onPress={clearSearch} hitSlop={8}>
+              <X size={18} color={COLORS.textMuted} />
+            </Pressable>
+          )}
+        </View>
+        
+        {userAddress && (
+          <View style={styles.locationBadge}>
+            <Text style={styles.locationText} numberOfLines={1}>
+              {userAddress}
+            </Text>
+          </View>
+        )}
+      </View>
+
+      <View style={[styles.filterContainer, { top: insets.top + SPACING.md + 56 + SPACING.sm }]}>
+        <FilterChips
+          selectedFilters={selectedFilters}
+          onFilterChange={handleFilterChange}
+        />
+      </View>
+
+      <View style={[styles.fabContainer, { bottom: 180 }]}>
         <ActionFloatingButton
           icon={Navigation}
           onPress={handleMyLocation}
@@ -167,16 +259,13 @@ export default function MapScreen(): React.JSX.Element {
         />
       </View>
 
-      <BookingBottomSheet
+      <MapBottomSheet
         ref={bottomSheetRef}
-        barbers={barbers}
-        services={services}
-        isLoadingBarbers={isLoadingBarbers}
-        isLoadingServices={isLoadingServices}
+        barbers={filteredBarbers}
+        isLoading={isLoadingBarbers}
+        selectedBarberId={selectedBarber?.id ?? null}
         onBarberSelect={handleBarberSelect}
-        onRequestBarber={handleRequestBarber}
-        isRequesting={createRequest.isPending}
-        userAddress={userAddress}
+        onBarberPress={handleBarberPress}
       />
     </View>
   );
@@ -185,10 +274,52 @@ export default function MapScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: COLORS.background,
+  },
+  searchContainer: {
+    position: 'absolute',
+    left: SPACING.lg,
+    right: SPACING.lg,
+    zIndex: 10,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.lg,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    gap: SPACING.sm,
+    ...SHADOWS.md,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: TYPOGRAPHY.base,
+    color: COLORS.textPrimary,
+    paddingVertical: SPACING.xs,
+  },
+  locationBadge: {
+    marginTop: SPACING.xs,
+    backgroundColor: COLORS.copperMuted,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.xs,
+    borderRadius: RADIUS.full,
+    alignSelf: 'flex-start',
+  },
+  locationText: {
+    fontSize: TYPOGRAPHY.sm,
+    color: COLORS.copper,
+    fontWeight: TYPOGRAPHY.medium,
+  },
+  filterContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    zIndex: 9,
   },
   fabContainer: {
     position: 'absolute',
-    right: 16,
+    right: SPACING.lg,
+    zIndex: 10,
   },
 });

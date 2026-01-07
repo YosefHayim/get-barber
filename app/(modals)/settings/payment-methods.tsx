@@ -19,10 +19,7 @@ import {
   Check,
   Wallet,
 } from 'lucide-react-native';
-
-const GOLD = '#DAA520';
-const DARK_GOLD = '#B8860B';
-const BURGUNDY = '#722F37';
+import { DARK_COLORS } from '@/constants/theme';
 
 interface PaymentMethod {
   id: string;
@@ -54,7 +51,7 @@ function CardIcon({ type }: { type: PaymentMethod['type'] }) {
     visa: '#1A1F71',
     mastercard: '#EB001B',
     amex: '#006FCF',
-    cash: DARK_GOLD,
+    cash: DARK_COLORS.accent,
   };
 
   if (type === 'cash') {
@@ -162,10 +159,11 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Payment Methods',
-          headerTitleStyle: { fontWeight: '700', color: BURGUNDY },
+          headerStyle: { backgroundColor: DARK_COLORS.background },
+          headerTitleStyle: { fontWeight: '700', color: DARK_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
-              <ArrowLeft size={24} color={BURGUNDY} />
+              <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
             </Pressable>
           ),
         }}
@@ -179,7 +177,7 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
       >
         {methods.length === 0 ? (
           <View style={styles.emptyState}>
-            <CreditCard size={64} color="#D1D5DB" />
+            <CreditCard size={64} color={DARK_COLORS.textMuted} />
             <Text style={styles.emptyTitle}>No payment methods</Text>
             <Text style={styles.emptyText}>
               Add a card to make booking and payments seamless
@@ -187,7 +185,7 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
           </View>
         ) : (
           methods.map((method) => (
-            <Surface key={method.id} style={styles.cardItem} elevation={1}>
+            <Surface key={method.id} style={styles.cardItem} elevation={0}>
               <Pressable
                 style={styles.cardContent}
                 onPress={() => handleSetDefault(method.id)}
@@ -218,14 +216,14 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
                       style={styles.actionButton}
                       onPress={() => handleSetDefault(method.id)}
                     >
-                      <Star size={18} color="#6B7280" />
+                      <Star size={18} color={DARK_COLORS.textMuted} />
                     </Pressable>
                   )}
                   <Pressable
                     style={styles.actionButton}
                     onPress={() => handleDeleteMethod(method.id)}
                   >
-                    <Trash2 size={18} color="#EF4444" />
+                    <Trash2 size={18} color={DARK_COLORS.error} />
                   </Pressable>
                 </View>
               </Pressable>
@@ -233,9 +231,9 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
           ))
         )}
 
-        <Surface style={styles.infoCard} elevation={1}>
+        <Surface style={styles.infoCard} elevation={0}>
           <View style={styles.infoIcon}>
-            <Wallet size={24} color={DARK_GOLD} />
+            <Wallet size={24} color={DARK_COLORS.accent} />
           </View>
           <View style={styles.infoContent}>
             <Text style={styles.infoTitle}>Cash Payment</Text>
@@ -253,7 +251,7 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
           icon={() => <Plus size={20} color="#FFFFFF" />}
           style={styles.addButton}
           contentStyle={styles.addButtonContent}
-          buttonColor={DARK_GOLD}
+          buttonColor={DARK_COLORS.primary}
         >
           Add New Card
         </Button>
@@ -273,11 +271,13 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
               value={cardNumber}
               onChangeText={(text) => setCardNumber(formatCardNumber(text))}
               placeholder="1234 5678 9012 3456"
+              placeholderTextColor={DARK_COLORS.textMuted}
               mode="outlined"
               style={styles.modalInput}
               outlineStyle={styles.inputOutline}
-              outlineColor="#E5E7EB"
-              activeOutlineColor={DARK_GOLD}
+              outlineColor={DARK_COLORS.border}
+              activeOutlineColor={DARK_COLORS.primary}
+              textColor={DARK_COLORS.textPrimary}
               keyboardType="numeric"
               maxLength={19}
             />
@@ -290,11 +290,13 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
                 value={expiryDate}
                 onChangeText={(text) => setExpiryDate(formatExpiryDate(text))}
                 placeholder="MM/YY"
+                placeholderTextColor={DARK_COLORS.textMuted}
                 mode="outlined"
                 style={styles.modalInput}
                 outlineStyle={styles.inputOutline}
-                outlineColor="#E5E7EB"
-                activeOutlineColor={DARK_GOLD}
+                outlineColor={DARK_COLORS.border}
+                activeOutlineColor={DARK_COLORS.primary}
+                textColor={DARK_COLORS.textPrimary}
                 keyboardType="numeric"
                 maxLength={5}
               />
@@ -305,11 +307,13 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
                 value={cvv}
                 onChangeText={setCvv}
                 placeholder="123"
+                placeholderTextColor={DARK_COLORS.textMuted}
                 mode="outlined"
                 style={styles.modalInput}
                 outlineStyle={styles.inputOutline}
-                outlineColor="#E5E7EB"
-                activeOutlineColor={DARK_GOLD}
+                outlineColor={DARK_COLORS.border}
+                activeOutlineColor={DARK_COLORS.primary}
+                textColor={DARK_COLORS.textPrimary}
                 keyboardType="numeric"
                 maxLength={4}
                 secureTextEntry
@@ -323,11 +327,13 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
               value={cardholderName}
               onChangeText={setCardholderName}
               placeholder="Name on card"
+              placeholderTextColor={DARK_COLORS.textMuted}
               mode="outlined"
               style={styles.modalInput}
               outlineStyle={styles.inputOutline}
-              outlineColor="#E5E7EB"
-              activeOutlineColor={DARK_GOLD}
+              outlineColor={DARK_COLORS.border}
+              activeOutlineColor={DARK_COLORS.primary}
+              textColor={DARK_COLORS.textPrimary}
               autoCapitalize="characters"
             />
           </View>
@@ -337,7 +343,7 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
               mode="outlined"
               onPress={() => setShowAddModal(false)}
               style={styles.modalButton}
-              textColor="#6B7280"
+              textColor={DARK_COLORS.textSecondary}
             >
               Cancel
             </Button>
@@ -345,7 +351,7 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
               mode="contained"
               onPress={handleAddCard}
               style={styles.modalButton}
-              buttonColor={DARK_GOLD}
+              buttonColor={DARK_COLORS.primary}
             >
               Add Card
             </Button>
@@ -363,7 +369,7 @@ export default function PaymentMethodsScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: DARK_COLORS.background,
   },
   scrollContent: {
     padding: 16,
@@ -378,21 +384,23 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: DARK_COLORS.textPrimary,
     marginTop: 16,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: DARK_COLORS.textMuted,
     textAlign: 'center',
     maxWidth: 240,
   },
   cardItem: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     marginBottom: 12,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   cardContent: {
     flexDirection: 'row',
@@ -403,7 +411,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: DARK_COLORS.surfaceLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -420,13 +428,13 @@ const styles = StyleSheet.create({
   cardType: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: DARK_COLORS.textPrimary,
   },
   defaultBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: DARK_GOLD,
+    backgroundColor: DARK_COLORS.primary,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 10,
@@ -438,13 +446,13 @@ const styles = StyleSheet.create({
   },
   cardNumber: {
     fontSize: 14,
-    color: '#6B7280',
+    color: DARK_COLORS.textSecondary,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     marginBottom: 2,
   },
   cardExpiry: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: DARK_COLORS.textMuted,
   },
   cardActions: {
     flexDirection: 'row',
@@ -454,23 +462,25 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 8,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: DARK_COLORS.surfaceLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   infoCard: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     padding: 16,
     marginTop: 8,
     flexDirection: 'row',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   infoIcon: {
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: 'rgba(218, 165, 32, 0.1)',
+    backgroundColor: 'rgba(245, 158, 11, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -481,12 +491,12 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: DARK_COLORS.textPrimary,
     marginBottom: 4,
   },
   infoText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: DARK_COLORS.textMuted,
     lineHeight: 18,
   },
   footer: {
@@ -495,9 +505,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: DARK_COLORS.border,
   },
   addButton: {
     borderRadius: 14,
@@ -506,15 +516,17 @@ const styles = StyleSheet.create({
     height: 52,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     margin: 20,
     borderRadius: 20,
     padding: 24,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: BURGUNDY,
+    color: DARK_COLORS.textPrimary,
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -524,7 +536,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: DARK_COLORS.textSecondary,
     marginBottom: 8,
   },
   cardDetailsRow: {
@@ -532,7 +544,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   modalInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surfaceLight,
   },
   inputOutline: {
     borderRadius: 12,
@@ -548,7 +560,7 @@ const styles = StyleSheet.create({
   },
   securityNote: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: DARK_COLORS.textMuted,
     textAlign: 'center',
     marginTop: 16,
   },

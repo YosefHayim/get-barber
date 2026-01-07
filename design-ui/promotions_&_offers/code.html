@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Promotions &amp; Offers</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11a4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a262b",
+                        "text-main-light": "#111618",
+                        "text-main-dark": "#ffffff",
+                        "text-sub-light": "#617f89",
+                        "text-sub-dark": "#a0b3b9",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden pb-24">
+<!-- Top App Bar -->
+<div class="sticky top-0 z-10 flex items-center bg-surface-light dark:bg-surface-dark p-4 pb-2 justify-between border-b border-[#e5e7eb] dark:border-[#2A3438]">
+<div class="text-text-main-light dark:text-text-main-dark flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_back</span>
+</div>
+<h2 class="text-text-main-light dark:text-text-main-dark text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Promotions</h2>
+<div class="flex w-12 items-center justify-end absolute right-4">
+<button class="flex cursor-pointer items-center justify-center rounded-lg h-10 w-10 bg-transparent text-text-main-light dark:text-text-main-dark">
+<span class="material-symbols-outlined" style="font-size: 24px;">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Chips / Categories -->
+<div class="flex gap-3 px-4 py-4 overflow-x-auto hide-scrollbar bg-background-light dark:bg-background-dark">
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary pl-5 pr-5 shadow-sm cursor-pointer">
+<p class="text-white text-sm font-bold leading-normal">All Offers</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark pl-5 pr-5 border border-transparent shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-[#223036]">
+<p class="text-text-main-light dark:text-text-main-dark text-sm font-medium leading-normal">Haircuts</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark pl-5 pr-5 border border-transparent shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-[#223036]">
+<p class="text-text-main-light dark:text-text-main-dark text-sm font-medium leading-normal">Beard</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark pl-5 pr-5 border border-transparent shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-[#223036]">
+<p class="text-text-main-light dark:text-text-main-dark text-sm font-medium leading-normal">Packages</p>
+</div>
+<div class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark pl-5 pr-5 border border-transparent shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-[#223036]">
+<p class="text-text-main-light dark:text-text-main-dark text-sm font-medium leading-normal">Products</p>
+</div>
+</div>
+<!-- Hero Card -->
+<div class="px-4 pb-2 w-full">
+<div class="flex flex-col items-stretch justify-start rounded-xl shadow-md overflow-hidden bg-surface-light dark:bg-surface-dark transition-transform active:scale-[0.98] cursor-pointer">
+<div class="w-full bg-center bg-no-repeat h-48 sm:h-56 bg-cover relative" data-alt="Barber arranging tools for a premium haircut session" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCCcsNzkx_ok2bTVpYozhTFZj1cBeDoZSyGiN5Nzl72IqTH6g6gfViwKSJ-x2bz8M_V7NKo1H4PmQ-jRQbdx6wUz7Fhud8X7_-O-ZQpMn2SYN9OXwHFrv34VpDpH963vBw3ZbL8LtB_EgmZk8TZNmfFhkaQ8lrkFKEt-u-PMrKHsMFcP7gRnbjW7-FRR51VfCC4c6o8wx5wiQu8_Soo6CHnHr5WV_4sBjE86gXK3yzhGBjcyKULfQXIkv_pvR9f2Hv9tjXbeGem2DUk");'>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-black/80 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-orange-500 text-[18px]">local_fire_department</span>
+<span class="text-xs font-bold text-text-main-light dark:text-white uppercase tracking-wider">Hot Deal</span>
+</div>
+</div>
+<div class="flex w-full flex-col items-stretch justify-center gap-3 p-5">
+<div>
+<h2 class="text-text-main-light dark:text-text-main-dark text-xl font-bold leading-tight tracking-[-0.015em] mb-1">Summer Special: Free Premium Kit</h2>
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm leading-relaxed">Get a free grooming kit with every home visit booking above $60.</p>
+</div>
+<div class="w-full h-px bg-gray-100 dark:bg-[#2A3438]"></div>
+<div class="flex items-center justify-between mt-1">
+<div class="flex flex-col">
+<p class="text-text-sub-light dark:text-text-sub-dark text-xs font-medium uppercase tracking-wide">Expires in</p>
+<p class="text-orange-600 dark:text-orange-400 text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">timer</span>
+                            14 hours
+                        </p>
+</div>
+<button class="flex items-center justify-center rounded-lg h-9 px-5 bg-primary hover:bg-primary/90 text-white text-sm font-bold shadow-sm transition-colors">
+                        Redeem
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Flash Deals / Stories -->
+<div class="pt-6 pb-2">
+<div class="flex items-center justify-between px-4 mb-3">
+<h2 class="text-text-main-light dark:text-text-main-dark text-lg font-bold leading-tight">Flash Categories</h2>
+<a class="text-primary text-sm font-semibold" href="#">See All</a>
+</div>
+<div class="flex w-full overflow-x-auto hide-scrollbar px-4 pb-2">
+<div class="flex min-h-min flex-row items-start justify-start gap-4">
+<!-- Story Item 1 -->
+<div class="flex flex-col items-center justify-center gap-2 w-[72px] cursor-pointer group">
+<div class="size-[72px] rounded-full p-[2px] bg-gradient-to-tr from-primary to-[#4dd4ff]">
+<div class="w-full h-full rounded-full border-2 border-white dark:border-background-dark overflow-hidden relative">
+<div class="w-full h-full bg-center bg-cover transition-transform group-hover:scale-110" data-alt="Close up of a beard trim with scissors" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAvEMsULdXZC2ui7xyp60DaOCcyX8k5t0E6M4NZfQyppu7AHGQhFjXsYvY1NcAfxgFZN1fiRwowN6rzT2ajpMw1dGhz7iBKr3Qvwm_qeMzhmEI28Sqviy-HpNs-uQMd-5Y5kbI2rZQ4d_bpIVoqh4s3bnuDLMCYxuziEpSOPNukcSCrz5hpTnXbBdCT0DNg3broDO5iZrtLxHzmQS-zEkvJrHvRgrN-ZXETfqN-TXCdHkuBWslEmhZW74uEMbbCreZ9o06lO7RuaqT_");'></div>
+</div>
+</div>
+<p class="text-text-main-light dark:text-text-main-dark text-xs font-medium text-center truncate w-full">Beard Trims</p>
+</div>
+<!-- Story Item 2 -->
+<div class="flex flex-col items-center justify-center gap-2 w-[72px] cursor-pointer group">
+<div class="size-[72px] rounded-full p-[2px] bg-gray-200 dark:bg-gray-700">
+<div class="w-full h-full rounded-full border-2 border-white dark:border-background-dark overflow-hidden relative">
+<div class="w-full h-full bg-center bg-cover transition-transform group-hover:scale-110" data-alt="Man getting a hot towel shave" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDPo2Hzo14F3GMkbrTRJqeCof1VxCLTPw6JOfGw-lT18ukhi3TbKuQS0GzFI1aYpUvALmlX4Csm_FVenudXltDIsj08EhSFBnT2oqGXjhc_2fYvYUE7_k9yKwRSpiS8N2awHSeSus7wZTSNMMIyqiCBi-Ar6ixCLJVXVnm9Y_2OJniJDOq5YKGekQw6fcHzOqjekA_S8eZbUdigg8Vz571VmRYZVjVO1LeqTfV5Tu2RlzlOENzWzlOlefnHfcheNVsqmDcKDuL6DKqh");'></div>
+</div>
+</div>
+<p class="text-text-main-light dark:text-text-main-dark text-xs font-medium text-center truncate w-full">Shaves</p>
+</div>
+<!-- Story Item 3 -->
+<div class="flex flex-col items-center justify-center gap-2 w-[72px] cursor-pointer group">
+<div class="size-[72px] rounded-full p-[2px] bg-gray-200 dark:bg-gray-700">
+<div class="w-full h-full rounded-full border-2 border-white dark:border-background-dark overflow-hidden relative">
+<div class="w-full h-full bg-center bg-cover transition-transform group-hover:scale-110" data-alt="Barber styling hair with product" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBq31ywgLN3BctVilV4MJz6I54AmYeyqypRcMRivPMvrR40-ot-7XMObGp5cziUKYwkW1bMZx3QLvthYav833yyPXfcJRQQGrIntWWWHgbMgFupJuLDgaot4UmF_NPMAgxmMZ6Hk2_SqDqA8un1edFffcSvaIx55FTIgBkqx6Hlg198i0cyAndG7hWjwDchf4K_D4TTAvsLYYOpLV057Q6xCz0K1rT0HiSzm10-NsRDC6seme5r6Mglagz1U_EHWiAr0wrJVJLqRg1C");'></div>
+</div>
+</div>
+<p class="text-text-main-light dark:text-text-main-dark text-xs font-medium text-center truncate w-full">Products</p>
+</div>
+<!-- Story Item 4 -->
+<div class="flex flex-col items-center justify-center gap-2 w-[72px] cursor-pointer group">
+<div class="size-[72px] rounded-full p-[2px] bg-gradient-to-tr from-primary to-[#4dd4ff]">
+<div class="w-full h-full rounded-full border-2 border-white dark:border-background-dark overflow-hidden relative">
+<div class="w-full h-full bg-center bg-cover transition-transform group-hover:scale-110" data-alt="Barber shop chair and mirror" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD0couzv_MVP8T_A4fnQAw_UHAiT-BQNAcIGaIIC4SWcwF67N5rM3xL5PhQEJFpzau7OAnlCCxDWBnYpEkTgVmq8-atzBFkZQVIwdAP6TSghyFbt5g5803RnUWumC3FgpS2gMV3AlJ6iwhFzYt1CCEoHXzzKGZJDYIY72F7_beNNiDa2CPQTNI_sh8tduHSZu7Y6a4WCiO5U3B9Z8jETcMDmjzAW4O8nzMZVzoe4PfeXP5eaoDFLy-h8eSdqKMqHhxy07vaNz3cphB2");'></div>
+</div>
+</div>
+<p class="text-text-main-light dark:text-text-main-dark text-xs font-medium text-center truncate w-full">Combos</p>
+</div>
+<!-- Story Item 5 -->
+<div class="flex flex-col items-center justify-center gap-2 w-[72px] cursor-pointer group">
+<div class="size-[72px] rounded-full p-[2px] bg-gray-200 dark:bg-gray-700">
+<div class="w-full h-full rounded-full border-2 border-white dark:border-background-dark overflow-hidden relative">
+<div class="w-full h-full bg-center bg-cover transition-transform group-hover:scale-110" data-alt="Hair clipper and scissors on table" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCZeb46u3xsrPKfTboH45hVuNTN9-yjBg4JkP9JokmGzyEFAmgWPFT3PXqnXxjZSN5KWRrBqkiqg3laWMjhrG493Nt1pJmKxr-KGFl7Sp2_yZ5kP1Lg0tWSUVcVwufpHcb5W7FGNp6HSLTwvO6-sNmWX6psL_6hk0a6eAJ5YBV84LjHKDtEtaujWBXga4HgcIghxdIA3fCdJOvuGIJvwMyfDdYCx37fyr-r1X1jYjNRC5-AjSWzB8ezYsqXO_mNuwQ91U4abSHBnhO2");'></div>
+</div>
+</div>
+<p class="text-text-main-light dark:text-text-main-dark text-xs font-medium text-center truncate w-full">Tools</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Promo List -->
+<div class="px-4 pt-4">
+<h2 class="text-text-main-light dark:text-text-main-dark text-lg font-bold leading-tight mb-4">More Offers for You</h2>
+<div class="flex flex-col gap-4">
+<!-- Card 1 -->
+<div class="flex flex-col sm:flex-row items-stretch justify-start rounded-xl shadow-sm bg-surface-light dark:bg-surface-dark overflow-hidden group hover:shadow-md transition-shadow">
+<div class="w-full sm:w-32 h-40 sm:h-auto shrink-0 bg-center bg-no-repeat bg-cover relative" data-alt="Man smiling after a fresh haircut" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDa_ZmD9MaK3c0qKrvOFpXTrKmrNhC2gwT2Tjkc-axijzZSNWMp3KOZTW8b5QoMDART1w0XYsJY1juKl7nF46aTuNQasaOMSUNQ-6O3V7ThTuuz4bP6IbdZnK42ZpSRTKoNWwwSpcQruw5RE8JLTlekP6hzmbjG5L1cMqgjN6BF91XLoVo_eXgq98iS8k0iaoPF9CtcNrgrf36HYu7ggo-buDeQUhy2WB2SNHeOV0-gCwlb_D_f0mcpWtwvvLK3nBeJZXiA39Wf2O66");'>
+<div class="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">
+                        -20% OFF
+                    </div>
+</div>
+<div class="flex w-full grow flex-col justify-between p-4 gap-2">
+<div>
+<div class="flex justify-between items-start">
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight">Morning Fresh Cut</p>
+<div class="bg-primary/10 dark:bg-primary/20 p-1.5 rounded-full cursor-pointer hover:bg-primary/20">
+<span class="material-symbols-outlined text-primary text-[20px]">content_copy</span>
+</div>
+</div>
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm mt-1">Get 20% off on all haircuts booked between 8 AM - 11 AM.</p>
+</div>
+<div class="mt-2 pt-3 border-t border-gray-100 dark:border-[#2A3438] flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[10px] text-text-sub-light dark:text-text-sub-dark uppercase font-semibold">Code: MORNING20</span>
+<span class="text-xs text-text-sub-light dark:text-text-sub-dark flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">calendar_month</span> Expires in 2 days
+                             </span>
+</div>
+<button class="flex items-center justify-center rounded-lg h-8 px-4 border border-primary text-primary hover:bg-primary hover:text-white transition-colors text-xs font-bold">
+                            Book Now
+                        </button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="flex flex-col sm:flex-row items-stretch justify-start rounded-xl shadow-sm bg-surface-light dark:bg-surface-dark overflow-hidden group hover:shadow-md transition-shadow">
+<div class="w-full sm:w-32 h-40 sm:h-auto shrink-0 bg-center bg-no-repeat bg-cover relative" data-alt="Two friends laughing in a barber shop" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB4kUCKZMdMQckaih_-1m-5NklLWjqa-_u9f07Iq81zR8o0ZasZD_3z8zcB9DRzK1t0ilz5_xyHN6ht3ryfHAIpYLw25xPbxPdF4rEEXkY5Xf2NTltzGQsMiTbzN4Ra-4Hr53gs3c5G0_clZBr3hFl1xzAXZBpSoIUYPseVEjb0bUqoqeY9sSqdQIIYGb2OuA1bfjqcgjLvry3jp6dmX2GXBexKJg3CcrvtiWIWVuU6EycM599BXGQxafzyNbzXCUbdKEBlwNER1B9N");'>
+</div>
+<div class="flex w-full grow flex-col justify-between p-4 gap-2">
+<div>
+<div class="flex justify-between items-start">
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight">Refer a Friend</p>
+</div>
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm mt-1">Invite a friend to join and you both get $10 credit on your wallet.</p>
+</div>
+<div class="mt-2 pt-3 border-t border-gray-100 dark:border-[#2A3438] flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs text-text-sub-light dark:text-text-sub-dark flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">indeterminate_question_box</span> No expiry
+                             </span>
+</div>
+<button class="flex items-center justify-center rounded-lg h-8 px-4 bg-primary text-white hover:bg-primary/90 transition-colors text-xs font-bold">
+                            Invite
+                        </button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="flex flex-col sm:flex-row items-stretch justify-start rounded-xl shadow-sm bg-surface-light dark:bg-surface-dark overflow-hidden group hover:shadow-md transition-shadow">
+<div class="w-full sm:w-32 h-40 sm:h-auto shrink-0 bg-center bg-no-repeat bg-cover relative" data-alt="Detailed shot of a haircut fade being done" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAVQXbIRIjbDa91ZjaKtRkV0o7YK2krELK_tp8N4trDOXnY7Ez4kh_Qunyz65sNbf_338OhPlWnpnTJSsLKoyChd0pe822wHIAYfT26b0pYZYPAcHZsOyqu0ZeO5JetOgFjkXzltfDnu9T6_r8MiZDoRBs05zbyRtH0EcljMy6coRuM6Qp-CM3vIAIDRw-3fGQFw2r4X1rO3G8NcP1f3jxXgYWgvMd6nJs3usBj8cBByW0M2GFjRHc_gGzGZ6frLgPqCYnvvwE1LIE5");'>
+<div class="absolute top-2 left-2 bg-gray-900 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">
+                        BUNDLE
+                    </div>
+</div>
+<div class="flex w-full grow flex-col justify-between p-4 gap-2">
+<div>
+<div class="flex justify-between items-start">
+<p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-tight">The Executive Package</p>
+<div class="bg-primary/10 dark:bg-primary/20 p-1.5 rounded-full cursor-pointer hover:bg-primary/20">
+<span class="material-symbols-outlined text-primary text-[20px]">content_copy</span>
+</div>
+</div>
+<p class="text-text-sub-light dark:text-text-sub-dark text-sm mt-1">Includes haircut, beard trim, and hot towel shave. Save $15.</p>
+</div>
+<div class="mt-2 pt-3 border-t border-gray-100 dark:border-[#2A3438] flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[10px] text-text-sub-light dark:text-text-sub-dark uppercase font-semibold">Code: BOSS15</span>
+<span class="text-xs text-text-sub-light dark:text-text-sub-dark flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">calendar_month</span> Expires in 5 days
+                             </span>
+</div>
+<button class="flex items-center justify-center rounded-lg h-8 px-4 border border-primary text-primary hover:bg-primary hover:text-white transition-colors text-xs font-bold">
+                            Book Now
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation -->
+<div class="fixed bottom-0 left-0 w-full bg-surface-light dark:bg-surface-dark border-t border-gray-200 dark:border-[#2A3438] pb-safe z-50">
+<div class="flex justify-around items-center h-16 max-w-lg mx-auto">
+<button class="flex flex-col items-center justify-center w-full h-full space-y-1 text-text-sub-light dark:text-text-sub-dark hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full space-y-1 text-primary">
+<span class="material-symbols-outlined filled" style="font-variation-settings: 'FILL' 1;">local_offer</span>
+<span class="text-[10px] font-bold">Promos</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full space-y-1 text-text-sub-light dark:text-text-sub-dark hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-medium">Bookings</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full h-full space-y-1 text-text-sub-light dark:text-text-sub-dark hover:text-primary dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</div>
+</div>
+</body></html>

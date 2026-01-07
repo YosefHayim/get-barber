@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Payment Methods</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for cleaner mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col antialiased selection:bg-primary/30 selection:text-primary">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 flex items-center justify-between bg-background-light/90 dark:bg-background-dark/90 px-4 py-3 backdrop-blur-md">
+<button class="flex size-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-black/5 dark:text-white dark:hover:bg-white/10">
+<span class="material-symbols-outlined text-[24px]">arrow_back_ios_new</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Payment Methods</h1>
+<div class="size-10"></div> <!-- Spacer for centering title -->
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-4 pb-10 pt-2">
+<!-- Digital Wallets Section -->
+<section class="mb-6">
+<h2 class="mb-2 ml-1 px-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Digital Wallets</h2>
+<div class="overflow-hidden rounded-xl bg-white shadow-sm dark:bg-[#1c2333] dark:shadow-none border border-slate-100 dark:border-slate-800">
+<div class="flex items-center justify-between p-4 transition-colors hover:bg-slate-50 dark:hover:bg-[#252d40]">
+<div class="flex items-center gap-4">
+<div class="flex h-10 w-14 shrink-0 items-center justify-center rounded bg-black" data-alt="Apple Pay Logo" style="background-image: linear-gradient(135deg, #000 0%, #333 100%);">
+<span class="material-symbols-outlined text-white">ios</span>
+</div>
+<div class="flex flex-col">
+<p class="text-base font-medium text-slate-900 dark:text-white">Apple Pay</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Linked</p>
+</div>
+</div>
+<button class="text-primary font-medium text-sm hover:underline">Edit</button>
+</div>
+</div>
+</section>
+<!-- Credit & Debit Cards Section -->
+<section class="mb-6">
+<h2 class="mb-2 ml-1 px-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Credit &amp; Debit Cards</h2>
+<div class="overflow-hidden rounded-xl bg-white shadow-sm dark:bg-[#1c2333] dark:shadow-none border border-slate-100 dark:border-slate-800">
+<!-- Card Item 1 (Default) -->
+<div class="relative flex cursor-pointer items-center justify-between border-b border-slate-100 p-4 transition-colors hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-[#252d40]">
+<div class="flex items-center gap-4">
+<!-- Visa Logo Placeholder -->
+<div class="flex h-10 w-14 shrink-0 items-center justify-center rounded border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800" data-alt="Visa Logo">
+<span class="font-bold italic text-blue-900 dark:text-blue-400">Visa</span>
+</div>
+<div class="flex flex-col">
+<p class="font-medium text-slate-900 dark:text-white">Visa ending in 4242</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Expires 12/25</p>
+</div>
+</div>
+<div class="shrink-0 text-primary">
+<span class="material-symbols-outlined text-[24px] fill-1">check_circle</span>
+</div>
+</div>
+<!-- Card Item 2 -->
+<div class="relative flex cursor-pointer items-center justify-between p-4 transition-colors hover:bg-slate-50 dark:hover:bg-[#252d40]">
+<div class="flex items-center gap-4">
+<!-- Mastercard Logo Placeholder -->
+<div class="flex h-10 w-14 shrink-0 items-center justify-center rounded border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800" data-alt="Mastercard Logo">
+<div class="flex -space-x-2">
+<div class="size-4 rounded-full bg-red-500 opacity-80"></div>
+<div class="size-4 rounded-full bg-yellow-500 opacity-80"></div>
+</div>
+</div>
+<div class="flex flex-col">
+<p class="font-medium text-slate-900 dark:text-white">Mastercard ending in 8899</p>
+<p class="text-sm text-slate-500 dark:text-slate-400">Expires 09/24</p>
+</div>
+</div>
+<div class="shrink-0 text-slate-300 dark:text-slate-600">
+<span class="material-symbols-outlined text-[24px]">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Actions Section -->
+<section>
+<div class="overflow-hidden rounded-xl bg-white shadow-sm dark:bg-[#1c2333] dark:shadow-none border border-slate-100 dark:border-slate-800">
+<button class="flex w-full items-center gap-3 p-4 text-left transition-colors hover:bg-slate-50 dark:hover:bg-[#252d40]">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">add</span>
+</div>
+<span class="text-base font-semibold text-primary">Add New Card</span>
+</button>
+</div>
+</section>
+<!-- Security Footer -->
+<div class="mt-8 flex items-center justify-center gap-2 text-slate-400 opacity-80">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<p class="text-xs font-medium">Payments are processed securely</p>
+</div>
+</main>
+</body></html>

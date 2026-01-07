@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Searching for Barber</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11a4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'ping-slow': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom map marker pulse effect */
+        .radar-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid #11a4d4;
+            opacity: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: ripple 2.5s linear infinite;
+        }
+
+        .radar-ring:nth-child(1) { animation-delay: 0s; }
+        .radar-ring:nth-child(2) { animation-delay: 0.8s; }
+        .radar-ring:nth-child(3) { animation-delay: 1.6s; }
+
+        @keyframes ripple {
+            0% {
+                width: 60px;
+                height: 60px;
+                opacity: 0.8;
+                border-width: 4px;
+            }
+            100% {
+                width: 300px;
+                height: 300px;
+                opacity: 0;
+                border-width: 0px;
+            }
+        }
+        
+        /* Simulating the blurred map background */
+        .map-bg-overlay {
+            background: linear-gradient(to bottom, 
+                rgba(246, 248, 248, 0) 0%, 
+                rgba(246, 248, 248, 0.8) 50%, 
+                rgba(246, 248, 248, 1) 100%
+            );
+        }
+        .dark .map-bg-overlay {
+            background: linear-gradient(to bottom, 
+                rgba(16, 29, 34, 0) 0%, 
+                rgba(16, 29, 34, 0.8) 50%, 
+                rgba(16, 29, 34, 1) 100%
+            );
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white transition-colors duration-200">
+<div class="relative flex h-screen w-full flex-col overflow-hidden max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark">
+<!-- Background Map Layer -->
+<div class="absolute inset-0 z-0 opacity-40 dark:opacity-20 pointer-events-none">
+<div class="w-full h-full bg-cover bg-center" data-alt="Abstract map background showing city streets" data-location="New York City" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZuurwyvxbPVyC7nwBnW0TDjHWGEN1sp9bSjnawQIdYltpFF7WgdW0536qtLJSQxr7SqVzng4gyljvIPZNcbjQfptBTT4zO8rpQ70CmXarOplcUY2taQYIBO3InM7i5rtoxKyKDDrLvjVp_gbjWQfQRwglscZ3PcAc6XifdeMMeYQa3uCvHFaBte1cNd5BuNmpniFvFgklSZpQFNNsme_Le97tId0eqHx_pNZ0lth7hgkVjrvTVV-lMV_foE4KnZTZlCh89BAD2fkb");'>
+</div>
+<!-- Gradient Overlay to fade map into content -->
+<div class="absolute inset-0 map-bg-overlay"></div>
+</div>
+<!-- Top Navigation Area (Minimal) -->
+<header class="relative z-10 flex w-full items-center justify-between px-4 py-4 mt-2">
+<button class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 dark:bg-slate-800/80 shadow-sm backdrop-blur-md">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-200" style="font-size: 20px;">arrow_back</span>
+</button>
+<div class="rounded-full bg-white/80 dark:bg-slate-800/80 px-3 py-1 shadow-sm backdrop-blur-md">
+<span class="text-xs font-semibold text-primary">Searching...</span>
+</div>
+<button class="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 dark:bg-slate-800/80 shadow-sm backdrop-blur-md">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-200" style="font-size: 20px;">help</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="relative z-10 flex flex-1 flex-col items-center justify-center px-6">
+<!-- Radar Animation Section -->
+<div class="relative mb-12 flex h-64 w-64 items-center justify-center">
+<!-- Ripples -->
+<div class="radar-ring border-primary"></div>
+<div class="radar-ring border-primary"></div>
+<div class="radar-ring border-primary"></div>
+<!-- Central Avatar/Icon -->
+<div class="relative z-20 flex h-24 w-24 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-[0_8px_30px_rgb(0,0,0,0.12)] ring-4 ring-white dark:ring-slate-700">
+<!-- Pulsing background behind icon -->
+<div class="absolute inset-0 rounded-full bg-primary/10 animate-pulse"></div>
+<span class="material-symbols-outlined text-primary z-10" style="font-size: 40px;">content_cut</span>
+<!-- Decorator dot -->
+<div class="absolute right-0 top-0 h-6 w-6 rounded-full bg-primary border-4 border-white dark:border-slate-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-size: 12px;">search</span>
+</div>
+</div>
+</div>
+<!-- Dynamic Text Status -->
+<div class="text-center space-y-2">
+<h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    Finding your barber...
+                </h1>
+<p class="text-base text-slate-500 dark:text-slate-400 font-medium">
+                    Scanning within 5km of your location
+                </p>
+</div>
+<!-- Progress Indicator -->
+<div class="mt-8 w-full max-w-[240px]">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-semibold text-primary">Contacting Barbers</span>
+<span class="text-xs text-slate-400">45%</span>
+</div>
+<div class="h-1.5 w-full rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<div class="h-full rounded-full bg-primary animate-[shimmer_2s_infinite] relative overflow-hidden" style="width: 45%;">
+<div class="absolute inset-0 bg-white/30 skew-x-12 translate-x-[-100%] animate-[slide_1.5s_infinite]"></div>
+</div>
+</div>
+</div>
+<!-- Nearby Avatars (Simulating "Pinging") -->
+<div class="mt-10 flex items-center gap-4">
+<div class="relative">
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden ring-2 ring-white dark:ring-slate-800 opacity-50 grayscale">
+<img class="h-full w-full object-cover" data-alt="Profile picture of a potential barber" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdmb4bDIFusb_K-op4U9P_WuqIYgIwzUP5BH8sRs-sQtfFKrX0SWrFg2s1XjNp2k9eAvVCKPpx0rEFLzuEqw1BLayTesnV284KUyXXEhJKZpUzCBqvoTNdn7vnvHN04eUMduuhIbakna1Ad2dHa71DlW6inud85Gl0tdO6YlsKpZ0_qbNndpKYiZ_mQ08btQ6KysbvmcMwqqtT_i2NMxT3gjoJoEXNTJ7DaVkdXraHu8mVTHgbGihrPyD5f_p9vZBeofEN5iHJPZ2_"/>
+</div>
+</div>
+<div class="relative">
+<div class="h-12 w-12 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden ring-2 ring-primary shadow-lg scale-110 z-10">
+<img class="h-full w-full object-cover" data-alt="Profile picture of a potential barber being contacted" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwYmfGvnFbALA8McMPkKYGStmGBNioiVE-5vuoIDy8SzgEOTW_vH5Eg0q6Q74BcdhEZsDEwfDjZsNSDdSonSfYs3iUOFkgWYuRAl4XJpeHGHYJGu35xdpOkfuz8j4yUV6LO3dY82KPwvIRjoW8fNhy-UInXeSPPudPgYXJd_JPd0aP9xL1rxpx7jXm07E2w3SaEXyv5OeaNqnP4NZSmt7LWuXJ07kYmtdoJlMFY0OBar0E92b31PtdmETZIOljueVQM0lwl4W3Sv1G"/>
+<div class="absolute inset-0 bg-primary/20 animate-pulse"></div>
+</div>
+</div>
+<div class="relative">
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden ring-2 ring-white dark:ring-slate-800 opacity-50 grayscale">
+<img class="h-full w-full object-cover" data-alt="Profile picture of a potential barber" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDryt_73cOUI9CRj5F3ExfnD0fPDeyAgSQR_B_S3uNCsswPq14QkXECinkmpTpUQ-tYJW-ivNxZgDx7XineySXCkBWhiaBV9J1ULNrGa1UlITXXvJfFY99ngw2lpD3m781T1zyNoSwqMosSx_7UFXCyFRR67YJjBkeYrNTaT5a8ZeRG5ZxL3tf7lduXXdgReiecTxFCWuQGmrVJHCzkQpC2_zWmek8DCrL_m0exmsGc_1oIGBSQ99M8T7kD0JqY9QlQl9V0TkAGldFj"/>
+</div>
+</div>
+</div>
+<p class="mt-2 text-xs text-slate-400 animate-pulse">Pinging nearby pros...</p>
+</main>
+<!-- Bottom Action Area -->
+<footer class="relative z-10 w-full p-6 pb-8 bg-gradient-to-t from-white via-white to-transparent dark:from-background-dark dark:via-background-dark dark:to-transparent pt-12">
+<!-- Quick Tip Card -->
+<div class="mb-6 rounded-xl bg-primary/10 p-4 border border-primary/20 flex gap-3 items-start">
+<span class="material-symbols-outlined text-primary mt-0.5" style="font-size: 20px;">info</span>
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white">Did you know?</h3>
+<p class="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">Most barbers respond within 45 seconds during business hours.</p>
+</div>
+</div>
+<!-- Cancel Button -->
+<button class="group w-full flex items-center justify-center gap-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all duration-200 h-14">
+<span class="material-symbols-outlined text-slate-500 group-hover:text-red-500 transition-colors" style="font-size: 20px;">close</span>
+<span class="text-base font-bold text-slate-700 dark:text-slate-300 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">Cancel Request</span>
+</button>
+</footer>
+</div>
+<style>
+        /* Extra shimmer animation for progress bar */
+        @keyframes slide {
+            0% { transform: translateX(-100%) skewX(-15deg); }
+            100% { transform: translateX(200%) skewX(-15deg); }
+        }
+    </style>
+</body></html>

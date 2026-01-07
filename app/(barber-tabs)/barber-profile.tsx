@@ -19,6 +19,8 @@ import {
   Camera,
   Edit3,
   RefreshCw,
+  Calendar,
+  ImageIcon,
 } from 'lucide-react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { Avatar } from '@/components/ui/Avatar';
@@ -74,6 +76,46 @@ export default function BarberProfileScreen(): React.JSX.Element {
     router.replace('/(tabs)');
   };
 
+  const handleEditProfile = () => {
+    router.push('/(modals)/barber-settings/personal-info');
+  };
+
+  const handleServicesAndPricing = () => {
+    router.push('/(modals)/barber-settings/services-pricing');
+  };
+
+  const handleWorkingHours = () => {
+    router.push('/(modals)/barber-settings/working-hours');
+  };
+
+  const handlePersonalInfo = () => {
+    router.push('/(modals)/barber-settings/personal-info');
+  };
+
+  const handlePayoutMethods = () => {
+    router.push('/(modals)/barber-settings/payout-methods');
+  };
+
+  const handleNotifications = () => {
+    router.push('/(modals)/barber-settings/notifications');
+  };
+
+  const handleAppSettings = () => {
+    router.push('/(modals)/barber-settings/app-settings');
+  };
+
+  const handleHelpSupport = () => {
+    router.push('/(modals)/barber-settings/help-support');
+  };
+
+  const handleBookingsHistory = () => {
+    router.push('/(modals)/barber-settings/bookings-history');
+  };
+
+  const handlePortfolioGallery = () => {
+    router.push('/(modals)/barber-settings/portfolio-gallery');
+  };
+
   return (
     <ScrollView
       style={[styles.container, { paddingTop: insets.top }]}
@@ -103,7 +145,7 @@ export default function BarberProfileScreen(): React.JSX.Element {
               </Text>
             </View>
           </View>
-          <Pressable style={styles.editButton}>
+          <Pressable style={styles.editButton} onPress={handleEditProfile}>
             <Edit3 size={18} color={COLORS.gold} />
           </Pressable>
         </View>
@@ -159,19 +201,30 @@ export default function BarberProfileScreen(): React.JSX.Element {
             icon={<Scissors size={20} color={COLORS.gold} />}
             label="Services & Pricing"
             value="10 services"
-            onPress={() => {}}
+            onPress={handleServicesAndPricing}
+          />
+          <MenuItem
+            icon={<ImageIcon size={20} color={COLORS.gold} />}
+            label="Portfolio & Social"
+            value="Gallery & Links"
+            onPress={handlePortfolioGallery}
           />
           <MenuItem
             icon={<Clock size={20} color={COLORS.gold} />}
             label="Working Hours"
             value="Sun-Fri"
-            onPress={() => {}}
+            onPress={handleWorkingHours}
           />
           <MenuItem
             icon={<MapPin size={20} color={COLORS.gold} />}
             label="Service Area"
             value="10 km"
             onPress={() => {}}
+          />
+          <MenuItem
+            icon={<Calendar size={20} color={COLORS.gold} />}
+            label="Bookings History"
+            onPress={handleBookingsHistory}
           />
         </Surface>
       </View>
@@ -182,23 +235,23 @@ export default function BarberProfileScreen(): React.JSX.Element {
           <MenuItem
             icon={<User size={20} color={COLORS.textMuted} />}
             label="Personal Info"
-            onPress={() => {}}
+            onPress={handlePersonalInfo}
           />
           <MenuItem
             icon={<CreditCard size={20} color={COLORS.textMuted} />}
             label="Payout Methods"
-            onPress={() => {}}
+            onPress={handlePayoutMethods}
           />
           <MenuItem
             icon={<Bell size={20} color={COLORS.textMuted} />}
             label="Notifications"
-            onPress={() => {}}
+            onPress={handleNotifications}
             showBadge
           />
           <MenuItem
             icon={<Settings size={20} color={COLORS.textMuted} />}
             label="App Settings"
-            onPress={() => {}}
+            onPress={handleAppSettings}
           />
         </Surface>
       </View>
@@ -209,7 +262,7 @@ export default function BarberProfileScreen(): React.JSX.Element {
           <MenuItem
             icon={<HelpCircle size={20} color={COLORS.textMuted} />}
             label="Help & Support"
-            onPress={() => {}}
+            onPress={handleHelpSupport}
           />
         </Surface>
       </View>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Barber En Route</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#135bec",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+              "card-dark": "#192233",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased overflow-hidden">
+<div class="relative h-screen w-full flex flex-col bg-background-dark text-white overflow-hidden group/design-root">
+<div class="absolute inset-0 z-0">
+<div class="relative w-full h-full bg-[#111722]">
+<img class="w-full h-full object-cover opacity-80" data-alt="Dark stylized map background showing city streets and blocks" data-location="New York City" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdCRDIaXANPt0_MIK5MpNEDSAnbYJ9k96BoZD3BlvmwkG3AhitS8bW3rapQMbuEvrtRrp-foF7XGVG4ExE9KXsq9GwnCiXEcHKTIp09Hrw6U1lThCMaHhXUSJ0l0kHwuptvMBPXXBB1AO9kxtU1Bvf4ai1WtuP3QK1v-e6AqoKYSyofNX2KKgymd-QPaKhpz_9Nz8TU8L_TdcE94s-vNJTNthqAvI8ONLv9r-lUTyWhtHuUWN636iS3olgMjZRAJhfh1zIeryPb5kb"/>
+<svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
+<defs>
+<filter id="glow">
+<feGaussianBlur result="coloredBlur" stdDeviation="2.5"></feGaussianBlur>
+<feMerge>
+<feMergeNode in="coloredBlur"></feMergeNode>
+<feMergeNode in="SourceGraphic"></feMergeNode>
+</feMerge>
+</filter>
+</defs>
+<path class="opacity-90" d="M 120 -50 Q 180 200 160 350 T 220 500" fill="none" filter="url(#glow)" stroke="#135bec" stroke-dasharray="10 5" stroke-linecap="round" stroke-width="5"></path>
+</svg>
+<div class="absolute top-[60%] left-[55%] -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
+<div class="relative flex items-center justify-center w-12 h-12 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
+<span class="material-symbols-outlined text-white text-[24px]">home_pin</span>
+</div>
+</div>
+<div class="absolute top-[35%] left-[38%] -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
+<div class="absolute w-16 h-16 bg-primary/30 rounded-full animate-ping"></div>
+<div class="relative w-14 h-14 bg-primary rounded-full border-4 border-[#1A2235] shadow-[0_8px_16px_rgba(19,91,236,0.4)] flex items-center justify-center z-20">
+<span class="material-symbols-outlined text-white text-[28px]">content_cut</span>
+</div>
+<div class="mt-2 bg-[#1A2235] px-3 py-1 rounded-full text-xs font-medium text-white shadow-lg border border-white/10">
+                        Alex
+                    </div>
+</div>
+</div>
+</div>
+<div class="absolute top-0 left-0 right-0 z-30 pt-12 pb-4 px-4 bg-gradient-to-b from-background-dark/90 to-transparent">
+<div class="flex items-center justify-between">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-card-dark/80 backdrop-blur-md border border-white/10 shadow-lg text-white hover:bg-card-dark transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">arrow_back</span>
+</button>
+<div class="px-4 py-2 bg-card-dark/90 backdrop-blur-md rounded-full border border-white/10 shadow-lg flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-sm font-semibold text-white tracking-wide">En Route</span>
+</div>
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-card-dark/80 backdrop-blur-md border border-white/10 shadow-lg text-white hover:bg-card-dark transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">my_location</span>
+</button>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 z-40">
+<div class="flex flex-col items-stretch bg-card-dark rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.5)] border-t border-white/5 pb-8 pt-2">
+<div aria-label="Drag handle" class="flex w-full items-center justify-center pt-2 pb-4 cursor-pointer">
+<div class="h-1.5 w-12 rounded-full bg-[#324467]"></div>
+</div>
+<div class="px-6 flex flex-col items-center">
+<h2 class="text-white text-[32px] font-bold leading-tight tracking-tight text-center">Arriving in 12 min</h2>
+<p class="text-[#92a4c9] text-sm font-medium leading-normal mt-1 text-center">12:45 PM estimated arrival</p>
+<div class="w-full h-1.5 bg-[#2A364D] rounded-full mt-6 mb-2 overflow-hidden relative">
+<div class="absolute top-0 left-0 h-full w-[65%] bg-primary rounded-full shadow-[0_0_10px_rgba(19,91,236,0.6)]"></div>
+</div>
+<div class="w-full flex justify-between text-[10px] text-[#556987] font-medium uppercase tracking-wider mb-6">
+<span>On the way</span>
+<span>Arrived</span>
+</div>
+</div>
+<div class="h-px w-full bg-white/5 mb-6"></div>
+<div class="px-6">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white/10 bg-[#2A364D]">
+<img alt="Barber profile picture showing a young man smiling" class="w-full h-full object-cover" data-alt="Close up portrait of a barber named Alex" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATV-O_E9JaV9_GPSHyJ224gdPuZhAfNWR2_8huPwfF6XAjmSr5mFP8ujoCweYXzSJSFC0G9g4eTLrQtemN1hAF0PG8l2nyyF5vlfG-BI8szE0qS_cwWmToWjyW8qWyxwaBdgR67B5-2TriUfdkyESjfEvx9HJPiHapC6Tt40iw7T0usyumcc_G8BMvKapxvLJp2KNQNmJVRa56Iv1cyNRt2HFlmbeAlzBT87QAOu83_qV8fbMFAhwjXQ_YYharJEouvKyG6NQWoOpD"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-background-dark rounded-full p-0.5">
+<div class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center text-[10px] font-bold text-background-dark">★</div>
+</div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<h3 class="text-white text-xl font-bold">Alex the Barber</h3>
+<span class="bg-primary/20 text-primary text-[10px] px-2 py-0.5 rounded-full font-bold tracking-wide">PRO</span>
+</div>
+<div class="flex items-center gap-2 text-[#92a4c9] text-sm mt-0.5">
+<div class="flex items-center text-yellow-500">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-bold text-white">4.9</span>
+<span class="text-xs opacity-60">• Electric Scooter</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 mt-6">
+<button class="flex items-center justify-center gap-2 h-12 rounded-xl bg-[#2A364D] text-white font-semibold hover:bg-[#35425e] transition-colors border border-white/10 active:scale-95">
+<span class="material-symbols-outlined text-[20px]">chat_bubble</span>
+<span>Message Barber</span>
+</button>
+<button class="flex items-center justify-center gap-2 h-12 rounded-xl bg-primary text-white font-semibold shadow-[0_4px_12px_rgba(19,91,236,0.3)] hover:bg-primary/90 transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[20px]">call</span>
+<span>Call Barber</span>
+</button>
+</div>
+</div>
+<div class="mt-4 flex justify-center">
+<button class="text-[#556987] text-xs font-medium hover:text-white transition-colors py-3 px-4">
+                        Cancel Appointment
+                    </button>
+</div>
+<div class="h-6 w-full"></div>
+</div>
+</div>
+</div>
+</body></html>

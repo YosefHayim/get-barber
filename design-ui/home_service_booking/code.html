@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Home Service Booking</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-dark": "#1e293b",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased selection:bg-primary selection:text-white pb-32">
+<!-- Sticky Header -->
+<div class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+<div class="flex items-center justify-between px-4 py-3">
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold">Book at Home</h1>
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-2xl">more_horiz</span>
+</button>
+</div>
+<!-- Progress Indicators -->
+<div class="w-full px-6 pb-4">
+<div class="flex items-center justify-between relative">
+<!-- Line background -->
+<div class="absolute left-0 top-1/2 w-full h-0.5 bg-slate-200 dark:bg-slate-700 -z-10 -translate-y-1/2 rounded-full"></div>
+<!-- Active Line Progress (simulated to 50%) -->
+<div class="absolute left-0 top-1/2 w-1/2 h-0.5 bg-primary -z-0 -translate-y-1/2 rounded-full"></div>
+<!-- Steps -->
+<div class="flex flex-col items-center gap-1">
+<div class="h-6 w-6 rounded-full bg-primary border-4 border-white dark:border-background-dark flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-white text-[10px] font-bold">check</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="h-6 w-6 rounded-full bg-primary border-4 border-white dark:border-background-dark shadow-sm shadow-primary/30"></div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="h-6 w-6 rounded-full bg-slate-200 dark:bg-slate-700 border-4 border-white dark:border-background-dark"></div>
+</div>
+</div>
+<div class="flex justify-between text-xs font-medium text-slate-500 dark:text-slate-400 mt-2 px-1">
+<span>Service</span>
+<span class="text-primary translate-x-1">Details</span>
+<span>Confirm</span>
+</div>
+</div>
+</div>
+<!-- Main Content -->
+<div class="px-4 max-w-lg mx-auto w-full flex flex-col gap-8 pt-6">
+<!-- Step 1: Services (Review) -->
+<section>
+<div class="flex items-end justify-between mb-4">
+<h2 class="text-2xl font-bold tracking-tight">Select Services</h2>
+<span class="text-sm font-medium text-primary cursor-pointer hover:underline">Clear all</span>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Service Card 1: Active -->
+<label class="group relative flex items-center justify-between p-3 rounded-2xl bg-white dark:bg-surface-dark border-2 border-primary shadow-lg shadow-primary/10 transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="h-16 w-16 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Barber cutting hair closeup" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCyKQ7hRAVkwOoANkQNLXCq9uTUG07dcU69-LWH6dUsy9LmnKPCSTaf9negpseSnOIE9xcI6Voj1RvobiICowKrvLDlNBO5asTfckEy0FpECvS8IdlY4cb2gtSL0azxSLWP55ZpD2J6IZbmK_hQXIuImRf_l-_GgAyG_Qui00nztsVPV-sz1BS-DiATejMa4Hr4buhPs_pKg6bZsiTBpEPHOnVco6TiSmVJNb8MBMI4OBfa-14zdEdgAeql9vt_MA58Dmsq1l4tBz0j');"></div>
+</div>
+<div>
+<h3 class="font-bold text-base text-slate-900 dark:text-white leading-tight">Standard Haircut</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">45 mins • Includes wash</p>
+<p class="text-sm font-semibold text-primary mt-1">$30.00</p>
+</div>
+</div>
+<div class="absolute top-3 right-3">
+<input checked="" class="h-6 w-6 rounded-full border-2 border-slate-300 dark:border-slate-600 text-primary focus:ring-primary focus:ring-offset-0 bg-transparent checked:bg-primary checked:border-primary transition-all" type="checkbox"/>
+</div>
+</label>
+<!-- Service Card 2 -->
+<label class="group relative flex items-center justify-between p-3 rounded-2xl bg-white dark:bg-surface-dark border-2 border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="h-16 w-16 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Man getting beard trim with electric razor" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZ9DD8WMUH2uHuCjlbxmQU_nwyqb5q8dvRd0tTRKfakuL4uBl5fEqt3icC4wBYKoywZ5uREWEgWI2_JI-6HgvJRs91-oj6KUsyQtIrBLDllXEhrtQzuZvNl6xgAhrvU7CQjPqQ18FUUyjZdfVs1h4iCa4R4urMGQ6RflgQlDxK6rqrkudBQkI21DI9mr8b_AYHQLRrBfXSfl1fr2A9ObAi0QKRkrw2ZbsgsBpkHm6WRVat_GTlw8btyKTLBvi_XDvjOKp6JOopu84L');"></div>
+</div>
+<div>
+<h3 class="font-bold text-base text-slate-900 dark:text-white leading-tight">Beard Trim</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">20 mins • Shape up</p>
+<p class="text-sm font-semibold text-primary mt-1">$20.00</p>
+</div>
+</div>
+<div class="absolute top-3 right-3">
+<input class="h-6 w-6 rounded-full border-2 border-slate-300 dark:border-slate-600 text-primary focus:ring-primary focus:ring-offset-0 bg-transparent checked:bg-primary checked:border-primary transition-all" type="checkbox"/>
+</div>
+</label>
+<!-- Service Card 3 -->
+<label class="group relative flex items-center justify-between p-3 rounded-2xl bg-white dark:bg-surface-dark border-2 border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="h-16 w-16 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Hot towel shave preparation" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBg5ckmbV7juC16iKsOFSWF-4bMBHmLxYYhBZnTk04FqzOKOL9suHJIIxmhgeWZhQefB_o4NelHDTVM7ejNMjv-0OHUgeWdozv-O7g-X9sIFzC7Iee_3DnnrfLWRh_er3hltnmxnRBlJimx0YVdQ46zJe_x3S-fA2EAdwzsKTHRHf5EJCHLxbw2A4O5GaIISREy1tFevTzmaBvFb5pZX3_lt3dTyig3YvOGVJ6UWoyHK_uvmNp4EncCpqgp2ATOkOcTdtG4gsWsCQty');"></div>
+</div>
+<div>
+<h3 class="font-bold text-base text-slate-900 dark:text-white leading-tight">Hot Towel Shave</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">30 mins • Traditional</p>
+<p class="text-sm font-semibold text-primary mt-1">$25.00</p>
+</div>
+</div>
+<div class="absolute top-3 right-3">
+<input class="h-6 w-6 rounded-full border-2 border-slate-300 dark:border-slate-600 text-primary focus:ring-primary focus:ring-offset-0 bg-transparent checked:bg-primary checked:border-primary transition-all" type="checkbox"/>
+</div>
+</label>
+</div>
+</section>
+<hr class="border-slate-200 dark:border-slate-800"/>
+<!-- Step 2: Date & Time -->
+<section>
+<div class="mb-4">
+<h2 class="text-2xl font-bold tracking-tight">When should we arrive?</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Choose a date and start time.</p>
+</div>
+<!-- Date Scroller -->
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4 snap-x">
+<!-- Date Item 1: Active -->
+<button class="snap-start shrink-0 flex flex-col items-center justify-center h-20 w-16 rounded-2xl bg-primary text-white shadow-lg shadow-primary/25 ring-2 ring-primary ring-offset-2 ring-offset-background-light dark:ring-offset-background-dark transition-all">
+<span class="text-xs font-medium opacity-80">Sat</span>
+<span class="text-xl font-bold">14</span>
+<span class="text-[10px] font-medium mt-1 opacity-80">Today</span>
+</button>
+<!-- Date Item 2 -->
+<button class="snap-start shrink-0 flex flex-col items-center justify-center h-20 w-16 rounded-2xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-primary/50 transition-all">
+<span class="text-xs font-medium">Sun</span>
+<span class="text-xl font-bold text-slate-900 dark:text-white">15</span>
+</button>
+<!-- Date Item 3 -->
+<button class="snap-start shrink-0 flex flex-col items-center justify-center h-20 w-16 rounded-2xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-primary/50 transition-all">
+<span class="text-xs font-medium">Mon</span>
+<span class="text-xl font-bold text-slate-900 dark:text-white">16</span>
+</button>
+<!-- Date Item 4 -->
+<button class="snap-start shrink-0 flex flex-col items-center justify-center h-20 w-16 rounded-2xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-primary/50 transition-all">
+<span class="text-xs font-medium">Tue</span>
+<span class="text-xl font-bold text-slate-900 dark:text-white">17</span>
+</button>
+<!-- Date Item 5 -->
+<button class="snap-start shrink-0 flex flex-col items-center justify-center h-20 w-16 rounded-2xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-primary/50 transition-all">
+<span class="text-xs font-medium">Wed</span>
+<span class="text-xl font-bold text-slate-900 dark:text-white">18</span>
+</button>
+</div>
+<!-- Time Grid -->
+<div class="grid grid-cols-3 gap-3 mt-4">
+<button class="py-2.5 px-2 rounded-xl text-sm font-medium border border-transparent bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed decoration-slice" disabled="">09:00 AM</button>
+<button class="py-2.5 px-2 rounded-xl text-sm font-medium border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark text-slate-900 dark:text-white hover:border-primary hover:text-primary transition-all">10:00 AM</button>
+<button class="py-2.5 px-2 rounded-xl text-sm font-medium bg-primary/10 text-primary border border-primary dark:border-primary">11:00 AM</button>
+<button class="py-2.5 px-2 rounded-xl text-sm font-medium border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark text-slate-900 dark:text-white hover:border-primary hover:text-primary transition-all">12:00 PM</button>
+<button class="py-2.5 px-2 rounded-xl text-sm font-medium border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark text-slate-900 dark:text-white hover:border-primary hover:text-primary transition-all">01:00 PM</button>
+<button class="py-2.5 px-2 rounded-xl text-sm font-medium border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark text-slate-900 dark:text-white hover:border-primary hover:text-primary transition-all">02:30 PM</button>
+</div>
+</section>
+<hr class="border-slate-200 dark:border-slate-800"/>
+<!-- Step 3: Location -->
+<section class="pb-6">
+<h2 class="text-2xl font-bold tracking-tight mb-4">Where are we going?</h2>
+<div class="flex flex-col gap-4">
+<!-- Address Input -->
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3.5 border-none rounded-xl bg-white dark:bg-surface-dark text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-primary shadow-sm" placeholder="Search for your address..." type="text"/>
+</div>
+<!-- Current Location Button -->
+<button class="flex items-center gap-2 text-primary font-medium text-sm px-1">
+<span class="material-symbols-outlined text-lg">my_location</span>
+                    Use current location
+                </button>
+<!-- Map Preview -->
+<div class="relative w-full h-32 rounded-xl overflow-hidden mt-2 group cursor-pointer border border-slate-200 dark:border-slate-700">
+<!-- Map Image -->
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Map view of city streets" data-location="New York City map view" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuClu_riJrIA3UTFsCJZoIO0TOGLHT4Qk3ZXUNdZ9DJqBFozAQArxjntHCv5Ubzs20pEgsvvNyqP1bbWq28yfGYYJ_3oLTWvaBZVpjuRUsGtVDoNcgTRzlr97F7UxO5IvKKONRK4aWGPgbut4ySQrru2bVnYC5s88T79dR3RPoN6FhIzWZzrdFPk180gvE9xec2viYLL0HUwP9oVdz9hL7Mojg5oKbSwhjhnJMDO4Nwr5nZhgoMPp2H2W_l_aVhgdc9AkUmUNzTd5-ky'); opacity: 0.8;"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+<div class="absolute bottom-3 left-3 flex items-center gap-2 text-white">
+<div class="bg-primary p-1 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">home</span>
+</div>
+<span class="text-sm font-medium">123 Main St, Apt 4B</span>
+</div>
+</div>
+<!-- Extra Fields -->
+<input class="block w-full px-4 py-3.5 border-none rounded-xl bg-white dark:bg-surface-dark text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:ring-2 focus:ring-primary shadow-sm" placeholder="Apartment, suite, etc. (optional)" type="text"/>
+</div>
+</section>
+</div>
+<!-- Sticky Footer (Booking Summary) -->
+<div class="fixed bottom-0 left-0 w-full z-40 px-4 py-4 bg-white dark:bg-[#0f1520] border-t border-slate-200 dark:border-slate-800 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.4)]">
+<div class="max-w-lg mx-auto w-full">
+<!-- Accordion Trigger (Simulated) -->
+<div class="flex justify-between items-center mb-4 px-1 cursor-pointer group">
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors">
+<span class="text-sm font-medium">Order Summary</span>
+<span class="material-symbols-outlined text-lg transition-transform group-hover:-translate-y-0.5">expand_less</span>
+</div>
+<div class="text-right">
+<p class="text-xs text-slate-500 dark:text-slate-400">Total</p>
+<p class="text-lg font-bold text-slate-900 dark:text-white">$30.00</p>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 px-6 rounded-xl flex items-center justify-between shadow-lg shadow-primary/25 transition-all transform active:scale-[0.98]">
+<span>Continue</span>
+<div class="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded-lg text-sm">
+<span>1 Item</span>
+</div>
+</button>
+</div>
+</div>
+</body></html>

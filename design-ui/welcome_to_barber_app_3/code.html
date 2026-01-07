@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Welcome to Barber App: Aesthetic Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6",
+                        "primary-dark": "#2563eb",
+                        "accent": "#f59e0b",
+                        "background-dark": "#0f1115",
+                        "surface-dark": "#181b21",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "xl": "1rem",
+                        "2xl": "1.5rem",
+                        "3xl": "2rem"
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            min-height: 100vh;
+        }.text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #60a5fa, #ffffff);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-black font-display antialiased text-white">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-hidden max-w-md mx-auto bg-background-dark">
+<div class="relative flex-1 w-full flex flex-col justify-between">
+<div class="absolute inset-0 w-full h-full bg-center bg-no-repeat bg-cover" data-alt="Modern barbershop interior with moody lighting and leather chairs" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB37DVbg6xJaNXUCu1hghXfOAQ3s02D-MlKsO0KuaHGyXTYXGHjBBC74p8SZEYxH3e_WkMAFMCRPCZJkCS33qOQBG_SgBeSKCFbCwedgkTKuQ7LrGnBXU1pD4IiLyWlZHnQAs0CUOrdRG2lTFYtZHav54qJQ5Wq8NhqmgeS7R8ljGCVzs-2wBxIrvBRdfdsJsdqofrmF8mL48ygQRGYBU0BNJ2422g1tmOt35VjbmNW6Fz-Yqkh2VNJ_HuVJWNECWvwzJeQBSy6YXvi");'>
+<div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-background-dark"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/80 to-transparent"></div>
+</div>
+<div class="relative z-10 flex items-center justify-between px-6 pt-12 pb-4">
+<div class="flex items-center gap-2">
+<div class="bg-white/10 backdrop-blur-md border border-white/10 p-2 rounded-xl">
+<span class="material-symbols-outlined text-white text-xl">content_cut</span>
+</div>
+<span class="font-semibold text-lg tracking-wide">Barber<span class="text-primary">Hub</span></span>
+</div>
+<button class="text-sm font-medium text-white/70 hover:text-white transition-colors">Skip</button>
+</div>
+<div class="relative z-10 px-6 pb-6 mt-auto">
+<div class="mb-8">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/20 backdrop-blur-md mb-4">
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+<span class="text-xs font-semibold text-blue-100 uppercase tracking-wider">Premium Service</span>
+</div>
+<h1 class="text-5xl font-bold leading-[1.1] mb-4 text-white">
+                        Style that <br/>
+<span class="text-gradient">comes to you.</span>
+</h1>
+<p class="text-lg text-gray-400 font-medium leading-relaxed max-w-[90%]">
+                        Experience the luxury of a personal barber at home, or find the finest chairs in your city instantly.
+                    </p>
+</div>
+<div class="space-y-4">
+<button class="group w-full relative overflow-hidden bg-primary hover:bg-primary-dark transition-all duration-300 rounded-3xl p-1">
+<div class="relative flex items-center justify-between bg-inherit px-6 py-5 rounded-[inherit]">
+<div class="flex flex-col items-start gap-1">
+<span class="text-lg font-bold text-white">Book at Home</span>
+<span class="text-sm text-blue-100">Barber comes to your door</span>
+</div>
+<div class="bg-white/20 p-3 rounded-full group-hover:bg-white/30 transition-colors">
+<span class="material-symbols-outlined text-white">home_pin</span>
+</div>
+</div>
+</button>
+<button class="group w-full relative overflow-hidden bg-surface-dark border border-white/10 hover:border-white/20 hover:bg-white/5 transition-all duration-300 rounded-3xl p-1">
+<div class="relative flex items-center justify-between px-6 py-5 rounded-[inherit]">
+<div class="flex flex-col items-start gap-1">
+<span class="text-lg font-bold text-white">Find a Shop</span>
+<span class="text-sm text-gray-400">Book a chair nearby</span>
+</div>
+<div class="bg-white/5 border border-white/5 p-3 rounded-full group-hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-white">storefront</span>
+</div>
+</div>
+</button>
+<div class="grid grid-cols-2 gap-3 pt-2">
+<button class="flex items-center justify-center gap-2 py-4 rounded-2xl bg-surface-dark border border-white/5 hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-xl">login</span>
+<span class="font-medium text-sm">Log In</span>
+</button>
+<button class="flex items-center justify-center gap-2 py-4 rounded-2xl bg-surface-dark border border-white/5 hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-xl">person_add</span>
+<span class="font-medium text-sm">Sign Up</span>
+</button>
+</div>
+</div>
+<p class="text-center text-xs text-gray-600 mt-6 mb-2">
+                    By continuing, you agree to our Terms &amp; Privacy Policy
+                </p>
+</div>
+</div>
+</div>
+
+</body></html>

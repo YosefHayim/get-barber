@@ -17,10 +17,7 @@ import {
   Gift,
   Megaphone,
 } from 'lucide-react-native';
-
-const GOLD = '#DAA520';
-const DARK_GOLD = '#B8860B';
-const BURGUNDY = '#722F37';
+import { DARK_COLORS } from '@/constants/theme';
 
 interface NotificationSetting {
   id: string;
@@ -38,42 +35,42 @@ export default function NotificationsScreen(): React.JSX.Element {
       id: 'push',
       label: 'Push Notifications',
       description: 'Receive push notifications on your device',
-      icon: <Bell size={20} color={DARK_GOLD} />,
+      icon: <Bell size={20} color={DARK_COLORS.primary} />,
       enabled: true,
     },
     {
       id: 'messages',
       label: 'New Messages',
       description: 'Get notified when barbers message you',
-      icon: <MessageSquare size={20} color={DARK_GOLD} />,
+      icon: <MessageSquare size={20} color={DARK_COLORS.primary} />,
       enabled: true,
     },
     {
       id: 'bookings',
       label: 'Booking Updates',
       description: 'Updates about your upcoming and past bookings',
-      icon: <Calendar size={20} color={DARK_GOLD} />,
+      icon: <Calendar size={20} color={DARK_COLORS.primary} />,
       enabled: true,
     },
     {
       id: 'reviews',
       label: 'Review Reminders',
       description: 'Reminders to rate your barber after service',
-      icon: <Star size={20} color={DARK_GOLD} />,
+      icon: <Star size={20} color={DARK_COLORS.accent} />,
       enabled: false,
     },
     {
       id: 'promotions',
       label: 'Promotions & Offers',
       description: 'Special deals and discounts from barbers',
-      icon: <Gift size={20} color={DARK_GOLD} />,
+      icon: <Gift size={20} color={DARK_COLORS.accent} />,
       enabled: false,
     },
     {
       id: 'news',
       label: 'App Updates & News',
       description: 'New features and important announcements',
-      icon: <Megaphone size={20} color={DARK_GOLD} />,
+      icon: <Megaphone size={20} color={DARK_COLORS.primary} />,
       enabled: true,
     },
   ]);
@@ -94,10 +91,11 @@ export default function NotificationsScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Notifications',
-          headerTitleStyle: { fontWeight: '700', color: BURGUNDY },
+          headerStyle: { backgroundColor: DARK_COLORS.background },
+          headerTitleStyle: { fontWeight: '700', color: DARK_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
-              <ArrowLeft size={24} color={BURGUNDY} />
+              <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
             </Pressable>
           ),
         }}
@@ -109,9 +107,9 @@ export default function NotificationsScreen(): React.JSX.Element {
           { paddingBottom: insets.bottom + 24 },
         ]}
       >
-        <Surface style={styles.summaryCard} elevation={1}>
+        <Surface style={styles.summaryCard} elevation={0}>
           <View style={styles.summaryIcon}>
-            <Bell size={28} color={DARK_GOLD} />
+            <Bell size={28} color={DARK_COLORS.primary} />
           </View>
           <View style={styles.summaryContent}>
             <Text style={styles.summaryTitle}>Notification Status</Text>
@@ -123,7 +121,7 @@ export default function NotificationsScreen(): React.JSX.Element {
 
         <Text style={styles.sectionTitle}>Notification Preferences</Text>
 
-        <Surface style={styles.settingsCard} elevation={1}>
+        <Surface style={styles.settingsCard} elevation={0}>
           {settings.map((setting, index) => (
             <View
               key={setting.id}
@@ -142,7 +140,7 @@ export default function NotificationsScreen(): React.JSX.Element {
               <Switch
                 value={setting.enabled}
                 onValueChange={() => handleToggle(setting.id)}
-                color={DARK_GOLD}
+                color={DARK_COLORS.primary}
               />
             </View>
           ))}
@@ -171,7 +169,7 @@ export default function NotificationsScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: DARK_COLORS.background,
   },
   scrollContent: {
     padding: 16,
@@ -183,15 +181,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     padding: 20,
     marginBottom: 24,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   summaryIcon: {
     width: 56,
     height: 56,
     borderRadius: 14,
-    backgroundColor: 'rgba(218, 165, 32, 0.1)',
+    backgroundColor: DARK_COLORS.primaryMuted,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -202,17 +202,17 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#111827',
+    color: DARK_COLORS.textPrimary,
     marginBottom: 4,
   },
   summaryText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: DARK_COLORS.textMuted,
   },
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: DARK_COLORS.textMuted,
     marginBottom: 12,
     marginLeft: 4,
     textTransform: 'uppercase',
@@ -220,9 +220,11 @@ const styles = StyleSheet.create({
   },
   settingsCard: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: DARK_COLORS.surface,
     overflow: 'hidden',
     marginBottom: 24,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   settingItem: {
     flexDirection: 'row',
@@ -231,13 +233,13 @@ const styles = StyleSheet.create({
   },
   settingItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: DARK_COLORS.border,
   },
   settingIconContainer: {
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: 'rgba(218, 165, 32, 0.1)',
+    backgroundColor: DARK_COLORS.primaryMuted,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -249,29 +251,31 @@ const styles = StyleSheet.create({
   settingLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: DARK_COLORS.textPrimary,
     marginBottom: 2,
   },
   settingDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: DARK_COLORS.textMuted,
     lineHeight: 18,
   },
   infoBox: {
-    backgroundColor: 'rgba(218, 165, 32, 0.08)',
+    backgroundColor: DARK_COLORS.surfaceLight,
     borderRadius: 14,
     padding: 16,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   infoTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: BURGUNDY,
+    color: DARK_COLORS.primary,
     marginBottom: 6,
   },
   infoText: {
     fontSize: 13,
-    color: '#4B5563',
+    color: DARK_COLORS.textSecondary,
     lineHeight: 20,
   },
 });

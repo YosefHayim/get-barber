@@ -13,6 +13,7 @@ import type {
   YearsExperience,
   BarberSpecialty,
 } from '@/types/onboarding.types';
+import { useAppStore } from './useAppStore';
 
 const CUSTOMER_TOTAL_STEPS = 7;
 const BARBER_TOTAL_STEPS = 9;
@@ -152,10 +153,12 @@ export const useOnboardingStore = create<OnboardingState>()(
           }
         }),
 
-      completeOnboarding: () =>
+      completeOnboarding: () => {
         set((state) => {
           state.progress.isCompleted = true;
-        }),
+        });
+        useAppStore.getState().setOnboardingComplete(true);
+      },
 
       updateCustomerData: (data) =>
         set((state) => {

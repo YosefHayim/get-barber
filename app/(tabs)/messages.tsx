@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet, Pressable, Image } from 'react-native';
-import { Text, Badge } from 'react-native-paper';
+import { View, StyleSheet, Pressable } from 'react-native';
+import { Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { FlashList } from '@shopify/flash-list';
@@ -14,7 +14,7 @@ import {
   Sparkles,
 } from 'lucide-react-native';
 import { Avatar } from '@/components/ui/Avatar';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
+import { DARK_COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 import { useAppStore } from '@/stores/useAppStore';
 import {
   MOCK_CONVERSATIONS_CUSTOMER,
@@ -25,13 +25,13 @@ import {
 function getStatusIcon(status: MockConversation['status']) {
   switch (status) {
     case 'negotiating':
-      return <Clock size={14} color={COLORS.warning} />;
+      return <Clock size={14} color={DARK_COLORS.warning} />;
     case 'confirmed':
-      return <CheckCircle2 size={14} color={COLORS.success} />;
+      return <CheckCircle2 size={14} color={DARK_COLORS.success} />;
     case 'completed':
-      return <CheckCheck size={14} color={COLORS.textMuted} />;
+      return <CheckCheck size={14} color={DARK_COLORS.textMuted} />;
     case 'cancelled':
-      return <XCircle size={14} color={COLORS.error} />;
+      return <XCircle size={14} color={DARK_COLORS.error} />;
     default:
       return null;
   }
@@ -55,15 +55,15 @@ function getStatusLabel(status: MockConversation['status']): string {
 function getStatusColor(status: MockConversation['status']): string {
   switch (status) {
     case 'negotiating':
-      return COLORS.warning;
+      return DARK_COLORS.warning;
     case 'confirmed':
-      return COLORS.success;
+      return DARK_COLORS.success;
     case 'completed':
-      return COLORS.textMuted;
+      return DARK_COLORS.textMuted;
     case 'cancelled':
-      return COLORS.error;
+      return DARK_COLORS.error;
     default:
-      return COLORS.textMuted;
+      return DARK_COLORS.textMuted;
   }
 }
 
@@ -97,7 +97,7 @@ function ConversationCard({ conversation, onPress }: ConversationCardProps): Rea
         </View>
 
         <View style={styles.servicesRow}>
-          {conversation.serviceNames.slice(0, 2).map((service, index) => (
+          {conversation.serviceNames.slice(0, 2).map((service) => (
             <View key={service} style={styles.serviceTag}>
               <Text style={styles.serviceTagText}>{service}</Text>
             </View>
@@ -123,7 +123,7 @@ function ConversationCard({ conversation, onPress }: ConversationCardProps): Rea
           {conversation.offeredPrice && (
             <>
               <View style={styles.priceDot} />
-              <Sparkles size={12} color={COLORS.gold} />
+              <Sparkles size={12} color={DARK_COLORS.accent} />
               <Text style={styles.priceText}>₪{conversation.offeredPrice}</Text>
             </>
           )}
@@ -184,7 +184,7 @@ export default function MessagesScreen(): React.JSX.Element {
       {conversations.length === 0 ? (
         <View style={styles.emptyState}>
           <View style={styles.emptyIconContainer}>
-            <MessageCircle size={48} color={COLORS.gold} />
+            <MessageCircle size={48} color={DARK_COLORS.primary} />
           </View>
           <Text style={styles.emptyTitle}>No messages yet</Text>
           <Text style={styles.emptyText}>
@@ -194,15 +194,17 @@ export default function MessagesScreen(): React.JSX.Element {
           </Text>
         </View>
       ) : (
-        <FlashList
-          data={conversations}
-          renderItem={renderConversation}
-          keyExtractor={keyExtractor}
-          estimatedItemSize={140}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-        />
+        <View style={styles.listContainer}>
+          <FlashList
+            data={conversations}
+            renderItem={renderConversation}
+            keyExtractor={keyExtractor}
+            estimatedItemSize={140}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+          />
+        </View>
       )}
     </View>
   );
@@ -211,14 +213,17 @@ export default function MessagesScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: DARK_COLORS.background,
+  },
+  listContainer: {
+    flex: 1,
   },
   header: {
     padding: SPACING.xl,
     paddingBottom: SPACING.lg,
-    backgroundColor: COLORS.surface,
+    backgroundColor: DARK_COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: DARK_COLORS.border,
   },
   headerContent: {
     flexDirection: 'row',
@@ -228,10 +233,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: TYPOGRAPHY['2xl'],
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
   },
   headerBadge: {
-    backgroundColor: COLORS.goldMuted,
+    backgroundColor: DARK_COLORS.primaryMuted,
     paddingHorizontal: SPACING.sm,
     paddingVertical: SPACING.xxs,
     borderRadius: RADIUS.full,
@@ -239,11 +244,11 @@ const styles = StyleSheet.create({
   headerBadgeText: {
     fontSize: TYPOGRAPHY.xs,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.goldDark,
+    color: DARK_COLORS.primary,
   },
   subtitle: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
     marginTop: SPACING.xxs,
   },
   listContent: {
@@ -254,10 +259,11 @@ const styles = StyleSheet.create({
   },
   conversationCard: {
     flexDirection: 'row',
-    backgroundColor: COLORS.surface,
+    backgroundColor: DARK_COLORS.surface,
     borderRadius: RADIUS.xl,
     padding: SPACING.lg,
-    ...SHADOWS.md,
+    borderWidth: 1,
+    borderColor: DARK_COLORS.border,
   },
   avatarContainer: {
     position: 'relative',
@@ -269,9 +275,9 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: COLORS.success,
+    backgroundColor: DARK_COLORS.success,
     borderWidth: 2,
-    borderColor: COLORS.surface,
+    borderColor: DARK_COLORS.surface,
   },
   conversationContent: {
     flex: 1,
@@ -286,12 +292,12 @@ const styles = StyleSheet.create({
   participantName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
     flex: 1,
   },
   timeText: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
   },
   servicesRow: {
     flexDirection: 'row',
@@ -300,7 +306,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   serviceTag: {
-    backgroundColor: COLORS.goldMuted,
+    backgroundColor: DARK_COLORS.primaryMuted,
     paddingHorizontal: SPACING.sm,
     paddingVertical: SPACING.xxs,
     borderRadius: RADIUS.sm,
@@ -308,11 +314,11 @@ const styles = StyleSheet.create({
   serviceTagText: {
     fontSize: TYPOGRAPHY.xs,
     fontWeight: TYPOGRAPHY.medium,
-    color: COLORS.goldDark,
+    color: DARK_COLORS.primary,
   },
   moreServices: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
   },
   messageRow: {
     flexDirection: 'row',
@@ -320,7 +326,7 @@ const styles = StyleSheet.create({
   },
   lastMessage: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: DARK_COLORS.textSecondary,
     flex: 1,
   },
   statusRow: {
@@ -336,16 +342,16 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 1.5,
-    backgroundColor: COLORS.textMuted,
+    backgroundColor: DARK_COLORS.textMuted,
     marginHorizontal: SPACING.xxs,
   },
   priceText: {
     fontSize: TYPOGRAPHY.xs,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.goldDark,
+    color: DARK_COLORS.accent,
   },
   unreadBadge: {
-    backgroundColor: COLORS.gold,
+    backgroundColor: DARK_COLORS.primary,
     minWidth: 22,
     height: 22,
     borderRadius: 11,
@@ -357,7 +363,7 @@ const styles = StyleSheet.create({
   unreadText: {
     fontSize: TYPOGRAPHY.xs,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.charcoal,
+    color: DARK_COLORS.textPrimary,
   },
   emptyState: {
     flex: 1,
@@ -369,7 +375,7 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 48,
-    backgroundColor: COLORS.goldMuted,
+    backgroundColor: DARK_COLORS.primaryMuted,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: SPACING.xl,
@@ -377,12 +383,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
     marginBottom: SPACING.sm,
   },
   emptyText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
     textAlign: 'center',
     lineHeight: 20,
   },

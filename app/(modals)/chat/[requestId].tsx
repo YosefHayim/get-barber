@@ -27,7 +27,7 @@ import Animated, {
   FadeInDown,
 } from 'react-native-reanimated';
 import { Avatar } from '@/components/ui/Avatar';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
+import { DARK_COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 import { useAppStore } from '@/stores/useAppStore';
 import {
   MOCK_CONVERSATIONS_CUSTOMER,
@@ -73,7 +73,7 @@ function TextBubble({
           <Text style={styles.timestamp}>
             {formatDistanceToNow(new Date(timestamp), { addSuffix: true })}
           </Text>
-          {isOwn && <CheckCheck size={12} color={COLORS.textMuted} />}
+          {isOwn && <CheckCheck size={12} color={DARK_COLORS.textMuted} />}
         </View>
       </View>
     </Animated.View>
@@ -98,10 +98,10 @@ function OfferBubble({
   onCounter?: () => void;
 }): React.JSX.Element {
   const statusConfig = {
-    pending: { label: 'Pending', color: COLORS.warning, bgColor: COLORS.warningLight },
-    accepted: { label: 'Accepted', color: COLORS.success, bgColor: COLORS.successLight },
-    rejected: { label: 'Rejected', color: COLORS.error, bgColor: COLORS.errorLight },
-    expired: { label: 'Expired', color: COLORS.textMuted, bgColor: COLORS.borderLight },
+    pending: { label: 'Pending', color: DARK_COLORS.warning, bgColor: DARK_COLORS.warningLight },
+    accepted: { label: 'Accepted', color: DARK_COLORS.success, bgColor: DARK_COLORS.successLight },
+    rejected: { label: 'Rejected', color: DARK_COLORS.error, bgColor: DARK_COLORS.errorLight },
+    expired: { label: 'Expired', color: DARK_COLORS.textMuted, bgColor: DARK_COLORS.borderLight },
   };
 
   const config = statusConfig[status];
@@ -114,7 +114,7 @@ function OfferBubble({
     >
       <Surface style={styles.offerBubble} elevation={2}>
         <View style={styles.offerHeader}>
-          <Sparkles size={16} color={COLORS.gold} />
+          <Sparkles size={16} color={DARK_COLORS.accent} />
           <Text style={styles.offerLabel}>Price Offer</Text>
           <View style={[styles.statusBadge, { backgroundColor: config.bgColor }]}>
             <Text style={[styles.statusText, { color: config.color }]}>
@@ -133,9 +133,9 @@ function OfferBubble({
             <Button
               mode="contained"
               onPress={onAccept}
-              icon={() => <Check size={16} color={COLORS.textInverse} />}
+              icon={() => <Check size={16} color={DARK_COLORS.textPrimary} />}
               compact
-              style={[styles.offerButton, { backgroundColor: COLORS.success }]}
+              style={[styles.offerButton, { backgroundColor: DARK_COLORS.success }]}
               labelStyle={styles.offerButtonLabel}
             >
               Accept
@@ -150,14 +150,14 @@ function OfferBubble({
               Counter
             </Button>
             <Pressable onPress={onReject} style={styles.rejectButton}>
-              <X size={18} color={COLORS.error} />
+              <X size={18} color={DARK_COLORS.error} />
             </Pressable>
           </View>
         )}
 
         {status === 'accepted' && (
           <View style={styles.acceptedBanner}>
-            <Check size={14} color={COLORS.success} />
+            <Check size={14} color={DARK_COLORS.success} />
             <Text style={styles.acceptedText}>Booking confirmed!</Text>
           </View>
         )}
@@ -241,10 +241,10 @@ function ChatInputComponent({
           style={styles.offerInputContainer}
         >
           <View style={styles.offerInputHeader}>
-            <Sparkles size={16} color={COLORS.gold} />
+            <Sparkles size={16} color={DARK_COLORS.accent} />
             <Text style={styles.offerInputLabel}>Send Price Offer</Text>
             <Pressable onPress={toggleOfferInput}>
-              <X size={18} color={COLORS.textMuted} />
+              <X size={18} color={DARK_COLORS.textMuted} />
             </Pressable>
           </View>
           <View style={styles.offerInputRow}>
@@ -254,7 +254,7 @@ function ChatInputComponent({
               value={offerAmount}
               onChangeText={setOfferAmount}
               placeholder="0"
-              placeholderTextColor={COLORS.textMuted}
+              placeholderTextColor={DARK_COLORS.textMuted}
               keyboardType="numeric"
               maxLength={6}
               editable={!isDisabled}
@@ -267,7 +267,7 @@ function ChatInputComponent({
       <View style={styles.inputRow}>
         <View style={styles.inputActions}>
           <IconButton
-            icon={() => <Camera size={22} color={COLORS.textMuted} />}
+            icon={() => <Camera size={22} color={DARK_COLORS.textMuted} />}
             onPress={() => {}}
             disabled={isDisabled}
             size={22}
@@ -276,7 +276,7 @@ function ChatInputComponent({
             icon={() => (
               <DollarSign
                 size={22}
-                color={showOfferInput ? COLORS.gold : COLORS.textMuted}
+                color={showOfferInput ? DARK_COLORS.accent : DARK_COLORS.textMuted}
               />
             )}
             onPress={toggleOfferInput}
@@ -291,7 +291,7 @@ function ChatInputComponent({
             value={message}
             onChangeText={setMessage}
             placeholder="Type a message..."
-            placeholderTextColor={COLORS.textMuted}
+            placeholderTextColor={DARK_COLORS.textMuted}
             multiline
             maxLength={1000}
             editable={!isDisabled}
@@ -309,7 +309,7 @@ function ChatInputComponent({
           >
             <Send
               size={20}
-              color={canSend && !isDisabled ? COLORS.textInverse : COLORS.textMuted}
+              color={canSend && !isDisabled ? DARK_COLORS.textPrimary : DARK_COLORS.textMuted}
             />
           </Pressable>
         </Animated.View>
@@ -431,7 +431,7 @@ export default function ChatScreen(): React.JSX.Element {
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.header}>
           <Pressable onPress={() => router.back()} style={styles.backButton}>
-            <ArrowLeft size={24} color={COLORS.textPrimary} />
+            <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
           </Pressable>
           <Text style={styles.headerName}>Conversation not found</Text>
         </View>
@@ -443,7 +443,7 @@ export default function ChatScreen(): React.JSX.Element {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <ArrowLeft size={24} color={COLORS.textPrimary} />
+          <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
         </Pressable>
 
         <Pressable style={styles.headerProfile}>
@@ -457,22 +457,22 @@ export default function ChatScreen(): React.JSX.Element {
             <View style={styles.headerStatusRow}>
               {conversation.status === 'negotiating' && (
                 <>
-                  <Clock size={12} color={COLORS.warning} />
-                  <Text style={[styles.headerStatus, { color: COLORS.warning }]}>
+                  <Clock size={12} color={DARK_COLORS.warning} />
+                  <Text style={[styles.headerStatus, { color: DARK_COLORS.warning }]}>
                     Negotiating price
                   </Text>
                 </>
               )}
               {conversation.status === 'confirmed' && (
                 <>
-                  <Check size={12} color={COLORS.success} />
-                  <Text style={[styles.headerStatus, { color: COLORS.success }]}>
+                  <Check size={12} color={DARK_COLORS.success} />
+                  <Text style={[styles.headerStatus, { color: DARK_COLORS.success }]}>
                     Booking confirmed
                   </Text>
                 </>
               )}
               {conversation.status === 'completed' && (
-                <Text style={[styles.headerStatus, { color: COLORS.textMuted }]}>
+                <Text style={[styles.headerStatus, { color: DARK_COLORS.textMuted }]}>
                   Completed
                 </Text>
               )}
@@ -482,17 +482,17 @@ export default function ChatScreen(): React.JSX.Element {
 
         <View style={styles.headerActions}>
           <Pressable style={styles.iconButton}>
-            <Phone size={20} color={COLORS.textMuted} />
+            <Phone size={20} color={DARK_COLORS.textMuted} />
           </Pressable>
           <Pressable style={styles.iconButton}>
-            <MoreVertical size={20} color={COLORS.textMuted} />
+            <MoreVertical size={20} color={DARK_COLORS.textMuted} />
           </Pressable>
         </View>
       </View>
 
       {conversation.offeredPrice && (
         <View style={styles.priceBar}>
-          <Sparkles size={14} color={COLORS.gold} />
+          <Sparkles size={14} color={DARK_COLORS.accent} />
           <Text style={styles.priceBarText}>
             Agreed price: <Text style={styles.priceBarAmount}>₪{conversation.offeredPrice}</Text>
           </Text>
@@ -507,15 +507,17 @@ export default function ChatScreen(): React.JSX.Element {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={0}
       >
-        <FlashList
-          data={messages}
-          renderItem={renderMessage}
-          keyExtractor={keyExtractor}
-          estimatedItemSize={80}
-          inverted
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-        />
+        <View style={styles.listContainer}>
+          <FlashList
+            data={messages}
+            renderItem={renderMessage}
+            keyExtractor={keyExtractor}
+            estimatedItemSize={80}
+            inverted
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
 
         <ChatInputComponent
           onSendMessage={handleSendMessage}
@@ -530,16 +532,16 @@ export default function ChatScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: DARK_COLORS.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
-    backgroundColor: COLORS.surface,
+    backgroundColor: DARK_COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: DARK_COLORS.border,
   },
   backButton: {
     width: 40,
@@ -561,7 +563,7 @@ const styles = StyleSheet.create({
   headerName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
   },
   headerStatusRow: {
     flexDirection: 'row',
@@ -590,24 +592,27 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.sm,
-    backgroundColor: COLORS.goldMuted,
+    backgroundColor: DARK_COLORS.primaryMuted,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: DARK_COLORS.border,
   },
   priceBarText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: DARK_COLORS.textSecondary,
   },
   priceBarAmount: {
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.goldDark,
+    color: DARK_COLORS.accentDark,
   },
   priceBarServices: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
     marginLeft: 'auto',
   },
   content: {
+    flex: 1,
+  },
+  listContainer: {
     flex: 1,
   },
   listContent: {
@@ -635,20 +640,20 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.md,
   },
   ownBubble: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: DARK_COLORS.bubbleOwn,
     borderBottomRightRadius: SPACING.xxs,
   },
   otherBubble: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: DARK_COLORS.bubbleOther,
     borderBottomLeftRadius: SPACING.xxs,
   },
   messageText: {
     fontSize: TYPOGRAPHY.base,
     lineHeight: 22,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
   },
   ownMessageText: {
-    color: COLORS.textInverse,
+    color: DARK_COLORS.textPrimary,
   },
   messageFooter: {
     flexDirection: 'row',
@@ -659,7 +664,7 @@ const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
   },
   offerRow: {
     alignSelf: 'flex-start',
@@ -672,9 +677,9 @@ const styles = StyleSheet.create({
   offerBubble: {
     borderRadius: RADIUS.xl,
     padding: SPACING.lg,
-    backgroundColor: COLORS.surface,
+    backgroundColor: DARK_COLORS.surface,
     borderWidth: 1,
-    borderColor: COLORS.goldMuted,
+    borderColor: DARK_COLORS.primaryMuted,
   },
   offerHeader: {
     flexDirection: 'row',
@@ -685,7 +690,7 @@ const styles = StyleSheet.create({
   offerLabel: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.medium,
-    color: COLORS.textSecondary,
+    color: DARK_COLORS.textSecondary,
     flex: 1,
   },
   statusBadge: {
@@ -707,12 +712,12 @@ const styles = StyleSheet.create({
   offerCurrency: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.medium,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
   },
   offerAmount: {
     fontSize: 36,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
   },
   offerActions: {
     flexDirection: 'row',
@@ -729,15 +734,15 @@ const styles = StyleSheet.create({
   },
   counterButtonLabel: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.goldDark,
+    color: DARK_COLORS.accentDark,
   },
   rejectButton: {
     width: 36,
     height: 36,
     borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: COLORS.errorLight,
-    backgroundColor: COLORS.errorLight,
+    borderColor: DARK_COLORS.errorLight,
+    backgroundColor: DARK_COLORS.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -748,16 +753,16 @@ const styles = StyleSheet.create({
     marginTop: SPACING.md,
     paddingTop: SPACING.md,
     borderTopWidth: 1,
-    borderTopColor: COLORS.successLight,
+    borderTopColor: DARK_COLORS.successLight,
   },
   acceptedText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.success,
+    color: DARK_COLORS.success,
     fontWeight: TYPOGRAPHY.medium,
   },
   offerTimestamp: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
     textAlign: 'center',
     marginTop: SPACING.sm,
   },
@@ -768,24 +773,24 @@ const styles = StyleSheet.create({
   },
   systemText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
     textAlign: 'center',
-    backgroundColor: COLORS.borderLight,
+    backgroundColor: DARK_COLORS.borderLight,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.xs,
     borderRadius: RADIUS.md,
   },
   inputContainer: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: DARK_COLORS.surface,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    borderTopColor: DARK_COLORS.border,
     paddingBottom: 34,
   },
   offerInputContainer: {
     padding: SPACING.lg,
-    backgroundColor: COLORS.goldMuted,
+    backgroundColor: DARK_COLORS.primaryMuted,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: DARK_COLORS.border,
   },
   offerInputHeader: {
     flexDirection: 'row',
@@ -797,7 +802,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.medium,
-    color: COLORS.textSecondary,
+    color: DARK_COLORS.textSecondary,
   },
   offerInputRow: {
     flexDirection: 'row',
@@ -808,12 +813,12 @@ const styles = StyleSheet.create({
   offerInputCurrency: {
     fontSize: TYPOGRAPHY.xl,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textMuted,
+    color: DARK_COLORS.textMuted,
   },
   offerInputField: {
     fontSize: 44,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
     minWidth: 120,
     textAlign: 'center',
   },
@@ -829,13 +834,13 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    backgroundColor: COLORS.borderLight,
+    backgroundColor: DARK_COLORS.borderLight,
     borderRadius: RADIUS.xl,
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.md,
     paddingTop: SPACING.md,
     fontSize: TYPOGRAPHY.base,
-    color: COLORS.textPrimary,
+    color: DARK_COLORS.textPrimary,
     maxHeight: 100,
     minHeight: 40,
   },
@@ -843,11 +848,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.borderLight,
+    backgroundColor: DARK_COLORS.borderLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   sendButtonActive: {
-    backgroundColor: COLORS.goldDark,
+    backgroundColor: DARK_COLORS.accentDark,
   },
 });
