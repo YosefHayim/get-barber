@@ -38,9 +38,9 @@ const ICON_SIZES = {
 } as const;
 
 const COLORS = {
-  primary: { bg: '#3b82f6', fg: '#ffffff' },
-  secondary: { bg: '#8b5cf6', fg: '#ffffff' },
-  surface: { bg: '#ffffff', fg: '#374151' },
+  primary: { bg: '#B8860B', fg: '#ffffff' },
+  secondary: { bg: '#722F37', fg: '#ffffff' },
+  surface: { bg: '#ffffff', fg: '#1A1A1A' },
 } as const;
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -128,12 +128,14 @@ function getPositionStyles(position: ActionFloatingButtonProps['position']): Vie
 
 const styles = StyleSheet.create({
   fab: {
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    elevation: 12,
+    shadowColor: '#B8860B',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
 });

@@ -8,8 +8,14 @@ import Animated, {
   withRepeat,
   withSequence,
   withDelay,
+  withTiming,
+  Easing,
 } from 'react-native-reanimated';
 import { Scissors } from 'lucide-react-native';
+
+const GOLD = '#DAA520';
+const DARK_GOLD = '#B8860B';
+const BURGUNDY = '#722F37';
 
 interface NearbyBarber {
   id: string;
@@ -89,16 +95,24 @@ export function AnimatedBarberMarker({
       anchor={{ x: 0.5, y: 0.5 }}
     >
       <Animated.View style={containerStyle}>
+        {isSelected && (
+          <View style={styles.pulseRing} />
+        )}
         <View style={[
           styles.markerContainer,
           isSelected && styles.selectedMarker,
           barber.is_verified && styles.verifiedMarker,
         ]}>
-          <Scissors
-            size={isSelected ? 20 : 16}
-            color={isSelected ? '#FFFFFF' : '#3B82F6'}
-            style={styles.icon}
-          />
+          <View style={[
+            styles.innerCircle,
+            isSelected && styles.innerCircleSelected,
+          ]}>
+            <Scissors
+              size={isSelected ? 22 : 18}
+              color={isSelected ? '#FFFFFF' : DARK_GOLD}
+              style={styles.icon}
+            />
+          </View>
         </View>
         {isSelected && (
           <View style={styles.selectedIndicator} />
@@ -110,42 +124,65 @@ export function AnimatedBarberMarker({
 
 const styles = StyleSheet.create({
   markerContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    borderWidth: 2,
-    borderColor: '#3B82F6',
-  },
-  selectedMarker: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#3B82F6',
-    borderColor: '#1D4ED8',
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: GOLD,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+    elevation: 8,
     borderWidth: 3,
+    borderColor: GOLD,
+  },
+  innerCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(218, 165, 32, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  innerCircleSelected: {
+    backgroundColor: BURGUNDY,
+  },
+  selectedMarker: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: GOLD,
+    borderColor: DARK_GOLD,
+    borderWidth: 4,
+    shadowColor: GOLD,
+    shadowOpacity: 0.5,
   },
   verifiedMarker: {
-    borderColor: '#10B981',
+    borderColor: GOLD,
   },
   icon: {
     transform: [{ rotate: '-45deg' }],
   },
+  pulseRing: {
+    position: 'absolute',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: 'rgba(218, 165, 32, 0.2)',
+    top: -7,
+    left: -7,
+  },
   selectedIndicator: {
     position: 'absolute',
-    bottom: -8,
+    bottom: -10,
     left: '50%',
-    marginLeft: -6,
-    width: 12,
-    height: 12,
-    backgroundColor: '#3B82F6',
+    marginLeft: -8,
+    width: 16,
+    height: 16,
+    backgroundColor: GOLD,
     transform: [{ rotate: '45deg' }],
+    borderBottomRightRadius: 4,
   },
 });

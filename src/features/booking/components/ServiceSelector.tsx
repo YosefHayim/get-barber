@@ -1,14 +1,20 @@
 import React, { useCallback, useMemo } from 'react';
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Text, Chip, Surface } from 'react-native-paper';
-import { Check, Clock } from 'lucide-react-native';
+import { Check, Clock, Sparkles } from 'lucide-react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withSequence,
+  FadeInDown,
 } from 'react-native-reanimated';
 import type { Tables } from '@/services/supabase/database.types';
 import { useBookingStore } from '@/stores/useBookingStore';
+
+const GOLD = '#DAA520';
+const DARK_GOLD = '#B8860B';
+const BURGUNDY = '#722F37';
 
 type Service = Tables<'services'>;
 type ServiceCategory = 'haircut' | 'beard' | 'shave' | 'combo' | 'styling' | 'coloring';
@@ -207,36 +213,40 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   loadingText: {
-    color: '#6B7280',
-    fontSize: 14,
+    color: '#757575',
+    fontSize: 15,
+    fontStyle: 'italic',
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    padding: 16,
-    paddingBottom: 100,
+    padding: 20,
+    paddingBottom: 110,
   },
   categorySection: {
-    marginBottom: 24,
+    marginBottom: 28,
   },
   categoryTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: 12,
+    fontSize: 17,
+    fontWeight: '700',
+    color: BURGUNDY,
+    marginBottom: 14,
     paddingLeft: 4,
+    letterSpacing: 0.3,
   },
   serviceItem: {
-    marginBottom: 8,
-    borderRadius: 12,
-    padding: 16,
+    marginBottom: 10,
+    borderRadius: 16,
+    padding: 18,
     backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   serviceItemSelected: {
     borderWidth: 2,
-    borderColor: '#3B82F6',
-    backgroundColor: '#EFF6FF',
+    borderColor: GOLD,
+    backgroundColor: 'rgba(218, 165, 32, 0.06)',
   },
   serviceContent: {
     flexDirection: 'row',
@@ -245,61 +255,73 @@ const styles = StyleSheet.create({
   },
   serviceInfo: {
     flex: 1,
-    marginRight: 12,
+    marginRight: 14,
   },
   serviceName: {
-    fontSize: 15,
-    fontWeight: '500',
-    color: '#111827',
-    marginBottom: 2,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 3,
   },
   serviceNameSelected: {
-    color: '#1D4ED8',
+    color: DARK_GOLD,
+    fontWeight: '700',
   },
   serviceDescription: {
     fontSize: 13,
-    color: '#6B7280',
-    marginBottom: 4,
+    color: '#757575',
+    marginBottom: 6,
   },
   serviceMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.03)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
   },
   duration: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: '#757575',
+    fontWeight: '500',
   },
   serviceRight: {
     alignItems: 'flex-end',
   },
   price: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
-    marginBottom: 4,
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 6,
   },
   priceSelected: {
-    color: '#1D4ED8',
+    color: DARK_GOLD,
   },
   checkmark: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#3B82F6',
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: GOLD,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: GOLD,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   summary: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FAFAFA',
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    borderTopColor: 'rgba(0, 0, 0, 0.06)',
+    paddingHorizontal: 20,
+    paddingVertical: 14,
   },
   summaryRow: {
     flexDirection: 'row',
@@ -307,12 +329,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   summaryLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#374151',
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#1A1A1A',
   },
   chips: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 10,
   },
 });

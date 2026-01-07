@@ -6,11 +6,16 @@ import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
-import { ChevronUp, MapPin, Send } from 'lucide-react-native';
+import { ChevronUp, MapPin, Send, Sparkles } from 'lucide-react-native';
+import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { BarberCard } from './BarberCard';
 import { ServiceSelector } from './ServiceSelector';
 import { useBookingStore, useTotalEstimatedPrice, useSelectedServicesCount } from '@/stores/useBookingStore';
 import type { Tables } from '@/services/supabase/database.types';
+
+const GOLD = '#DAA520';
+const DARK_GOLD = '#B8860B';
+const BURGUNDY = '#722F37';
 
 type Service = Tables<'services'>;
 
@@ -93,16 +98,19 @@ export const BookingBottomSheet = forwardRef<BottomSheet, BookingBottomSheetProp
       <View style={styles.collapsedContent}>
         <View style={styles.handle} />
         <View style={styles.collapsedHeader}>
-          <ChevronUp size={20} color="#6B7280" />
+          <ChevronUp size={20} color={DARK_GOLD} />
           <Text style={styles.collapsedTitle}>
             {servicesCount > 0
-              ? `${servicesCount} service${servicesCount > 1 ? 's' : ''} - ${totalPrice} ILS`
+              ? `${servicesCount} service${servicesCount > 1 ? 's' : ''} - ₪${totalPrice}`
               : 'Select services to get started'}
           </Text>
+          {servicesCount > 0 && (
+            <Sparkles size={16} color={GOLD} fill={GOLD} />
+          )}
         </View>
         {userAddress && (
           <View style={styles.locationRow}>
-            <MapPin size={14} color="#3B82F6" />
+            <MapPin size={14} color={GOLD} />
             <Text style={styles.locationText} numberOfLines={1}>
               {userAddress}
             </Text>
@@ -197,50 +205,58 @@ const styles = StyleSheet.create({
   },
   sheetBackground: {
     backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 10,
+    shadowOffset: { width: 0, height: -6 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 16,
   },
   handleIndicator: {
-    backgroundColor: '#D1D5DB',
-    width: 40,
+    backgroundColor: GOLD,
+    width: 48,
+    height: 5,
+    borderRadius: 3,
   },
   handle: {
-    width: 40,
-    height: 4,
-    backgroundColor: '#D1D5DB',
-    borderRadius: 2,
+    width: 48,
+    height: 5,
+    backgroundColor: GOLD,
+    borderRadius: 3,
     alignSelf: 'center',
-    marginTop: 8,
-    marginBottom: 12,
+    marginTop: 10,
+    marginBottom: 14,
   },
   collapsedContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
   },
   collapsedHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
   },
   collapsedTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    flex: 1,
   },
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginTop: 8,
+    gap: 8,
+    marginTop: 10,
+    backgroundColor: 'rgba(218, 165, 32, 0.08)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
   },
   locationText: {
-    fontSize: 13,
-    color: '#6B7280',
+    fontSize: 14,
+    color: '#4A4A4A',
     flex: 1,
+    fontWeight: '500',
   },
   expandedContent: {
     flex: 1,
@@ -250,17 +266,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#111827',
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#1A1A1A',
+    letterSpacing: 0.3,
   },
   barberList: {
-    paddingHorizontal: 20,
-    paddingBottom: 16,
+    paddingHorizontal: 24,
+    paddingBottom: 18,
   },
   servicesContainer: {
     flex: 1,
@@ -268,20 +285,22 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     color: '#9CA3AF',
-    fontSize: 14,
-    paddingHorizontal: 20,
+    fontSize: 15,
+    paddingHorizontal: 24,
+    fontStyle: 'italic',
   },
   footer: {
-    padding: 20,
-    paddingBottom: 34,
+    padding: 24,
+    paddingBottom: 38,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: 'rgba(0, 0, 0, 0.06)',
+    backgroundColor: '#FAFAFA',
   },
   requestButton: {
-    borderRadius: 12,
+    borderRadius: 16,
+    backgroundColor: DARK_GOLD,
   },
   buttonContent: {
-    height: 52,
+    height: 56,
   },
 });
