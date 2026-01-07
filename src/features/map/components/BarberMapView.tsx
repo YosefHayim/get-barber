@@ -1,7 +1,5 @@
-import React, { useCallback, useRef, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
-import { AnimatedBarberMarker } from './AnimatedBarberMarker';
+import React from 'react';
+import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import type { GeoLocation } from '@/types/common.types';
 
 interface NearbyBarber {
@@ -23,84 +21,59 @@ interface BarberMapViewProps {
   barbers: NearbyBarber[];
   selectedBarberId: string | null;
   onBarberSelect: (barber: NearbyBarber) => void;
-  onRegionChange?: (region: Region) => void;
+  onRegionChange?: (region: { latitude: number; longitude: number; latitudeDelta: number; longitudeDelta: number }) => void;
 }
-
-const DEFAULT_DELTA = 0.015;
-
-const INITIAL_REGION = {
-  latitude: 32.0853,
-  longitude: 34.7818,
-  latitudeDelta: DEFAULT_DELTA,
-  longitudeDelta: DEFAULT_DELTA,
-};
 
 export function BarberMapView({
   userLocation,
   barbers,
   selectedBarberId,
   onBarberSelect,
-  onRegionChange,
 }: BarberMapViewProps): React.JSX.Element {
-  const mapRef = useRef<MapView>(null);
-
-  useEffect(() => {
-    if (userLocation && mapRef.current) {
-      mapRef.current.animateToRegion({
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
-        latitudeDelta: DEFAULT_DELTA,
-        longitudeDelta: DEFAULT_DELTA,
-      }, 500);
-    }
-  }, [userLocation]);
-
-  const handleRegionChangeComplete = useCallback((region: Region) => {
-    onRegionChange?.(region);
-  }, [onRegionChange]);
-
-  const generateBarberCoordinates = useCallback((barber: NearbyBarber, userLoc: GeoLocation) => {
-    const seed = barber.id.charCodeAt(0) + barber.id.charCodeAt(barber.id.length - 1);
-    const angle = (seed % 360) * (Math.PI / 180);
-    const distanceKm = barber.distance_meters / 1000;
-    const latOffset = distanceKm * Math.cos(angle) / 111;
-    const lngOffset = distanceKm * Math.sin(angle) / (111 * Math.cos(userLoc.latitude * Math.PI / 180));
-    
-    return {
-      latitude: userLoc.latitude + latOffset,
-      longitude: userLoc.longitude + lngOffset,
-    };
-  }, []);
-
   return (
     <View style={styles.container}>
-      <MapView
-        ref={mapRef}
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={INITIAL_REGION}
-        showsUserLocation
-        showsMyLocationButton
-        showsCompass
-        rotateEnabled={false}
-        pitchEnabled={false}
-        onRegionChangeComplete={handleRegionChangeComplete}
-        mapPadding={{ top: 0, right: 0, bottom: 200, left: 0 }}
-      >
-        {userLocation && barbers.map((barber) => {
-          const coords = generateBarberCoordinates(barber, userLocation);
-          return (
-            <AnimatedBarberMarker
-              key={barber.id}
-              barber={barber}
-              latitude={coords.latitude}
-              longitude={coords.longitude}
-              isSelected={barber.id === selectedBarberId}
-              onPress={onBarberSelect}
-            />
-          );
-        })}
-      </MapView>
+      <View style={styles.mapPlaceholder}>
+        <Text style={styles.title}>Map View</Text>
+        <Text style={styles.subtitle}>
+          Maps are only available on iOS and Android devices
+        </Text>
+        {userLocation && (
+          <Text style={styles.locationText}>
+            Your location: {userLocation.latitude.toFixed(4)}, {userLocation.longitude.toFixed(4)}
+          </Text>
+        )}
+        <Text style={styles.barberCount}>
+          {barbers.length} barber{barbers.length !== 1 ? 's' : ''} nearby
+        </Text>
+      </View>
+      
+      <View style={styles.barberList}>
+        {barbers.map((barber) => (
+          <Pressable
+            key={barber.id}
+            style={[
+              styles.barberItem,
+              selectedBarberId === barber.id && styles.selectedBarberItem,
+            ]}
+            onPress={() => onBarberSelect(barber)}
+          >
+            <View style={styles.barberInfo}>
+              <Text style={styles.barberName}>{barber.display_name}</Text>
+              <Text style={styles.barberRating}>
+                {barber.rating.toFixed(1)} ({barber.total_reviews} reviews)
+              </Text>
+              <Text style={styles.barberDistance}>
+                {(barber.distance_meters / 1000).toFixed(1)} km away
+              </Text>
+            </View>
+            {barber.is_verified && (
+              <View style={styles.verifiedBadge}>
+                <Text style={styles.verifiedText}>✓</Text>
+              </View>
+            )}
+          </Pressable>
+        ))}
+      </View>
     </View>
   );
 }
@@ -108,8 +81,91 @@ export function BarberMapView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F3F4F6',
   },
-  map: {
-    ...StyleSheet.absoluteFillObject,
+  mapPlaceholder: {
+    height: 200,
+    backgroundColor: '#E5E7EB',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#D1D5DB',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginBottom: 16,
+  },
+  locationText: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    marginBottom: 8,
+  },
+  barberCount: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#3B82F6',
+  },
+  barberList: {
+    flex: 1,
+    padding: 16,
+  },
+  barberItem: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    ...(Platform.OS === 'web' ? { boxShadow: '0 2px 4px rgba(0,0,0,0.1)' } : {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
+    }),
+  } as const,
+  selectedBarberItem: {
+    borderWidth: 2,
+    borderColor: '#3B82F6',
+  },
+  barberInfo: {
+    flex: 1,
+  },
+  barberName: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1F2937',
+    marginBottom: 4,
+  },
+  barberRating: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginBottom: 2,
+  },
+  barberDistance: {
+    fontSize: 14,
+    color: '#9CA3AF',
+  },
+  verifiedBadge: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#10B981',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  verifiedText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
