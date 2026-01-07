@@ -128,8 +128,6 @@ export function OnboardingLayout({
           style={styles.nextButton}
           contentStyle={styles.nextButtonContent}
           labelStyle={styles.nextButtonLabel}
-          icon={() => !nextLoading && <ArrowRight size={20} color={COLORS.textInverse} />}
-          contentStyleRightIcon
         >
           {nextLabel}
         </Button>
