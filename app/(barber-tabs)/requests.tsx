@@ -272,7 +272,6 @@ export default function BarberRequestsScreen(): React.JSX.Element {
             data={filteredRequests}
             renderItem={renderRequest}
             keyExtractor={keyExtractor}
-            estimatedItemSize={300}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => <View style={styles.separator} />}

@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, FlatList, ListRenderItemInfo } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
-import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
 import { formatDistanceToNow } from 'date-fns';
 import { Avatar } from '@/components/ui/Avatar';
 import { OfferBubble } from './OfferBubble';
@@ -189,18 +188,12 @@ export function MessageList({
 
   return (
     <View style={styles.container}>
-      <FlashList
+      <FlatList
         data={data}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        getItemType={getItemType}
-        estimatedItemSize={80}
         inverted
         contentContainerStyle={styles.listContent}
-        maintainVisibleContentPosition={{
-          minIndexForVisible: 0,
-          autoscrollToTopThreshold: 10,
-        }}
         showsVerticalScrollIndicator={false}
       />
     </View>

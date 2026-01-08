@@ -199,7 +199,6 @@ export default function MessagesScreen(): React.JSX.Element {
             data={conversations}
             renderItem={renderConversation}
             keyExtractor={keyExtractor}
-            estimatedItemSize={140}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={() => <View style={styles.separator} />}

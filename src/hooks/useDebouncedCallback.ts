@@ -4,7 +4,7 @@ export function useDebouncedCallback<TFn extends (...args: never[]) => unknown>(
   callback: TFn,
   delay: number
 ): (...args: Parameters<TFn>) => void {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const callbackRef = useRef(callback);
 
   useEffect(() => {

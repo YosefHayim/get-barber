@@ -1,9 +1,8 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { View, StyleSheet, Pressable, KeyboardAvoidingView, Platform, TextInput, Keyboard } from 'react-native';
+import { View, StyleSheet, Pressable, KeyboardAvoidingView, Platform, TextInput, Keyboard, FlatList } from 'react-native';
 import { Text, Surface, IconButton, Button } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { FlashList } from '@shopify/flash-list';
 import { formatDistanceToNow } from 'date-fns';
 import {
   X,
@@ -508,11 +507,10 @@ export default function ChatScreen(): React.JSX.Element {
         keyboardVerticalOffset={0}
       >
         <View style={styles.listContainer}>
-          <FlashList
+          <FlatList
             data={messages}
             renderItem={renderMessage}
             keyExtractor={keyExtractor}
-            estimatedItemSize={80}
             inverted
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
