@@ -27,7 +27,17 @@ import {
   Trash2,
   Check,
 } from 'lucide-react-native';
-import { DARK_COLORS, RADIUS, SPACING, TYPOGRAPHY } from '@/constants/theme';
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '@/constants/theme';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 import {
   MOCK_NOTIFICATIONS,
   NOTIFICATION_TYPE_CONFIG,
@@ -99,9 +109,9 @@ const NotificationItem = ({
       style={{
         flexDirection: 'row',
         padding: SPACING.lg,
-        backgroundColor: notification.isRead ? DARK_COLORS.surface : DARK_COLORS.primaryMuted,
+        backgroundColor: notification.isRead ? LIGHT_COLORS.surface : LIGHT_COLORS.surfaceHighlight,
         borderBottomWidth: 1,
-        borderBottomColor: DARK_COLORS.border,
+        borderBottomColor: LIGHT_COLORS.border,
       }}
     >
       <NotificationIcon type={notification.type} />
@@ -112,20 +122,20 @@ const NotificationItem = ({
               flex: 1,
               fontSize: TYPOGRAPHY.sm,
               fontWeight: notification.isRead ? TYPOGRAPHY.medium : TYPOGRAPHY.semibold,
-              color: DARK_COLORS.textPrimary,
+              color: LIGHT_COLORS.textPrimary,
             }}
             numberOfLines={1}
           >
             {notification.title}
           </Text>
-          <Text style={{ fontSize: TYPOGRAPHY.xs, color: DARK_COLORS.textMuted }}>
+          <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>
             {formatTime(notification.createdAt)}
           </Text>
         </View>
         <Text
           style={{
             fontSize: TYPOGRAPHY.sm,
-            color: DARK_COLORS.textSecondary,
+            color: LIGHT_COLORS.textSecondary,
             lineHeight: 20,
           }}
           numberOfLines={2}
@@ -138,7 +148,7 @@ const NotificationItem = ({
               source={{ uri: notification.metadata.barberAvatar }}
               style={{ width: 20, height: 20, borderRadius: 10, marginRight: SPACING.xs }}
             />
-            <Text style={{ fontSize: TYPOGRAPHY.xs, color: DARK_COLORS.textMuted }}>
+            <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>
               {notification.metadata.barberName}
             </Text>
           </View>
@@ -151,14 +161,14 @@ const NotificationItem = ({
             width: 32,
             height: 32,
             borderRadius: 16,
-            backgroundColor: DARK_COLORS.surface,
+            backgroundColor: LIGHT_COLORS.surface,
             alignItems: 'center',
             justifyContent: 'center',
             marginLeft: SPACING.sm,
             alignSelf: 'center',
           }}
         >
-          <Check size={16} color={DARK_COLORS.success} />
+          <Check size={16} color={COLORS.success} />
         </TouchableOpacity>
       )}
     </TouchableOpacity>
@@ -224,7 +234,7 @@ export default function NotificationsScreen(): React.JSX.Element {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: DARK_COLORS.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: LIGHT_COLORS.background }}>
       <View
         style={{
           flexDirection: 'row',
@@ -232,20 +242,20 @@ export default function NotificationsScreen(): React.JSX.Element {
           paddingHorizontal: SPACING.xl,
           paddingVertical: SPACING.lg,
           borderBottomWidth: 1,
-          borderBottomColor: DARK_COLORS.border,
+          borderBottomColor: LIGHT_COLORS.border,
         }}
       >
         <TouchableOpacity onPress={() => router.back()} style={{ marginRight: SPACING.md }}>
-          <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
+          <ArrowLeft size={24} color={LIGHT_COLORS.textPrimary} />
         </TouchableOpacity>
-        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: DARK_COLORS.textPrimary, flex: 1 }}>
+        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary, flex: 1 }}>
           Notifications
         </Text>
         <TouchableOpacity
           onPress={() => router.push('/(modals)/settings/notifications')}
           style={{ padding: SPACING.xs }}
         >
-          <Settings size={22} color={DARK_COLORS.textSecondary} />
+          <Settings size={22} color={LIGHT_COLORS.textSecondary} />
         </TouchableOpacity>
       </View>
 
@@ -264,14 +274,14 @@ export default function NotificationsScreen(): React.JSX.Element {
             paddingHorizontal: SPACING.lg,
             paddingVertical: SPACING.sm,
             borderRadius: RADIUS.full,
-            backgroundColor: filter === 'all' ? DARK_COLORS.primary : DARK_COLORS.surface,
+            backgroundColor: filter === 'all' ? COLORS.primary : LIGHT_COLORS.surface,
           }}
         >
           <Text
             style={{
               fontSize: TYPOGRAPHY.sm,
               fontWeight: TYPOGRAPHY.medium,
-              color: filter === 'all' ? DARK_COLORS.background : DARK_COLORS.textSecondary,
+              color: filter === 'all' ? LIGHT_COLORS.surface : LIGHT_COLORS.textSecondary,
             }}
           >
             All
@@ -285,14 +295,14 @@ export default function NotificationsScreen(): React.JSX.Element {
             paddingHorizontal: SPACING.lg,
             paddingVertical: SPACING.sm,
             borderRadius: RADIUS.full,
-            backgroundColor: filter === 'unread' ? DARK_COLORS.primary : DARK_COLORS.surface,
+            backgroundColor: filter === 'unread' ? COLORS.primary : LIGHT_COLORS.surface,
           }}
         >
           <Text
             style={{
               fontSize: TYPOGRAPHY.sm,
               fontWeight: TYPOGRAPHY.medium,
-              color: filter === 'unread' ? DARK_COLORS.background : DARK_COLORS.textSecondary,
+              color: filter === 'unread' ? LIGHT_COLORS.surface : LIGHT_COLORS.textSecondary,
             }}
           >
             Unread
@@ -304,7 +314,7 @@ export default function NotificationsScreen(): React.JSX.Element {
                 minWidth: 18,
                 height: 18,
                 borderRadius: 9,
-                backgroundColor: filter === 'unread' ? DARK_COLORS.background : DARK_COLORS.error,
+                backgroundColor: filter === 'unread' ? LIGHT_COLORS.surface : COLORS.error,
                 alignItems: 'center',
                 justifyContent: 'center',
                 paddingHorizontal: 4,
@@ -314,7 +324,7 @@ export default function NotificationsScreen(): React.JSX.Element {
                 style={{
                   fontSize: 10,
                   fontWeight: TYPOGRAPHY.bold,
-                  color: filter === 'unread' ? DARK_COLORS.primary : DARK_COLORS.textPrimary,
+                  color: filter === 'unread' ? COLORS.primary : LIGHT_COLORS.surface,
                 }}
               >
                 {unreadCount}
@@ -327,7 +337,7 @@ export default function NotificationsScreen(): React.JSX.Element {
 
         {unreadCount > 0 && (
           <TouchableOpacity onPress={handleMarkAllRead} style={{ padding: SPACING.xs }}>
-            <Text style={{ fontSize: TYPOGRAPHY.xs, color: DARK_COLORS.primary, fontWeight: TYPOGRAPHY.medium }}>
+            <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.primary, fontWeight: TYPOGRAPHY.medium }}>
               Mark all read
             </Text>
           </TouchableOpacity>
@@ -341,19 +351,19 @@ export default function NotificationsScreen(): React.JSX.Element {
               width: 80,
               height: 80,
               borderRadius: 40,
-              backgroundColor: DARK_COLORS.primaryMuted,
+              backgroundColor: LIGHT_COLORS.surfaceHighlight,
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: SPACING.xl,
             }}
           >
-            <BellOff size={36} color={DARK_COLORS.primary} />
+            <BellOff size={36} color={COLORS.primary} />
           </View>
           <Text
             style={{
               fontSize: TYPOGRAPHY.lg,
               fontWeight: TYPOGRAPHY.semibold,
-              color: DARK_COLORS.textPrimary,
+              color: LIGHT_COLORS.textPrimary,
               marginBottom: SPACING.sm,
             }}
           >
@@ -362,7 +372,7 @@ export default function NotificationsScreen(): React.JSX.Element {
           <Text
             style={{
               fontSize: TYPOGRAPHY.sm,
-              color: DARK_COLORS.textMuted,
+              color: LIGHT_COLORS.textMuted,
               textAlign: 'center',
             }}
           >
@@ -376,7 +386,7 @@ export default function NotificationsScreen(): React.JSX.Element {
           style={{ flex: 1 }}
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={DARK_COLORS.primary} />
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={COLORS.primary} />
           }
         >
           {filteredNotifications.map((notification) => (
@@ -399,8 +409,8 @@ export default function NotificationsScreen(): React.JSX.Element {
                 gap: SPACING.sm,
               }}
             >
-              <Trash2 size={16} color={DARK_COLORS.error} />
-              <Text style={{ fontSize: TYPOGRAPHY.sm, color: DARK_COLORS.error }}>Clear all notifications</Text>
+              <Trash2 size={16} color={COLORS.error} />
+              <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.error }}>Clear all notifications</Text>
             </TouchableOpacity>
           )}
         </ScrollView>

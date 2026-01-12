@@ -3,11 +3,22 @@ import { View, StyleSheet, TouchableOpacity, Image, ScrollView, Alert } from 're
 import { Text, TextInput } from 'react-native-paper';
 import { router } from 'expo-router';
 import { Camera, Instagram, Plus, X, Image as ImageIcon, Sparkles } from 'lucide-react-native';
-import Animated, { FadeInDown, FadeIn, ZoomIn } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown, webSafeZoomIn } from '@/utils/animations';
 import * as ImagePicker from 'expo-image-picker';
 import { OnboardingLayout } from '@/components/onboarding/OnboardingLayout';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { useOnboardingStore } from '@/stores/useOnboardingStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 const MIN_PORTFOLIO_IMAGES = 3;
 const MAX_PORTFOLIO_IMAGES = 10;
@@ -94,7 +105,7 @@ export default function BarberPortfolioScreen(): React.JSX.Element {
       nextDisabled={!isValid}
     >
       <View style={styles.content}>
-        <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.tipsCard}>
+        <Animated.View entering={webSafeFadeInDown(100, 400)} style={styles.tipsCard}>
           <Sparkles size={20} color={COLORS.gold} />
           <View style={styles.tipsContent}>
             <Text style={styles.tipsTitle}>Tips for great photos</Text>
@@ -106,7 +117,7 @@ export default function BarberPortfolioScreen(): React.JSX.Element {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(200).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(200, 400)} style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Work Photos *</Text>
             <Text style={styles.counterText}>
@@ -121,7 +132,7 @@ export default function BarberPortfolioScreen(): React.JSX.Element {
             {barberData.portfolioImages.map((uri, index) => (
               <Animated.View
                 key={uri}
-                entering={ZoomIn.delay(index * 50).duration(300)}
+                entering={webSafeZoomIn(index * 50, 300)}
                 style={styles.imageContainer}
               >
                 <Image source={{ uri }} style={styles.portfolioImage} />
@@ -136,7 +147,7 @@ export default function BarberPortfolioScreen(): React.JSX.Element {
             ))}
 
             {canAddMore && (
-              <Animated.View entering={FadeIn.duration(300)} style={styles.addContainer}>
+              <Animated.View entering={webSafeFadeIn(300)} style={styles.addContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
                   onPress={handlePickImage}
@@ -167,9 +178,9 @@ export default function BarberPortfolioScreen(): React.JSX.Element {
           )}
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(300).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(300, 400)} style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Instagram size={18} color={COLORS.textSecondary} />
+            <Instagram size={18} color={LIGHT_COLORS.textSecondary} />
             <Text style={styles.sectionTitle}>Instagram (Optional)</Text>
           </View>
           <Text style={styles.sectionSubtitle}>
@@ -180,13 +191,13 @@ export default function BarberPortfolioScreen(): React.JSX.Element {
             placeholder="@your_username"
             value={barberData.instagramHandle}
             onChangeText={setBarberInstagram}
-            outlineColor={COLORS.border}
+            outlineColor={LIGHT_COLORS.border}
             activeOutlineColor={COLORS.gold}
             style={styles.input}
             autoCapitalize="none"
             left={
               <TextInput.Icon
-                icon={() => <Instagram size={20} color={COLORS.textMuted} />}
+                icon={() => <Instagram size={20} color={LIGHT_COLORS.textMuted} />}
               />
             }
           />
@@ -225,7 +236,7 @@ const styles = StyleSheet.create({
   },
   tipsText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     lineHeight: 20,
   },
   section: {
@@ -239,19 +250,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     flexDirection: 'row',
     alignItems: 'center',
     gap: SPACING.xs,
   },
   sectionSubtitle: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   counterText: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
   },
   portfolioGrid: {
     flexDirection: 'row',
@@ -292,11 +303,11 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: RADIUS.md,
     borderWidth: 2,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
     borderStyle: 'dashed',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     gap: SPACING.xs,
   },
   addButtonText: {
@@ -317,12 +328,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   input: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     marginTop: SPACING.xs,
   },
   instagramHint: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     marginTop: SPACING.xs,
   },
 });

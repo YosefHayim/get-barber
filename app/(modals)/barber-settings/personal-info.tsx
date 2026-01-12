@@ -24,6 +24,16 @@ import {
 import { Avatar } from '@/components/ui/Avatar';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
+
 export default function PersonalInfoScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
   
@@ -59,8 +69,8 @@ export default function PersonalInfoScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Personal Info',
-          headerStyle: { backgroundColor: COLORS.charcoal },
-          headerTitleStyle: { fontWeight: '700', color: COLORS.textInverse },
+          headerStyle: { backgroundColor: LIGHT_COLORS.surface },
+          headerTitleStyle: { fontWeight: '700', color: LIGHT_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
               <ArrowLeft size={24} color={COLORS.gold} />
@@ -89,7 +99,7 @@ export default function PersonalInfoScreen(): React.JSX.Element {
             <View style={styles.avatarContainer}>
               <Avatar uri={null} name="Yossi Cohen" size={100} />
               <Pressable style={styles.cameraButton} onPress={handleChangePhoto}>
-                <Camera size={18} color={COLORS.charcoal} />
+                <Camera size={18} color={LIGHT_COLORS.textPrimary} />
               </Pressable>
             </View>
             <Pressable onPress={handleChangePhoto}>
@@ -111,10 +121,10 @@ export default function PersonalInfoScreen(): React.JSX.Element {
                 placeholder="Enter your first name"
                 mode="outlined"
                 style={styles.input}
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                placeholderTextColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textPrimary}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
               />
             </View>
 
@@ -126,10 +136,10 @@ export default function PersonalInfoScreen(): React.JSX.Element {
                 placeholder="Enter your last name"
                 mode="outlined"
                 style={styles.input}
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                placeholderTextColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textPrimary}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
               />
             </View>
           </View>
@@ -148,10 +158,10 @@ export default function PersonalInfoScreen(): React.JSX.Element {
                 placeholder="Enter your business name"
                 mode="outlined"
                 style={styles.input}
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                placeholderTextColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textPrimary}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
               />
             </View>
 
@@ -163,10 +173,10 @@ export default function PersonalInfoScreen(): React.JSX.Element {
                 placeholder="Tell clients about yourself..."
                 mode="outlined"
                 style={[styles.input, styles.textArea]}
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                placeholderTextColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textPrimary}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 multiline
                 numberOfLines={4}
               />
@@ -187,10 +197,10 @@ export default function PersonalInfoScreen(): React.JSX.Element {
                 placeholder="Enter your email"
                 mode="outlined"
                 style={styles.input}
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                placeholderTextColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textPrimary}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
@@ -204,10 +214,10 @@ export default function PersonalInfoScreen(): React.JSX.Element {
                 placeholder="+972 XX XXX XXXX"
                 mode="outlined"
                 style={styles.input}
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                placeholderTextColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textPrimary}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 keyboardType="phone-pad"
               />
             </View>
@@ -220,11 +230,11 @@ export default function PersonalInfoScreen(): React.JSX.Element {
                 placeholder="Enter your service area"
                 mode="outlined"
                 style={styles.input}
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                placeholderTextColor={COLORS.textMuted}
-                left={<TextInput.Icon icon={() => <MapPin size={18} color={COLORS.textMuted} />} />}
+                textColor={LIGHT_COLORS.textPrimary}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
+                left={<TextInput.Icon icon={() => <MapPin size={18} color={LIGHT_COLORS.textMuted} />} />}
               />
             </View>
           </View>
@@ -237,7 +247,7 @@ export default function PersonalInfoScreen(): React.JSX.Element {
             style={styles.saveButton}
             contentStyle={styles.saveButtonContent}
             buttonColor={COLORS.gold}
-            textColor={COLORS.charcoal}
+            textColor={LIGHT_COLORS.textPrimary}
           >
             Save Changes
           </Button>
@@ -250,7 +260,7 @@ export default function PersonalInfoScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollView: {
     flex: 1,
@@ -281,7 +291,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: COLORS.charcoal,
+    borderColor: LIGHT_COLORS.surface,
   },
   changePhotoText: {
     fontSize: TYPOGRAPHY.sm,
@@ -289,7 +299,7 @@ const styles = StyleSheet.create({
     color: COLORS.gold,
   },
   formCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     marginBottom: SPACING.lg,
@@ -303,7 +313,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   inputGroup: {
     marginBottom: SPACING.md,
@@ -311,11 +321,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.medium,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     marginBottom: SPACING.xs,
   },
   input: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
   },
   textArea: {
     minHeight: 100,

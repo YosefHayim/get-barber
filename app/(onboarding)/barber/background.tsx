@@ -3,7 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import { router } from 'expo-router';
 import { Award } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 import { OnboardingLayout } from '@/components/onboarding/OnboardingLayout';
 import { SelectableChip } from '@/components/onboarding/SelectableChip';
 import { OptionCard } from '@/components/onboarding/OptionCard';
@@ -14,6 +15,16 @@ import {
   YEARS_EXPERIENCE_OPTIONS,
   type BarberSpecialty,
 } from '@/types/onboarding.types';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 export default function BarberBackgroundScreen(): React.JSX.Element {
   const progress = useOnboardingStore((s) => s.progress);
@@ -55,7 +66,7 @@ export default function BarberBackgroundScreen(): React.JSX.Element {
       nextDisabled={!isValid}
     >
       <View style={styles.content}>
-        <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(100, 400)} style={styles.section}>
           <Text style={styles.sectionTitle}>Years of experience *</Text>
           <View style={styles.optionsList}>
             {YEARS_EXPERIENCE_OPTIONS.map((exp) => (
@@ -69,7 +80,7 @@ export default function BarberBackgroundScreen(): React.JSX.Element {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(200).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(200, 400)} style={styles.section}>
           <Text style={styles.sectionTitle}>Your specialties *</Text>
           <Text style={styles.sectionSubtitle}>Select all that apply</Text>
           <View style={styles.chipGrid}>
@@ -84,9 +95,9 @@ export default function BarberBackgroundScreen(): React.JSX.Element {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(300).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(300, 400)} style={styles.section}>
           <View style={styles.labelRow}>
-            <Award size={18} color={COLORS.textSecondary} />
+            <Award size={18} color={LIGHT_COLORS.textSecondary} />
             <Text style={styles.sectionTitle}>Certifications (optional)</Text>
           </View>
           <TextInput
@@ -116,11 +127,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   sectionSubtitle: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   labelRow: {
     flexDirection: 'row',
@@ -138,14 +149,14 @@ const styles = StyleSheet.create({
     marginTop: SPACING.sm,
   },
   input: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
   },
   inputOutline: {
     borderRadius: RADIUS.md,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
   },
   hint: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
 });

@@ -51,9 +51,9 @@ export default function RootLayout(): React.JSX.Element {
 
   return (
     
-    <GluestackUIProvider mode="dark">
+    <GluestackUIProvider mode="light">
       <AppProviders>
-      <StatusBar style="dark" />
+      <StatusBar style="dark" backgroundColor="#f6f8f8" />
       <NavigationGuard>
         <Stack
           screenOptions={{

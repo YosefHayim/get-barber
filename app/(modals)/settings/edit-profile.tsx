@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,25 +12,64 @@ import { Text, TextInput, Button } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, Stack } from 'expo-router';
 import { Camera, X, Check } from 'lucide-react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { Avatar } from '@/components/ui/Avatar';
 import { useAuth } from '@/features/auth/context/AuthContext';
-import { DARK_COLORS } from '@/constants/theme';
+import { supabase } from '@/services/supabase/client';
+import { COLORS } from '@/constants/theme';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 export default function EditProfileScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
-  const { user } = useAuth();
-  
+  const { user, profile, refreshProfile } = useAuth();
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
   const [bio, setBio] = useState('');
+  const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+
+  // Initialize form with existing profile data
+  useEffect(() => {
+    if (profile) {
+      const nameParts = (profile.display_name || '').split(' ');
+      setFirstName(nameParts[0] || '');
+      setLastName(nameParts.slice(1).join(' ') || '');
+      setPhone(profile.phone || '');
+      setAvatarUri(profile.avatar_url || null);
+    }
+  }, [profile]);
 
   const handleSave = async () => {
+    if (!user?.id) return;
+
     setIsSaving(true);
     try {
-      // TODO: Implement profile update with Supabase
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const displayName = `${firstName} ${lastName}`.trim();
+      const updates: { display_name?: string; phone?: string } = {};
+
+      if (displayName) updates.display_name = displayName;
+      if (phone) updates.phone = phone;
+
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      await refreshProfile();
       Alert.alert('Success', 'Profile updated successfully!');
       router.back();
     } catch (error) {
@@ -40,9 +79,65 @@ export default function EditProfileScreen(): React.JSX.Element {
     }
   };
 
-  const handleChangePhoto = () => {
-    // TODO: Implement image picker
-    Alert.alert('Coming Soon', 'Photo upload will be available soon!');
+  const uploadProfileImage = async (uri: string) => {
+    if (!user?.id) return;
+
+    setIsUploadingImage(true);
+    try {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const fileExt = uri.split('.').pop() || 'jpg';
+      const fileName = `${user.id}/avatar-${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, blob, {
+          contentType: `image/${fileExt}`,
+          upsert: true
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl })
+        .eq('id', user.id);
+
+      if (updateError) throw updateError;
+
+      await refreshProfile();
+      Alert.alert('Success', 'Profile photo updated!');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to upload image. Please try again.');
+      setAvatarUri(profile?.avatar_url || null);
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  const handleChangePhoto = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert('Permission Required', 'Please allow access to your photo library to change your profile photo.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets[0]) {
+      const uri = result.assets[0].uri;
+      setAvatarUri(uri);
+      await uploadProfileImage(uri);
+    }
   };
 
   return (
@@ -51,16 +146,16 @@ export default function EditProfileScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Edit Profile',
-          headerStyle: { backgroundColor: DARK_COLORS.background },
-          headerTitleStyle: { fontWeight: '700', color: DARK_COLORS.textPrimary },
+          headerStyle: { backgroundColor: LIGHT_COLORS.background },
+          headerTitleStyle: { fontWeight: '700', color: LIGHT_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
-              <X size={24} color={DARK_COLORS.textPrimary} />
+              <X size={24} color={LIGHT_COLORS.textPrimary} />
             </Pressable>
           ),
           headerRight: () => (
             <Pressable onPress={handleSave} disabled={isSaving} style={styles.headerButton}>
-              <Check size={24} color={isSaving ? DARK_COLORS.textMuted : DARK_COLORS.primary} />
+              <Check size={24} color={isSaving ? LIGHT_COLORS.textMuted : COLORS.copper} />
             </Pressable>
           ),
         }}
@@ -80,16 +175,22 @@ export default function EditProfileScreen(): React.JSX.Element {
           <View style={styles.avatarSection}>
             <View style={styles.avatarContainer}>
               <Avatar
-                uri={null}
-                name={user?.email ?? 'User'}
+                uri={avatarUri}
+                name={profile?.display_name ?? user?.email ?? 'User'}
                 size={120}
               />
-              <Pressable style={styles.cameraButton} onPress={handleChangePhoto}>
+              <Pressable
+                style={[styles.cameraButton, isUploadingImage && styles.cameraButtonDisabled]}
+                onPress={handleChangePhoto}
+                disabled={isUploadingImage}
+              >
                 <Camera size={20} color="#FFFFFF" />
               </Pressable>
             </View>
-            <Pressable onPress={handleChangePhoto}>
-              <Text style={styles.changePhotoText}>Change Photo</Text>
+            <Pressable onPress={handleChangePhoto} disabled={isUploadingImage}>
+              <Text style={styles.changePhotoText}>
+                {isUploadingImage ? 'Uploading...' : 'Change Photo'}
+              </Text>
             </Pressable>
           </View>
 
@@ -102,13 +203,13 @@ export default function EditProfileScreen(): React.JSX.Element {
                 value={firstName}
                 onChangeText={setFirstName}
                 placeholder="Enter your first name"
-                placeholderTextColor={DARK_COLORS.textMuted}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 mode="outlined"
                 style={styles.input}
                 outlineStyle={styles.inputOutline}
-                outlineColor={DARK_COLORS.border}
-                activeOutlineColor={DARK_COLORS.primary}
-                textColor={DARK_COLORS.textPrimary}
+                outlineColor={LIGHT_COLORS.border}
+                activeOutlineColor={COLORS.copper}
+                textColor={LIGHT_COLORS.textPrimary}
               />
             </View>
 
@@ -118,13 +219,13 @@ export default function EditProfileScreen(): React.JSX.Element {
                 value={lastName}
                 onChangeText={setLastName}
                 placeholder="Enter your last name"
-                placeholderTextColor={DARK_COLORS.textMuted}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 mode="outlined"
                 style={styles.input}
                 outlineStyle={styles.inputOutline}
-                outlineColor={DARK_COLORS.border}
-                activeOutlineColor={DARK_COLORS.primary}
-                textColor={DARK_COLORS.textPrimary}
+                outlineColor={LIGHT_COLORS.border}
+                activeOutlineColor={COLORS.copper}
+                textColor={LIGHT_COLORS.textPrimary}
               />
             </View>
 
@@ -134,13 +235,13 @@ export default function EditProfileScreen(): React.JSX.Element {
                 value={phone}
                 onChangeText={setPhone}
                 placeholder="+972 XX XXX XXXX"
-                placeholderTextColor={DARK_COLORS.textMuted}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 mode="outlined"
                 style={styles.input}
                 outlineStyle={styles.inputOutline}
-                outlineColor={DARK_COLORS.border}
-                activeOutlineColor={DARK_COLORS.primary}
-                textColor={DARK_COLORS.textPrimary}
+                outlineColor={LIGHT_COLORS.border}
+                activeOutlineColor={COLORS.copper}
+                textColor={LIGHT_COLORS.textPrimary}
                 keyboardType="phone-pad"
               />
             </View>
@@ -152,8 +253,8 @@ export default function EditProfileScreen(): React.JSX.Element {
                 mode="outlined"
                 style={styles.input}
                 outlineStyle={styles.inputOutline}
-                outlineColor={DARK_COLORS.border}
-                textColor={DARK_COLORS.textMuted}
+                outlineColor={LIGHT_COLORS.border}
+                textColor={LIGHT_COLORS.textMuted}
                 disabled
               />
               <Text style={styles.helperText}>Email cannot be changed</Text>
@@ -162,20 +263,20 @@ export default function EditProfileScreen(): React.JSX.Element {
 
           <View style={styles.formCard}>
             <Text style={styles.sectionTitle}>About You</Text>
-            
+
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Bio</Text>
               <TextInput
                 value={bio}
                 onChangeText={setBio}
                 placeholder="Tell us a bit about yourself..."
-                placeholderTextColor={DARK_COLORS.textMuted}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 mode="outlined"
                 style={[styles.input, styles.textArea]}
                 outlineStyle={styles.inputOutline}
-                outlineColor={DARK_COLORS.border}
-                activeOutlineColor={DARK_COLORS.primary}
-                textColor={DARK_COLORS.textPrimary}
+                outlineColor={LIGHT_COLORS.border}
+                activeOutlineColor={COLORS.copper}
+                textColor={LIGHT_COLORS.textPrimary}
                 multiline
                 numberOfLines={4}
               />
@@ -189,7 +290,7 @@ export default function EditProfileScreen(): React.JSX.Element {
             disabled={isSaving}
             style={styles.saveButton}
             contentStyle={styles.saveButtonContent}
-            buttonColor={DARK_COLORS.primary}
+            buttonColor={COLORS.copper}
           >
             Save Changes
           </Button>
@@ -202,7 +303,7 @@ export default function EditProfileScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollView: {
     flex: 1,
@@ -229,29 +330,32 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: COLORS.copper,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: DARK_COLORS.surface,
+    borderColor: LIGHT_COLORS.surface,
+  },
+  cameraButtonDisabled: {
+    opacity: 0.5,
   },
   changePhotoText: {
     fontSize: 15,
     fontWeight: '600',
-    color: DARK_COLORS.primary,
+    color: COLORS.copper,
   },
   formCard: {
     borderRadius: 16,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     padding: 20,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_COLORS.border,
   },
   sectionTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: 16,
   },
   inputGroup: {
@@ -260,11 +364,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: DARK_COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     marginBottom: 8,
   },
   input: {
-    backgroundColor: DARK_COLORS.input,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
   },
   inputOutline: {
     borderRadius: 12,
@@ -274,7 +378,7 @@ const styles = StyleSheet.create({
   },
   helperText: {
     fontSize: 12,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     marginTop: 4,
   },
   saveButton: {

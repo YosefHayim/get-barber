@@ -27,24 +27,18 @@ import {
   MessageCircle,
   Globe,
 } from 'lucide-react-native';
-import Animated, {
-  FadeIn,
-  FadeInDown,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  interpolate,
-  Extrapolation,
-} from 'react-native-reanimated';
-import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown } from '@/utils/animations';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { DARK_COLORS, DARK_MAP_STYLE, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
+import { COLORS, MAP_STYLE, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 import { MOCK_BARBERS, MOCK_NOTIFICATIONS, type MockBarber } from '@/constants/mockData';
 import { useBookingStore } from '@/stores/useBookingStore';
+import { CrossPlatformMapView, MapRegion, MapMarkerData } from '@/components/map';
+import type MapView from 'react-native-maps';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH - 40;
@@ -81,7 +75,7 @@ export default function HomeScreen(): React.JSX.Element {
 
   const [activeFilter, setActiveFilter] = useState<FilterType>(null);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
-  const [userLocation, setUserLocation] = useState<Region>({
+  const [userLocation, setUserLocation] = useState<MapRegion>({
     latitude: 32.0853,
     longitude: 34.7818,
     latitudeDelta: 0.015,
@@ -125,7 +119,13 @@ export default function HomeScreen(): React.JSX.Element {
           latitudeDelta: 0.015,
           longitudeDelta: 0.015,
         });
-      } catch {}
+      } catch (error) {
+        // Log error in development, gracefully fall back to default Tel Aviv coordinates
+        if (__DEV__) {
+          console.warn('Location permission or fetch error:', error);
+        }
+        // Default coordinates already set in useState, so fallback is automatic
+      }
     };
 
     getLocation();
@@ -181,7 +181,7 @@ export default function HomeScreen(): React.JSX.Element {
     return (
       <Animated.View
         key={barber.id}
-        entering={FadeInDown.delay(index * 100).duration(400)}
+        entering={webSafeFadeInDown(index * 100, 400)}
         style={styles.barberCard}
       >
         <View style={styles.cardHeader}>
@@ -198,14 +198,14 @@ export default function HomeScreen(): React.JSX.Element {
               <View
                 style={[
                   styles.onlineIndicator,
-                  { backgroundColor: isOnline ? DARK_COLORS.success : DARK_COLORS.warning },
+                  { backgroundColor: isOnline ? COLORS.success : COLORS.warning },
                 ]}
               />
             </View>
             <View style={styles.barberInfo}>
               <Text style={styles.barberName}>{barber.displayName}</Text>
               <View style={styles.ratingRow}>
-                <Star size={14} color={DARK_COLORS.accent} fill={DARK_COLORS.accent} />
+                <Star size={14} color={COLORS.accent} fill={COLORS.accent} />
                 <Text style={styles.ratingText}>{barber.rating.toFixed(1)}</Text>
                 <Text style={styles.reviewCount}>({barber.totalReviews} reviews)</Text>
                 <Text style={styles.separator}>•</Text>
@@ -214,7 +214,7 @@ export default function HomeScreen(): React.JSX.Element {
             </View>
           </View>
           <TouchableOpacity style={styles.favoriteButton}>
-            <Heart size={20} color={DARK_COLORS.textMuted} />
+            <Heart size={20} color={COLORS.textMuted} />
           </TouchableOpacity>
         </View>
 
@@ -227,19 +227,19 @@ export default function HomeScreen(): React.JSX.Element {
           >
             <Clock
               size={14}
-              color={isOnline ? DARK_COLORS.success : DARK_COLORS.warning}
+              color={isOnline ? COLORS.success : COLORS.warning}
             />
             <Text
               style={[
                 styles.badgeText,
-                { color: isOnline ? DARK_COLORS.success : DARK_COLORS.warning },
+                { color: isOnline ? COLORS.success : COLORS.warning },
               ]}
             >
               {isOnline ? 'Open until 8:00 PM' : 'Closed'}
             </Text>
           </View>
           <View style={styles.priceBadge}>
-            <DollarSign size={14} color={DARK_COLORS.textMuted} />
+            <DollarSign size={14} color={COLORS.textMuted} />
             <Text style={styles.priceBadgeText}>
               {barber.priceMin <= 50 ? '$ • Affordable' : barber.priceMin <= 80 ? '$$ • Moderate' : '$$$ • Premium'}
             </Text>
@@ -316,7 +316,7 @@ export default function HomeScreen(): React.JSX.Element {
               </View>
             ))}
             <TouchableOpacity style={styles.viewAllPortfolio}>
-              <Layers size={20} color={DARK_COLORS.textMuted} />
+              <Layers size={20} color={COLORS.textMuted} />
               <Text style={styles.viewAllText}>View All</Text>
             </TouchableOpacity>
           </View>
@@ -332,10 +332,10 @@ export default function HomeScreen(): React.JSX.Element {
           </View>
           <View style={styles.socialButtons}>
             <TouchableOpacity style={styles.socialButton}>
-              <Globe size={18} color={DARK_COLORS.textMuted} />
+              <Globe size={18} color={COLORS.textMuted} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.socialButton}>
-              <MessageCircle size={18} color={DARK_COLORS.textMuted} />
+              <MessageCircle size={18} color={COLORS.textMuted} />
             </TouchableOpacity>
           </View>
         </View>
@@ -352,66 +352,70 @@ export default function HomeScreen(): React.JSX.Element {
     );
   };
 
+  const mapMarkers: MapMarkerData[] = useMemo(() => 
+    barberMarkers.map((marker) => ({
+      id: marker.id,
+      coordinate: marker.coordinate,
+      title: marker.barber.displayName,
+    })),
+    [barberMarkers]
+  );
+
+  const renderMapMarker = useCallback((marker: MapMarkerData, isSelected: boolean) => {
+    const barberMarker = barberMarkers.find(m => m.id === marker.id);
+    if (!barberMarker) return null;
+
+    return (
+      <View style={[styles.mapMarker, isSelected && styles.mapMarkerActive]}>
+        {isSelected ? (
+          <View style={styles.markerActiveContent}>
+            <View style={styles.markerPriceTag}>
+              <Text style={styles.markerPriceText}>
+                ₪{barberMarker.barber.priceMin} • {Math.round(barberMarker.barber.distanceMeters / 100)}min
+              </Text>
+            </View>
+            <View style={styles.markerActiveIcon}>
+              <Text style={styles.markerIconText}>✂️</Text>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.markerInactiveIcon}>
+            <Text style={styles.markerIconTextSmall}>✂️</Text>
+          </View>
+        )}
+      </View>
+    );
+  }, [barberMarkers]);
+
   return (
     <GestureHandlerRootView style={styles.container}>
-      <MapView
-        ref={mapRef}
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
+      <CrossPlatformMapView
+        mapRef={mapRef}
         initialRegion={userLocation}
-        customMapStyle={DARK_MAP_STYLE}
+        customMapStyle={MAP_STYLE}
         showsUserLocation
-        showsMyLocationButton={false}
-      >
-        {barberMarkers.map((marker) => (
-          <Marker
-            key={marker.id}
-            coordinate={marker.coordinate}
-            onPress={() => handleMarkerPress(marker.id)}
-          >
-            <View
-              style={[
-                styles.mapMarker,
-                selectedMarkerId === marker.id && styles.mapMarkerActive,
-              ]}
-            >
-              {selectedMarkerId === marker.id ? (
-                <View style={styles.markerActiveContent}>
-                  <View style={styles.markerPriceTag}>
-                    <Text style={styles.markerPriceText}>
-                      ₪{marker.barber.priceMin} • {Math.round(marker.barber.distanceMeters / 100)}min
-                    </Text>
-                  </View>
-                  <View style={styles.markerActiveIcon}>
-                    <Text style={styles.markerIconText}>✂️</Text>
-                  </View>
-                </View>
-              ) : (
-                <View style={styles.markerInactiveIcon}>
-                  <Text style={styles.markerIconTextSmall}>✂️</Text>
-                </View>
-              )}
-            </View>
-          </Marker>
-        ))}
-      </MapView>
+        markers={mapMarkers}
+        selectedMarkerId={selectedMarkerId}
+        onMarkerPress={handleMarkerPress}
+        renderMarker={renderMapMarker}
+      />
 
       <LinearGradient
-        colors={['rgba(16, 22, 34, 0.95)', 'rgba(16, 22, 34, 0.7)', 'transparent']}
+        colors={['rgba(246, 246, 248, 0.98)', 'rgba(246, 246, 248, 0.8)', 'transparent']}
         style={[styles.topGradient, { paddingTop: insets.top + 12 }]}
       >
-        <Animated.View entering={FadeIn.duration(400)} style={styles.searchContainer}>
+        <Animated.View entering={webSafeFadeIn(400)} style={styles.searchContainer}>
           <TouchableOpacity
             style={styles.searchBar}
             onPress={handleSearchPress}
             activeOpacity={0.8}
           >
             <View style={styles.searchInputContainer}>
-              <Search size={20} color={DARK_COLORS.textMuted} />
+              <Search size={20} color={COLORS.textMuted} />
               <Text style={styles.searchPlaceholder}>Find a barber nearby...</Text>
             </View>
             <TouchableOpacity style={styles.filterButton}>
-              <SlidersHorizontal size={20} color={DARK_COLORS.textMuted} />
+              <SlidersHorizontal size={20} color={COLORS.textMuted} />
             </TouchableOpacity>
           </TouchableOpacity>
         </Animated.View>
@@ -419,10 +423,10 @@ export default function HomeScreen(): React.JSX.Element {
 
       <View style={styles.mapControls}>
         <TouchableOpacity style={styles.mapControlButton} onPress={handleMyLocation}>
-          <Locate size={22} color={DARK_COLORS.textPrimary} />
+          <Locate size={22} color={COLORS.textPrimary} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.mapControlButton}>
-          <Layers size={22} color={DARK_COLORS.textPrimary} />
+          <Layers size={22} color={COLORS.textPrimary} />
         </TouchableOpacity>
       </View>
 
@@ -448,7 +452,7 @@ export default function HomeScreen(): React.JSX.Element {
           >
             <Zap
               size={14}
-              color={activeFilter === 'available_now' ? '#fff' : DARK_COLORS.textSecondary}
+              color={activeFilter === 'available_now' ? '#fff' : COLORS.textSecondary}
             />
             <Text
               style={[
@@ -494,7 +498,7 @@ export default function HomeScreen(): React.JSX.Element {
             </Text>
             <ChevronDown
               size={14}
-              color={activeFilter === 'price_range' ? '#fff' : DARK_COLORS.textSecondary}
+              color={activeFilter === 'price_range' ? '#fff' : COLORS.textSecondary}
             />
           </TouchableOpacity>
 
@@ -529,7 +533,7 @@ export default function HomeScreen(): React.JSX.Element {
             </Text>
             <Sparkles
               size={14}
-              color={activeFilter === 'newcomers' ? '#fff' : DARK_COLORS.textSecondary}
+              color={activeFilter === 'newcomers' ? '#fff' : COLORS.textSecondary}
             />
           </TouchableOpacity>
         </ScrollView>
@@ -552,7 +556,7 @@ export default function HomeScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: COLORS.background,
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -572,17 +576,17 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: COLORS.surface,
     borderRadius: 12,
     height: 48,
     paddingLeft: 16,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: COLORS.border,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
   },
   searchInputContainer: {
     flex: 1,
@@ -592,14 +596,14 @@ const styles = StyleSheet.create({
   },
   searchPlaceholder: {
     fontSize: 15,
-    color: DARK_COLORS.textMuted,
+    color: COLORS.textMuted,
   },
   filterButton: {
     height: '100%',
     paddingHorizontal: 16,
     justifyContent: 'center',
     borderLeftWidth: 1,
-    borderLeftColor: DARK_COLORS.border,
+    borderLeftColor: COLORS.border,
   },
   mapControls: {
     position: 'absolute',
@@ -612,7 +616,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: COLORS.surface,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -622,12 +626,12 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   bottomSheetBackground: {
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: COLORS.background,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
   bottomSheetHandle: {
-    backgroundColor: DARK_COLORS.textMuted,
+    backgroundColor: COLORS.textMuted,
     width: 40,
     height: 4,
   },
@@ -644,18 +648,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     height: 36,
     borderRadius: 18,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: COLORS.surface,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: COLORS.border,
   },
   filterChipActive: {
-    backgroundColor: DARK_COLORS.primary,
-    borderColor: DARK_COLORS.primary,
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   filterChipText: {
     fontSize: 13,
     fontWeight: '500',
-    color: DARK_COLORS.textSecondary,
+    color: COLORS.textSecondary,
   },
   filterChipTextActive: {
     color: '#fff',
@@ -667,11 +671,11 @@ const styles = StyleSheet.create({
   },
   barberCard: {
     width: CARD_WIDTH,
-    backgroundColor: DARK_COLORS.card,
+    backgroundColor: COLORS.card,
     borderRadius: 24,
     padding: 20,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: COLORS.border,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -692,7 +696,7 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 32,
     borderWidth: 2,
-    borderColor: DARK_COLORS.surface,
+    borderColor: COLORS.surface,
   },
   onlineIndicator: {
     position: 'absolute',
@@ -702,7 +706,7 @@ const styles = StyleSheet.create({
     height: 18,
     borderRadius: 9,
     borderWidth: 2,
-    borderColor: DARK_COLORS.card,
+    borderColor: COLORS.card,
   },
   barberInfo: {
     flex: 1,
@@ -710,7 +714,7 @@ const styles = StyleSheet.create({
   barberName: {
     fontSize: 20,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: COLORS.textPrimary,
     marginBottom: 4,
   },
   ratingRow: {
@@ -721,19 +725,19 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 14,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: COLORS.textPrimary,
   },
   reviewCount: {
     fontSize: 13,
-    color: DARK_COLORS.textMuted,
+    color: COLORS.textMuted,
   },
   separator: {
-    color: DARK_COLORS.textMuted,
+    color: COLORS.textMuted,
     marginHorizontal: 4,
   },
   distance: {
     fontSize: 13,
-    color: DARK_COLORS.textMuted,
+    color: COLORS.textMuted,
   },
   favoriteButton: {
     padding: 8,
@@ -763,14 +767,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: COLORS.surface,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: COLORS.border,
   },
   priceBadgeText: {
     fontSize: 12,
     fontWeight: '500',
-    color: DARK_COLORS.textSecondary,
+    color: COLORS.textSecondary,
   },
   section: {
     marginBottom: 16,
@@ -778,13 +782,13 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: DARK_COLORS.textSecondary,
+    color: COLORS.textSecondary,
     marginBottom: 8,
   },
   sectionLabelBold: {
     fontSize: 15,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: COLORS.textPrimary,
     marginBottom: 10,
   },
   tagsRow: {
@@ -820,7 +824,7 @@ const styles = StyleSheet.create({
     flex: 1,
     aspectRatio: 1,
     borderRadius: 12,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: COLORS.surface,
     justifyContent: 'center',
     alignItems: 'center',
     gap: 4,
@@ -828,7 +832,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 11,
     fontWeight: '500',
-    color: DARK_COLORS.textMuted,
+    color: COLORS.textMuted,
   },
   cardFooter: {
     flexDirection: 'row',
@@ -838,18 +842,18 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 13,
-    color: DARK_COLORS.textMuted,
+    color: COLORS.textMuted,
     marginBottom: 2,
   },
   priceValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: COLORS.textPrimary,
   },
   priceSuffix: {
     fontSize: 13,
     fontWeight: '400',
-    color: DARK_COLORS.textMuted,
+    color: COLORS.textMuted,
   },
   socialButtons: {
     flexDirection: 'row',
@@ -859,21 +863,21 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: COLORS.surface,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: COLORS.border,
   },
   bookButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: COLORS.primary,
     height: 48,
     borderRadius: 12,
-    shadowColor: DARK_COLORS.primary,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -894,7 +898,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   markerPriceTag: {
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
@@ -909,7 +913,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
@@ -922,11 +926,11 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: COLORS.surface,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: COLORS.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,

@@ -17,6 +17,16 @@ import {
 } from 'lucide-react-native';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
+
 interface DaySchedule {
   day: string;
   shortName: string;
@@ -79,8 +89,8 @@ export default function WorkingHoursScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Working Hours',
-          headerStyle: { backgroundColor: COLORS.charcoal },
-          headerTitleStyle: { fontWeight: '700', color: COLORS.textInverse },
+          headerStyle: { backgroundColor: LIGHT_COLORS.background },
+          headerTitleStyle: { fontWeight: '700', color: LIGHT_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
               <ArrowLeft size={24} color={COLORS.gold} />
@@ -265,7 +275,7 @@ export default function WorkingHoursScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollContent: {
     padding: SPACING.lg,
@@ -276,7 +286,7 @@ const styles = StyleSheet.create({
   summaryCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.xl,
     marginBottom: SPACING.xl,
@@ -296,23 +306,23 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.xxs,
   },
   summaryText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
   },
   sectionTitle: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     marginBottom: SPACING.md,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   scheduleCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     overflow: 'hidden',
     marginBottom: SPACING.lg,
@@ -322,7 +332,7 @@ const styles = StyleSheet.create({
   },
   dayItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.mediumGray,
+    borderBottomColor: LIGHT_COLORS.border,
   },
   dayHeader: {
     flexDirection: 'row',
@@ -338,7 +348,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: RADIUS.sm,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -348,7 +358,7 @@ const styles = StyleSheet.create({
   dayBadgeText: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   dayBadgeTextActive: {
     color: COLORS.gold,
@@ -356,7 +366,7 @@ const styles = StyleSheet.create({
   dayName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   dayHours: {
     fontSize: TYPOGRAPHY.sm,
@@ -365,7 +375,7 @@ const styles = StyleSheet.create({
   },
   dayOff: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     fontStyle: 'italic',
     marginTop: SPACING.xxs,
   },
@@ -395,7 +405,7 @@ const styles = StyleSheet.create({
   },
   timeLabel: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     fontWeight: TYPOGRAPHY.medium,
   },
   timeOptions: {
@@ -404,7 +414,7 @@ const styles = StyleSheet.create({
   timeOption: {
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     borderRadius: RADIUS.sm,
     marginRight: SPACING.sm,
   },
@@ -413,7 +423,7 @@ const styles = StyleSheet.create({
   },
   timeOptionText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     fontWeight: TYPOGRAPHY.medium,
   },
   timeOptionTextActive: {
@@ -433,7 +443,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     lineHeight: 20,
   },
   saveButton: {

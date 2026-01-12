@@ -25,6 +25,16 @@ import {
 } from 'lucide-react-native';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
+
 interface HelpItem {
   id: string;
   icon: React.ReactNode;
@@ -140,7 +150,7 @@ export default function HelpSupportScreen(): React.JSX.Element {
         <Text style={styles.helpTitle}>{item.title}</Text>
         <Text style={styles.helpDescription}>{item.description}</Text>
       </View>
-      <ChevronRight size={18} color={COLORS.textMuted} />
+      <ChevronRight size={18} color={LIGHT_COLORS.textMuted} />
     </Pressable>
   );
 
@@ -150,8 +160,8 @@ export default function HelpSupportScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Help & Support',
-          headerStyle: { backgroundColor: COLORS.charcoal },
-          headerTitleStyle: { fontWeight: '700', color: COLORS.textInverse },
+          headerStyle: { backgroundColor: LIGHT_COLORS.surface },
+          headerTitleStyle: { fontWeight: '700', color: LIGHT_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
               <ArrowLeft size={24} color={COLORS.gold} />
@@ -234,7 +244,7 @@ export default function HelpSupportScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollContent: {
     padding: SPACING.lg,
@@ -243,7 +253,7 @@ const styles = StyleSheet.create({
     padding: SPACING.sm,
   },
   heroCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.xl,
     padding: SPACING['2xl'],
     alignItems: 'center',
@@ -261,25 +271,25 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: TYPOGRAPHY['2xl'],
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.sm,
   },
   heroText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     textAlign: 'center',
     lineHeight: 20,
   },
   sectionTitle: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     marginBottom: SPACING.md,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   card: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     overflow: 'hidden',
     marginBottom: SPACING.xl,
@@ -291,7 +301,7 @@ const styles = StyleSheet.create({
   },
   helpItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.mediumGray,
+    borderBottomColor: LIGHT_COLORS.border,
   },
   helpIconContainer: {
     width: 44,
@@ -309,12 +319,12 @@ const styles = StyleSheet.create({
   helpTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.xxs,
   },
   helpDescription: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
   },
   infoBox: {
     backgroundColor: COLORS.goldMuted,
@@ -330,7 +340,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     lineHeight: 22,
   },
   emergencyCard: {
@@ -348,7 +358,7 @@ const styles = StyleSheet.create({
   },
   emergencyText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     marginBottom: SPACING.lg,
     lineHeight: 20,
   },

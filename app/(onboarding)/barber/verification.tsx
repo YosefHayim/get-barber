@@ -12,11 +12,22 @@ import {
   Briefcase,
   SprayCan,
 } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 import * as ImagePicker from 'expo-image-picker';
 import { OnboardingLayout } from '@/components/onboarding/OnboardingLayout';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { useOnboardingStore } from '@/stores/useOnboardingStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 const EQUIPMENT_CHECKLIST = [
   { id: 'clippers', label: 'Professional clippers & trimmers', icon: Scissors },
@@ -80,7 +91,7 @@ export default function BarberVerificationScreen(): React.JSX.Element {
       nextLabel="Complete Setup"
     >
       <View style={styles.content}>
-        <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.infoCard}>
+        <Animated.View entering={webSafeFadeInDown(100, 400)} style={styles.infoCard}>
           <Shield size={24} color={COLORS.info} />
           <View style={styles.infoContent}>
             <Text style={styles.infoTitle}>Why verification?</Text>
@@ -91,9 +102,9 @@ export default function BarberVerificationScreen(): React.JSX.Element {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(200).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(200, 400)} style={styles.section}>
           <View style={styles.sectionHeader}>
-            <FileText size={18} color={COLORS.textSecondary} />
+            <FileText size={18} color={LIGHT_COLORS.textSecondary} />
             <Text style={styles.sectionTitle}>Government ID *</Text>
           </View>
           <Text style={styles.sectionSubtitle}>
@@ -136,14 +147,14 @@ export default function BarberVerificationScreen(): React.JSX.Element {
           </TouchableOpacity>
 
           <View style={styles.privacyNote}>
-            <AlertCircle size={14} color={COLORS.textMuted} />
+            <AlertCircle size={14} color={LIGHT_COLORS.textMuted} />
             <Text style={styles.privacyText}>
               Your ID is encrypted and only used for verification
             </Text>
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(300).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(300, 400)} style={styles.section}>
           <Text style={styles.sectionTitle}>Equipment Checklist *</Text>
           <Text style={styles.sectionSubtitle}>
             Confirm you have the required equipment
@@ -155,7 +166,7 @@ export default function BarberVerificationScreen(): React.JSX.Element {
               return (
                 <View key={item.id} style={styles.checklistItem}>
                   <View style={styles.checklistIcon}>
-                    <IconComponent size={18} color={COLORS.textSecondary} />
+                    <IconComponent size={18} color={LIGHT_COLORS.textSecondary} />
                   </View>
                   <Text style={styles.checklistText}>{item.label}</Text>
                 </View>
@@ -178,7 +189,7 @@ export default function BarberVerificationScreen(): React.JSX.Element {
           </TouchableOpacity>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(400).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(400, 400)} style={styles.section}>
           <TouchableOpacity
             style={styles.termsRow}
             onPress={() => setBarberTermsAccepted(!barberData.termsAccepted)}
@@ -222,7 +233,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     lineHeight: 20,
   },
   section: {
@@ -236,20 +247,20 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   sectionSubtitle: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   uploadBox: {
     borderWidth: 2,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
     borderStyle: 'dashed',
     borderRadius: RADIUS.lg,
     padding: SPACING.xl,
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     marginTop: SPACING.sm,
   },
   uploadBoxSuccess: {
@@ -269,12 +280,12 @@ const styles = StyleSheet.create({
   uploadText: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.xs,
   },
   uploadHint: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   uploadedContent: {
     flexDirection: 'row',
@@ -300,7 +311,7 @@ const styles = StyleSheet.create({
   },
   tapToChange: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     marginTop: SPACING.sm,
   },
   privacyNote: {
@@ -311,16 +322,16 @@ const styles = StyleSheet.create({
   },
   privacyText: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   checklistContainer: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.md,
     gap: SPACING.md,
     marginTop: SPACING.sm,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
   },
   checklistItem: {
     flexDirection: 'row',
@@ -331,13 +342,13 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: RADIUS.sm,
-    backgroundColor: COLORS.backgroundSecondary,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checklistText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     flex: 1,
   },
   confirmRow: {
@@ -349,7 +360,7 @@ const styles = StyleSheet.create({
   },
   confirmText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     flex: 1,
   },
   termsRow: {
@@ -360,7 +371,7 @@ const styles = StyleSheet.create({
   },
   termsText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     flex: 1,
     lineHeight: 20,
   },

@@ -5,6 +5,7 @@ import {
   ScrollView,
   Pressable,
   Alert,
+  Image,
 } from 'react-native';
 import { Text, Button, TextInput, Portal, Modal } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,51 +16,133 @@ import {
   Home,
   Briefcase,
   Plus,
-  Trash2,
-  Edit3,
-  Star,
+  Heart,
+  MapPinOff,
+  MoreVertical,
+  Navigation,
 } from 'lucide-react-native';
-import { DARK_COLORS } from '@/constants/theme';
+
+const LIGHT_COLORS = {
+  background: '#f6f8f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#111618',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+  primary: '#11a4d4',
+  primaryLight: 'rgba(17, 164, 212, 0.1)',
+  primaryDark: '#0d8ab3',
+  homeBlue: '#3b82f6',
+  homeBlueBg: 'rgba(59, 130, 246, 0.1)',
+  workPurple: '#8b5cf6',
+  workPurpleBg: 'rgba(139, 92, 246, 0.1)',
+  favoriteRed: '#ef4444',
+  favoriteRedBg: 'rgba(239, 68, 68, 0.1)',
+  otherGray: '#64748b',
+  otherGrayBg: 'rgba(100, 116, 139, 0.1)',
+  editGray: '#6b7280',
+  deleteRed: '#ef4444',
+  error: '#ef4444',
+  errorBg: 'rgba(239, 68, 68, 0.15)',
+};
 
 interface SavedAddress {
   id: string;
   label: string;
   address: string;
-  type: 'home' | 'work' | 'other';
+  type: 'home' | 'work' | 'favorite' | 'other';
   isDefault: boolean;
+  isUnavailable?: boolean;
 }
 
 const MOCK_ADDRESSES: SavedAddress[] = [
   {
     id: '1',
     label: 'Home',
-    address: 'Dizengoff 123, Tel Aviv, Israel',
+    address: '123 Main St, Apt 4B',
     type: 'home',
     isDefault: true,
   },
   {
     id: '2',
     label: 'Office',
-    address: 'Rothschild 45, Tel Aviv, Israel',
+    address: '456 Tech Park Blvd, Suite 300',
     type: 'work',
     isDefault: false,
   },
+  {
+    id: '3',
+    label: "Partner's House",
+    address: '789 Pine Ave, West Wing',
+    type: 'favorite',
+    isDefault: false,
+  },
+  {
+    id: '4',
+    label: 'Summer House',
+    address: 'Service unavailable in this area',
+    type: 'other',
+    isDefault: false,
+    isUnavailable: true,
+  },
 ];
 
-function AddressIcon({ type }: { type: SavedAddress['type'] }) {
+function AddressIcon({ type, isUnavailable, isSelected }: { type: SavedAddress['type']; isUnavailable?: boolean; isSelected?: boolean }) {
+  if (isUnavailable) {
+    return (
+      <View style={[styles.addressIconContainer, { backgroundColor: LIGHT_COLORS.errorBg }]}>
+        <MapPinOff size={24} color={LIGHT_COLORS.error} />
+      </View>
+    );
+  }
+
   switch (type) {
     case 'home':
-      return <Home size={20} color={DARK_COLORS.primary} />;
+      return (
+        <View style={[
+          styles.addressIconContainer,
+          { backgroundColor: isSelected ? LIGHT_COLORS.primaryLight : LIGHT_COLORS.homeBlueBg }
+        ]}>
+          <Home size={24} color={isSelected ? LIGHT_COLORS.primary : LIGHT_COLORS.homeBlue} />
+        </View>
+      );
     case 'work':
-      return <Briefcase size={20} color={DARK_COLORS.primary} />;
+      return (
+        <View style={[
+          styles.addressIconContainer,
+          { backgroundColor: isSelected ? LIGHT_COLORS.primaryLight : LIGHT_COLORS.workPurpleBg }
+        ]}>
+          <Briefcase size={24} color={isSelected ? LIGHT_COLORS.primary : LIGHT_COLORS.workPurple} />
+        </View>
+      );
+    case 'favorite':
+      return (
+        <View style={[
+          styles.addressIconContainer,
+          { backgroundColor: isSelected ? LIGHT_COLORS.primaryLight : LIGHT_COLORS.favoriteRedBg }
+        ]}>
+          <Heart size={24} color={isSelected ? LIGHT_COLORS.primary : LIGHT_COLORS.favoriteRed} />
+        </View>
+      );
     default:
-      return <MapPin size={20} color={DARK_COLORS.primary} />;
+      return (
+        <View style={[
+          styles.addressIconContainer,
+          { backgroundColor: isSelected ? LIGHT_COLORS.primaryLight : LIGHT_COLORS.otherGrayBg }
+        ]}>
+          <MapPin size={24} color={isSelected ? LIGHT_COLORS.primary : LIGHT_COLORS.otherGray} />
+        </View>
+      );
   }
 }
 
 export default function SavedAddressesScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
   const [addresses, setAddresses] = useState<SavedAddress[]>(MOCK_ADDRESSES);
+  const [selectedId, setSelectedId] = useState<string>(
+    MOCK_ADDRESSES.find(a => a.isDefault)?.id || ''
+  );
   const [showAddModal, setShowAddModal] = useState(false);
   const [newLabel, setNewLabel] = useState('');
   const [newAddress, setNewAddress] = useState('');
@@ -88,24 +171,11 @@ export default function SavedAddressesScreen(): React.JSX.Element {
     setShowAddModal(false);
   };
 
-  const handleDeleteAddress = (id: string) => {
-    Alert.alert(
-      'Delete Address',
-      'Are you sure you want to delete this address?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => {
-            setAddresses(addresses.filter((a) => a.id !== id));
-          },
-        },
-      ]
-    );
-  };
+  const handleSelectAddress = (id: string) => {
+    const address = addresses.find(a => a.id === id);
+    if (address?.isUnavailable) return;
 
-  const handleSetDefault = (id: string) => {
+    setSelectedId(id);
     setAddresses(
       addresses.map((a) => ({
         ...a,
@@ -119,12 +189,12 @@ export default function SavedAddressesScreen(): React.JSX.Element {
       <Stack.Screen
         options={{
           headerShown: true,
-          title: 'Saved Addresses',
-          headerStyle: { backgroundColor: DARK_COLORS.background },
-          headerTitleStyle: { fontWeight: '700', color: DARK_COLORS.textPrimary },
+          title: 'My Locations',
+          headerStyle: { backgroundColor: LIGHT_COLORS.background },
+          headerTitleStyle: { fontWeight: '700', color: LIGHT_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
-              <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
+              <ArrowLeft size={24} color={LIGHT_COLORS.textPrimary} />
             </Pressable>
           ),
         }}
@@ -136,68 +206,102 @@ export default function SavedAddressesScreen(): React.JSX.Element {
           { paddingBottom: insets.bottom + 100 },
         ]}
       >
-        {addresses.length === 0 ? (
-          <View style={styles.emptyState}>
-            <MapPin size={64} color={DARK_COLORS.textMuted} />
-            <Text style={styles.emptyTitle}>No saved addresses</Text>
-            <Text style={styles.emptyText}>
-              Add your frequently used addresses for quick booking
-            </Text>
-          </View>
-        ) : (
-          addresses.map((address) => (
-            <View key={address.id} style={styles.addressCard}>
-              <View style={styles.addressHeader}>
-                <View style={styles.iconContainer}>
-                  <AddressIcon type={address.type} />
-                </View>
+        {/* Helper Text */}
+        <Text style={styles.helperText}>
+          Select a delivery address or swipe left to manage.
+        </Text>
+
+        {/* Address List */}
+        <View style={styles.addressList}>
+          {addresses.map((address) => {
+            const isSelected = address.id === selectedId && !address.isUnavailable;
+            return (
+              <Pressable
+                key={address.id}
+                style={[
+                  styles.addressCard,
+                  isSelected && styles.addressCardSelected,
+                  address.isUnavailable && styles.addressCardUnavailable,
+                ]}
+                onPress={() => handleSelectAddress(address.id)}
+              >
+                <AddressIcon
+                  type={address.type}
+                  isUnavailable={address.isUnavailable}
+                  isSelected={isSelected}
+                />
                 <View style={styles.addressInfo}>
                   <View style={styles.labelRow}>
                     <Text style={styles.addressLabel}>{address.label}</Text>
-                    {address.isDefault && (
+                    {address.isDefault && !address.isUnavailable && (
                       <View style={styles.defaultBadge}>
-                        <Star size={10} color="#FFFFFF" fill="#FFFFFF" />
                         <Text style={styles.defaultText}>Default</Text>
                       </View>
                     )}
                   </View>
-                  <Text style={styles.addressText} numberOfLines={2}>
-                    {address.address}
+                  <Text
+                    style={[
+                      styles.addressText,
+                      address.isUnavailable && styles.addressTextError,
+                    ]}
+                    numberOfLines={1}
+                  >
+                    {address.isUnavailable
+                      ? 'Service unavailable in this area'
+                      : address.address}
                   </Text>
                 </View>
-              </View>
-              <View style={styles.addressActions}>
-                {!address.isDefault && (
-                  <Pressable
-                    style={styles.actionButton}
-                    onPress={() => handleSetDefault(address.id)}
-                  >
-                    <Star size={18} color={DARK_COLORS.textSecondary} />
+                {address.isUnavailable ? (
+                  <Pressable style={styles.menuButton}>
+                    <MoreVertical size={20} color={LIGHT_COLORS.textMuted} />
                   </Pressable>
+                ) : (
+                  <View style={styles.radioButton}>
+                    {isSelected ? (
+                      <View style={styles.radioSelected}>
+                        <View style={styles.radioInner} />
+                      </View>
+                    ) : (
+                      <View style={styles.radioUnselected} />
+                    )}
+                  </View>
                 )}
-                <Pressable style={styles.actionButton}>
-                  <Edit3 size={18} color={DARK_COLORS.textSecondary} />
-                </Pressable>
-                <Pressable
-                  style={styles.actionButton}
-                  onPress={() => handleDeleteAddress(address.id)}
-                >
-                  <Trash2 size={18} color={DARK_COLORS.error} />
-                </Pressable>
+              </Pressable>
+            );
+          })}
+        </View>
+
+        {/* Map Preview Section */}
+        <View style={styles.mapSection}>
+          <Text style={styles.mapSectionTitle}>CURRENT LOCATION</Text>
+          <View style={styles.mapContainer}>
+            <Image
+              source={{
+                uri: 'https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/-73.99,40.73,12,0/400x200@2x?access_token=pk.placeholder',
+              }}
+              style={styles.mapImage}
+              resizeMode="cover"
+            />
+            <View style={styles.mapOverlay} />
+            <View style={styles.mapPinContainer}>
+              <Navigation size={18} color={LIGHT_COLORS.primary} />
+              <View style={styles.mapLabel}>
+                <Text style={styles.mapLabelText}>Finding nearby barbers...</Text>
               </View>
             </View>
-          ))
-        )}
+          </View>
+        </View>
       </ScrollView>
 
-      <View style={[styles.footer, { paddingBottom: insets.bottom + 16 }]}>
+      {/* Footer Button */}
+      <View style={[styles.footer, { paddingBottom: insets.bottom + 24 }]}>
         <Button
           mode="contained"
           onPress={() => setShowAddModal(true)}
           icon={() => <Plus size={20} color="#FFFFFF" />}
           style={styles.addButton}
           contentStyle={styles.addButtonContent}
-          buttonColor={DARK_COLORS.primary}
+          buttonColor={LIGHT_COLORS.primary}
         >
           Add New Address
         </Button>
@@ -212,7 +316,7 @@ export default function SavedAddressesScreen(): React.JSX.Element {
           <Text style={styles.modalTitle}>Add New Address</Text>
 
           <View style={styles.typeSelector}>
-            {(['home', 'work', 'other'] as const).map((type) => (
+            {(['home', 'work', 'favorite', 'other'] as const).map((type) => (
               <Pressable
                 key={type}
                 style={[
@@ -221,14 +325,14 @@ export default function SavedAddressesScreen(): React.JSX.Element {
                 ]}
                 onPress={() => setSelectedType(type)}
               >
-                <AddressIcon type={type} />
+                <AddressIcon type={type} isSelected={selectedType === type} />
                 <Text
                   style={[
                     styles.typeText,
                     selectedType === type && styles.typeTextActive,
                   ]}
                 >
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                  {type === 'favorite' ? 'Favorite' : type.charAt(0).toUpperCase() + type.slice(1)}
                 </Text>
               </Pressable>
             ))}
@@ -238,26 +342,26 @@ export default function SavedAddressesScreen(): React.JSX.Element {
             value={newLabel}
             onChangeText={setNewLabel}
             placeholder="Label (e.g., Home, Office)"
-            placeholderTextColor={DARK_COLORS.textMuted}
+            placeholderTextColor={LIGHT_COLORS.textMuted}
             mode="outlined"
             style={styles.modalInput}
             outlineStyle={styles.inputOutline}
-            outlineColor={DARK_COLORS.border}
-            activeOutlineColor={DARK_COLORS.primary}
-            textColor={DARK_COLORS.textPrimary}
+            outlineColor={LIGHT_COLORS.border}
+            activeOutlineColor={LIGHT_COLORS.primary}
+            textColor={LIGHT_COLORS.textPrimary}
           />
 
           <TextInput
             value={newAddress}
             onChangeText={setNewAddress}
             placeholder="Full address"
-            placeholderTextColor={DARK_COLORS.textMuted}
+            placeholderTextColor={LIGHT_COLORS.textMuted}
             mode="outlined"
             style={styles.modalInput}
             outlineStyle={styles.inputOutline}
-            outlineColor={DARK_COLORS.border}
-            activeOutlineColor={DARK_COLORS.primary}
-            textColor={DARK_COLORS.textPrimary}
+            outlineColor={LIGHT_COLORS.border}
+            activeOutlineColor={LIGHT_COLORS.primary}
+            textColor={LIGHT_COLORS.textPrimary}
             multiline
             numberOfLines={2}
           />
@@ -267,7 +371,7 @@ export default function SavedAddressesScreen(): React.JSX.Element {
               mode="outlined"
               onPress={() => setShowAddModal(false)}
               style={styles.modalButton}
-              textColor={DARK_COLORS.textSecondary}
+              textColor={LIGHT_COLORS.textSecondary}
             >
               Cancel
             </Button>
@@ -275,7 +379,7 @@ export default function SavedAddressesScreen(): React.JSX.Element {
               mode="contained"
               onPress={handleAddAddress}
               style={styles.modalButton}
-              buttonColor={DARK_COLORS.primary}
+              buttonColor={LIGHT_COLORS.primary}
             >
               Save
             </Button>
@@ -289,7 +393,7 @@ export default function SavedAddressesScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollContent: {
     padding: 16,
@@ -297,111 +401,189 @@ const styles = StyleSheet.create({
   headerButton: {
     padding: 8,
   },
-  emptyState: {
-    alignItems: 'center',
-    paddingVertical: 64,
-  },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: DARK_COLORS.textPrimary,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptyText: {
+  helperText: {
     fontSize: 14,
-    color: DARK_COLORS.textMuted,
+    fontWeight: '500',
+    color: LIGHT_COLORS.textMuted,
     textAlign: 'center',
-    maxWidth: 240,
+    marginBottom: 24,
+  },
+  addressList: {
+    gap: 16,
   },
   addressCard: {
-    borderRadius: 16,
-    backgroundColor: DARK_COLORS.surface,
-    padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: DARK_COLORS.border,
-  },
-  addressHeader: {
     flexDirection: 'row',
-    marginBottom: 12,
-  },
-  iconContainer: {
-    width: 44,
-    height: 44,
+    alignItems: 'center',
+    gap: 16,
     borderRadius: 12,
-    backgroundColor: DARK_COLORS.primaryMuted,
+    backgroundColor: LIGHT_COLORS.surface,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: LIGHT_COLORS.border,
+  },
+  addressCardSelected: {
+    borderColor: LIGHT_COLORS.primary,
+  },
+  addressCardUnavailable: {
+    opacity: 0.75,
+  },
+  addressIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+  },
+  addressIconDefault: {
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
+  },
+  addressIconSelected: {
+    backgroundColor: LIGHT_COLORS.primaryLight,
+  },
+  addressIconUnavailable: {
+    backgroundColor: 'rgba(239, 68, 68, 0.15)',
   },
   addressInfo: {
     flex: 1,
+    minWidth: 0,
   },
   labelRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 4,
+    marginBottom: 2,
   },
   addressLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   defaultBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: LIGHT_COLORS.primaryLight,
     paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 10,
+    paddingVertical: 2,
+    borderRadius: 4,
   },
   defaultText: {
     fontSize: 10,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontWeight: '700',
+    color: LIGHT_COLORS.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   addressText: {
     fontSize: 14,
-    color: DARK_COLORS.textSecondary,
-    lineHeight: 20,
+    color: LIGHT_COLORS.textMuted,
   },
-  addressActions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    gap: 8,
-    borderTopWidth: 1,
-    borderTopColor: DARK_COLORS.border,
-    paddingTop: 12,
+  addressTextError: {
+    color: LIGHT_COLORS.error,
+    fontWeight: '500',
   },
-  actionButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 8,
-    backgroundColor: DARK_COLORS.surfaceLight,
+  menuButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  radioButton: {
+    marginLeft: 4,
+  },
+  radioSelected: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: LIGHT_COLORS.primary,
+    backgroundColor: LIGHT_COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  radioInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF',
+  },
+  radioUnselected: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: LIGHT_COLORS.textMuted,
+  },
+  // Map Section
+  mapSection: {
+    marginTop: 32,
+  },
+  mapSectionTitle: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: LIGHT_COLORS.textPrimary,
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+    marginBottom: 12,
+    marginLeft: 4,
+  },
+  mapContainer: {
+    height: 128,
+    borderRadius: 12,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: LIGHT_COLORS.border,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
+  },
+  mapImage: {
+    width: '100%',
+    height: '100%',
+    opacity: 0.8,
+  },
+  mapOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '100%',
+  },
+  mapPinContainer: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  mapLabel: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  mapLabelText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#FFFFFF',
+  },
+  // Footer
   footer: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     padding: 16,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_COLORS.background,
     borderTopWidth: 1,
-    borderTopColor: DARK_COLORS.border,
+    borderTopColor: LIGHT_COLORS.border,
   },
   addButton: {
-    borderRadius: 14,
+    borderRadius: 12,
   },
   addButtonContent: {
     height: 52,
   },
+  // Modal
   modalContent: {
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     margin: 20,
     borderRadius: 20,
     padding: 24,
@@ -409,41 +591,43 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: 20,
     textAlign: 'center',
   },
   typeSelector: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 12,
     marginBottom: 20,
   },
   typeButton: {
     flex: 1,
+    minWidth: '40%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     borderWidth: 2,
     borderColor: 'transparent',
   },
   typeButtonActive: {
-    backgroundColor: DARK_COLORS.primaryMuted,
-    borderColor: DARK_COLORS.primary,
+    backgroundColor: LIGHT_COLORS.primaryLight,
+    borderColor: LIGHT_COLORS.primary,
   },
   typeText: {
     fontSize: 13,
     fontWeight: '500',
-    color: DARK_COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
   },
   typeTextActive: {
-    color: DARK_COLORS.primary,
+    color: LIGHT_COLORS.primary,
   },
   modalInput: {
-    backgroundColor: DARK_COLORS.input,
+    backgroundColor: LIGHT_COLORS.surface,
     marginBottom: 12,
   },
   inputOutline: {

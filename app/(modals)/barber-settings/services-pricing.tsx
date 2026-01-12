@@ -28,6 +28,16 @@ import {
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { MOCK_SERVICES } from '@/constants/mockData';
 
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
+
 interface Service {
   id: string;
   name: string;
@@ -155,8 +165,8 @@ export default function ServicesPricingScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Services & Pricing',
-          headerStyle: { backgroundColor: COLORS.charcoal },
-          headerTitleStyle: { fontWeight: '700', color: COLORS.textInverse },
+          headerStyle: { backgroundColor: LIGHT_COLORS.surface },
+          headerTitleStyle: { fontWeight: '700', color: LIGHT_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
               <ArrowLeft size={24} color={COLORS.gold} />
@@ -208,10 +218,10 @@ export default function ServicesPricingScreen(): React.JSX.Element {
                     placeholder="Service name"
                     mode="outlined"
                     style={styles.editInput}
-                    outlineColor={COLORS.mediumGray}
+                    outlineColor={LIGHT_COLORS.border}
                     activeOutlineColor={COLORS.gold}
-                    textColor={COLORS.textInverse}
-                    placeholderTextColor={COLORS.textMuted}
+                    textColor={LIGHT_COLORS.textPrimary}
+                    placeholderTextColor={LIGHT_COLORS.textMuted}
                   />
                   <View style={styles.editRow}>
                     <TextInput
@@ -226,9 +236,9 @@ export default function ServicesPricingScreen(): React.JSX.Element {
                       mode="outlined"
                       style={[styles.editInput, styles.editInputSmall]}
                       keyboardType="numeric"
-                      outlineColor={COLORS.mediumGray}
+                      outlineColor={LIGHT_COLORS.border}
                       activeOutlineColor={COLORS.gold}
-                      textColor={COLORS.textInverse}
+                      textColor={LIGHT_COLORS.textPrimary}
                       left={<TextInput.Affix text="$" textStyle={{ color: COLORS.gold }} />}
                     />
                     <TextInput
@@ -243,10 +253,10 @@ export default function ServicesPricingScreen(): React.JSX.Element {
                       mode="outlined"
                       style={[styles.editInput, styles.editInputSmall]}
                       keyboardType="numeric"
-                      outlineColor={COLORS.mediumGray}
+                      outlineColor={LIGHT_COLORS.border}
                       activeOutlineColor={COLORS.gold}
-                      textColor={COLORS.textInverse}
-                      right={<TextInput.Affix text="min" textStyle={{ color: COLORS.textMuted }} />}
+                      textColor={LIGHT_COLORS.textPrimary}
+                      right={<TextInput.Affix text="min" textStyle={{ color: LIGHT_COLORS.textMuted }} />}
                     />
                   </View>
                   <View style={styles.imagePickerRow}>
@@ -299,11 +309,11 @@ export default function ServicesPricingScreen(): React.JSX.Element {
                     <Text style={styles.serviceName}>{service.name}</Text>
                     <View style={styles.serviceDetails}>
                       <View style={styles.serviceDetail}>
-                        <DollarSign size={12} color={COLORS.textMuted} />
+                        <DollarSign size={12} color={LIGHT_COLORS.textMuted} />
                         <Text style={styles.serviceDetailText}>{service.price}</Text>
                       </View>
                       <View style={styles.serviceDetail}>
-                        <Clock size={12} color={COLORS.textMuted} />
+                        <Clock size={12} color={LIGHT_COLORS.textMuted} />
                         <Text style={styles.serviceDetailText}>{service.duration} min</Text>
                       </View>
                     </View>
@@ -345,10 +355,10 @@ export default function ServicesPricingScreen(): React.JSX.Element {
               placeholder="Service name"
               mode="outlined"
               style={styles.addInput}
-              outlineColor={COLORS.mediumGray}
+              outlineColor={LIGHT_COLORS.border}
               activeOutlineColor={COLORS.gold}
-              textColor={COLORS.textInverse}
-              placeholderTextColor={COLORS.textMuted}
+              textColor={LIGHT_COLORS.textPrimary}
+              placeholderTextColor={LIGHT_COLORS.textMuted}
             />
             <View style={styles.addRow}>
               <TextInput
@@ -360,9 +370,9 @@ export default function ServicesPricingScreen(): React.JSX.Element {
                 mode="outlined"
                 style={[styles.addInput, styles.addInputSmall]}
                 keyboardType="numeric"
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
+                textColor={LIGHT_COLORS.textPrimary}
                 left={<TextInput.Affix text="$" textStyle={{ color: COLORS.gold }} />}
               />
               <TextInput
@@ -374,10 +384,10 @@ export default function ServicesPricingScreen(): React.JSX.Element {
                 mode="outlined"
                 style={[styles.addInput, styles.addInputSmall]}
                 keyboardType="numeric"
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                right={<TextInput.Affix text="min" textStyle={{ color: COLORS.textMuted }} />}
+                textColor={LIGHT_COLORS.textPrimary}
+                right={<TextInput.Affix text="min" textStyle={{ color: LIGHT_COLORS.textMuted }} />}
               />
             </View>
             <View style={styles.imagePickerRow}>
@@ -407,7 +417,7 @@ export default function ServicesPricingScreen(): React.JSX.Element {
                 mode="outlined"
                 onPress={() => setIsAdding(false)}
                 style={styles.addCancelButton}
-                textColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textSecondary}
               >
                 Cancel
               </Button>
@@ -444,7 +454,7 @@ export default function ServicesPricingScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollContent: {
     padding: SPACING.lg,
@@ -453,7 +463,7 @@ const styles = StyleSheet.create({
     padding: SPACING.sm,
   },
   summaryCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.xl,
     marginBottom: SPACING.xl,
@@ -474,23 +484,23 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   summaryDivider: {
     width: 1,
     height: 40,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.border,
   },
   sectionTitle: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     marginBottom: SPACING.md,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   servicesCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     overflow: 'hidden',
     marginBottom: SPACING.lg,
@@ -502,7 +512,7 @@ const styles = StyleSheet.create({
   },
   serviceItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.mediumGray,
+    borderBottomColor: LIGHT_COLORS.border,
   },
   serviceIcon: {
     width: 40,
@@ -525,7 +535,7 @@ const styles = StyleSheet.create({
   serviceName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.xxs,
   },
   serviceDetails: {
@@ -539,7 +549,7 @@ const styles = StyleSheet.create({
   },
   serviceDetailText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   serviceActions: {
     flexDirection: 'row',
@@ -549,7 +559,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: RADIUS.sm,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -558,7 +568,7 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
   },
   editInput: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
   },
   editInputSmall: {
     flex: 1,
@@ -575,7 +585,7 @@ const styles = StyleSheet.create({
   },
   imagePickerLabel: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
   },
   editImageContainer: {
     position: 'relative',
@@ -648,7 +658,7 @@ const styles = StyleSheet.create({
     color: COLORS.gold,
   },
   addCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     marginBottom: SPACING.lg,
@@ -657,10 +667,10 @@ const styles = StyleSheet.create({
   addTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   addInput: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
   },
   addInputSmall: {
     flex: 1,
@@ -676,7 +686,7 @@ const styles = StyleSheet.create({
   },
   addCancelButton: {
     flex: 1,
-    borderColor: COLORS.mediumGray,
+    borderColor: LIGHT_COLORS.border,
   },
   addSaveButton: {
     flex: 1,
@@ -694,7 +704,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     lineHeight: 20,
   },
 });

@@ -3,13 +3,24 @@ import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import { router } from 'expo-router';
 import { DollarSign } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 import Slider from '@react-native-community/slider';
 import { OnboardingLayout } from '@/components/onboarding/OnboardingLayout';
 import { SelectableChip } from '@/components/onboarding/SelectableChip';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 import { useOnboardingStore } from '@/stores/useOnboardingStore';
 import { MOCK_SERVICES } from '@/constants/mockData';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 export default function BarberServicesScreen(): React.JSX.Element {
   const progress = useOnboardingStore((s) => s.progress);
@@ -52,7 +63,7 @@ export default function BarberServicesScreen(): React.JSX.Element {
       nextDisabled={!isValid}
     >
       <View style={styles.content}>
-        <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(100, 400)} style={styles.section}>
           <Text style={styles.sectionTitle}>Select your services *</Text>
           <Text style={styles.sectionSubtitle}>Choose all services you offer</Text>
           <View style={styles.chipGrid}>
@@ -68,9 +79,9 @@ export default function BarberServicesScreen(): React.JSX.Element {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(200).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(200, 400)} style={styles.section}>
           <View style={styles.priceHeader}>
-            <DollarSign size={18} color={COLORS.textSecondary} />
+            <DollarSign size={18} color={LIGHT_COLORS.textSecondary} />
             <Text style={styles.sectionTitle}>Your price range</Text>
           </View>
           <Text style={styles.sectionSubtitle}>Set your typical pricing</Text>
@@ -142,11 +153,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   sectionSubtitle: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   priceHeader: {
     flexDirection: 'row',
@@ -177,7 +188,7 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     marginBottom: SPACING.xxs,
   },
   priceValue: {
@@ -188,14 +199,14 @@ const styles = StyleSheet.create({
   priceDivider: {
     width: 20,
     height: 2,
-    backgroundColor: COLORS.border,
+    backgroundColor: LIGHT_COLORS.border,
   },
   sliderContainer: {
     marginTop: SPACING.md,
   },
   sliderLabel: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     marginBottom: SPACING.xs,
   },
   sliderRow: {
@@ -208,7 +219,7 @@ const styles = StyleSheet.create({
   },
   sliderValue: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     width: 40,
     textAlign: 'center',
   },

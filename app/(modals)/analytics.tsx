@@ -24,6 +24,16 @@ import {
 import { COLORS, SHADOWS, RADIUS, SPACING, TYPOGRAPHY } from '@/constants/theme';
 import { MOCK_BARBER_STATS, MOCK_CLIENTS, MOCK_SERVICES } from '@/constants/mockData';
 
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
+
 type TimeRange = '7d' | '30d' | '90d' | 'year';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -40,7 +50,7 @@ const SimpleBarChart = ({ data, maxValue }: { data: ChartData[]; maxValue: numbe
       const height = maxValue > 0 ? (item.value / maxValue) * 100 : 0;
       return (
         <View key={index} style={{ flex: 1, alignItems: 'center' }}>
-          <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginBottom: 4 }}>
+          <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginBottom: 4 }}>
             {item.value > 0 ? `₪${item.value}` : ''}
           </Text>
           <View
@@ -51,7 +61,7 @@ const SimpleBarChart = ({ data, maxValue }: { data: ChartData[]; maxValue: numbe
               borderRadius: RADIUS.xs,
             }}
           />
-          <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginTop: 4 }}>
+          <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginTop: 4 }}>
             {item.label}
           </Text>
         </View>
@@ -84,13 +94,13 @@ const ServicePieChart = ({ data }: { data: ChartData[] }) => {
                 marginRight: SPACING.sm,
               }}
             />
-            <Text style={{ flex: 1, fontSize: TYPOGRAPHY.sm, color: COLORS.textLight }}>
+            <Text style={{ flex: 1, fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary }}>
               {item.label}
             </Text>
-            <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textInverse, fontWeight: TYPOGRAPHY.medium }}>
+            <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textPrimary, fontWeight: TYPOGRAPHY.medium }}>
               {percentage.toFixed(0)}%
             </Text>
-            <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted, marginLeft: SPACING.sm, width: 40 }}>
+            <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted, marginLeft: SPACING.sm, width: 40 }}>
               ({item.value})
             </Text>
           </View>
@@ -174,7 +184,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.charcoal }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: LIGHT_COLORS.background }}>
       <View
         style={{
           flexDirection: 'row',
@@ -182,13 +192,13 @@ export default function AnalyticsScreen(): React.JSX.Element {
           paddingHorizontal: SPACING.xl,
           paddingVertical: SPACING.lg,
           borderBottomWidth: 1,
-          borderBottomColor: COLORS.darkGray,
+          borderBottomColor: LIGHT_COLORS.border,
         }}
       >
         <TouchableOpacity onPress={() => router.back()} style={{ marginRight: SPACING.md }}>
-          <ArrowLeft size={24} color={COLORS.textInverse} />
+          <ArrowLeft size={24} color={LIGHT_COLORS.textPrimary} />
         </TouchableOpacity>
-        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textInverse, flex: 1 }}>
+        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary, flex: 1 }}>
           Analytics
         </Text>
         <BarChart3 size={24} color={COLORS.gold} />
@@ -203,7 +213,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
               flex: 1,
               paddingVertical: SPACING.sm,
               borderRadius: RADIUS.md,
-              backgroundColor: timeRange === range ? COLORS.gold : COLORS.darkGray,
+              backgroundColor: timeRange === range ? COLORS.gold : LIGHT_COLORS.surface,
               alignItems: 'center',
             }}
           >
@@ -211,7 +221,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
               style={{
                 fontSize: TYPOGRAPHY.sm,
                 fontWeight: TYPOGRAPHY.medium,
-                color: timeRange === range ? COLORS.charcoal : COLORS.textLight,
+                color: timeRange === range ? LIGHT_COLORS.background : LIGHT_COLORS.textSecondary,
               }}
             >
               {range === 'year' ? '1Y' : range.toUpperCase()}
@@ -226,18 +236,18 @@ export default function AnalyticsScreen(): React.JSX.Element {
             <View
               style={{
                 flex: 1,
-                backgroundColor: COLORS.darkGray,
+                backgroundColor: LIGHT_COLORS.surface,
                 borderRadius: RADIUS.lg,
                 padding: SPACING.lg,
               }}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.sm }}>
                 <DollarSign size={18} color={COLORS.success} />
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginLeft: SPACING.xs }}>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginLeft: SPACING.xs }}>
                   Revenue
                 </Text>
               </View>
-              <Text style={{ fontSize: TYPOGRAPHY['2xl'], fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+              <Text style={{ fontSize: TYPOGRAPHY['2xl'], fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                 {formatCurrency(totalRevenue)}
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: SPACING.xs }}>
@@ -251,18 +261,18 @@ export default function AnalyticsScreen(): React.JSX.Element {
             <View
               style={{
                 flex: 1,
-                backgroundColor: COLORS.darkGray,
+                backgroundColor: LIGHT_COLORS.surface,
                 borderRadius: RADIUS.lg,
                 padding: SPACING.lg,
               }}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.sm }}>
                 <Calendar size={18} color={COLORS.info} />
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginLeft: SPACING.xs }}>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginLeft: SPACING.xs }}>
                   Bookings
                 </Text>
               </View>
-              <Text style={{ fontSize: TYPOGRAPHY['2xl'], fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+              <Text style={{ fontSize: TYPOGRAPHY['2xl'], fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                 {totalBookings}
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: SPACING.xs }}>
@@ -278,18 +288,18 @@ export default function AnalyticsScreen(): React.JSX.Element {
             <View
               style={{
                 flex: 1,
-                backgroundColor: COLORS.darkGray,
+                backgroundColor: LIGHT_COLORS.surface,
                 borderRadius: RADIUS.lg,
                 padding: SPACING.lg,
               }}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.sm }}>
                 <Scissors size={18} color={COLORS.gold} />
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginLeft: SPACING.xs }}>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginLeft: SPACING.xs }}>
                   Avg Booking
                 </Text>
               </View>
-              <Text style={{ fontSize: TYPOGRAPHY.xl, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+              <Text style={{ fontSize: TYPOGRAPHY.xl, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                 ₪{avgBookingValue}
               </Text>
             </View>
@@ -297,18 +307,18 @@ export default function AnalyticsScreen(): React.JSX.Element {
             <View
               style={{
                 flex: 1,
-                backgroundColor: COLORS.darkGray,
+                backgroundColor: LIGHT_COLORS.surface,
                 borderRadius: RADIUS.lg,
                 padding: SPACING.lg,
               }}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.sm }}>
                 <Users size={18} color={COLORS.warning} />
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginLeft: SPACING.xs }}>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginLeft: SPACING.xs }}>
                   Repeat Rate
                 </Text>
               </View>
-              <Text style={{ fontSize: TYPOGRAPHY.xl, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+              <Text style={{ fontSize: TYPOGRAPHY.xl, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                 {repeatClientRate}%
               </Text>
             </View>
@@ -316,18 +326,18 @@ export default function AnalyticsScreen(): React.JSX.Element {
             <View
               style={{
                 flex: 1,
-                backgroundColor: COLORS.darkGray,
+                backgroundColor: LIGHT_COLORS.surface,
                 borderRadius: RADIUS.lg,
                 padding: SPACING.lg,
               }}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.sm }}>
                 <Clock size={18} color={COLORS.burgundy} />
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginLeft: SPACING.xs }}>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginLeft: SPACING.xs }}>
                   Avg Time
                 </Text>
               </View>
-              <Text style={{ fontSize: TYPOGRAPHY.xl, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+              <Text style={{ fontSize: TYPOGRAPHY.xl, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                 {avgServiceTime}m
               </Text>
             </View>
@@ -335,7 +345,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
 
           <View
             style={{
-              backgroundColor: COLORS.darkGray,
+              backgroundColor: LIGHT_COLORS.surface,
               borderRadius: RADIUS.xl,
               padding: SPACING.xl,
               marginBottom: SPACING.xl,
@@ -347,7 +357,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
                 style={{
                   fontSize: TYPOGRAPHY.md,
                   fontWeight: TYPOGRAPHY.semibold,
-                  color: COLORS.textInverse,
+                  color: LIGHT_COLORS.textPrimary,
                   marginLeft: SPACING.sm,
                 }}
               >
@@ -362,7 +372,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
 
           <View
             style={{
-              backgroundColor: COLORS.darkGray,
+              backgroundColor: LIGHT_COLORS.surface,
               borderRadius: RADIUS.xl,
               padding: SPACING.xl,
               marginBottom: SPACING.xl,
@@ -374,7 +384,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
                 style={{
                   fontSize: TYPOGRAPHY.md,
                   fontWeight: TYPOGRAPHY.semibold,
-                  color: COLORS.textInverse,
+                  color: LIGHT_COLORS.textPrimary,
                   marginLeft: SPACING.sm,
                 }}
               >
@@ -386,7 +396,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
 
           <View
             style={{
-              backgroundColor: COLORS.darkGray,
+              backgroundColor: LIGHT_COLORS.surface,
               borderRadius: RADIUS.xl,
               padding: SPACING.xl,
               marginBottom: SPACING.xl,
@@ -398,7 +408,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
                 style={{
                   fontSize: TYPOGRAPHY.md,
                   fontWeight: TYPOGRAPHY.semibold,
-                  color: COLORS.textInverse,
+                  color: LIGHT_COLORS.textPrimary,
                   marginLeft: SPACING.sm,
                 }}
               >
@@ -413,7 +423,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
 
           <View
             style={{
-              backgroundColor: COLORS.darkGray,
+              backgroundColor: LIGHT_COLORS.surface,
               borderRadius: RADIUS.xl,
               padding: SPACING.xl,
               marginBottom: SPACING.xl,
@@ -425,14 +435,14 @@ export default function AnalyticsScreen(): React.JSX.Element {
                 style={{
                   fontSize: TYPOGRAPHY.md,
                   fontWeight: TYPOGRAPHY.semibold,
-                  color: COLORS.textInverse,
+                  color: LIGHT_COLORS.textPrimary,
                   marginLeft: SPACING.sm,
                 }}
               >
                 Customer Satisfaction
               </Text>
             </View>
-            
+
             <View style={{ alignItems: 'center', marginBottom: SPACING.lg }}>
               <Text style={{ fontSize: TYPOGRAPHY['4xl'], fontWeight: TYPOGRAPHY.bold, color: COLORS.gold }}>
                 {stats.averageRating}
@@ -447,7 +457,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
                   />
                 ))}
               </View>
-              <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted, marginTop: SPACING.sm }}>
+              <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted, marginTop: SPACING.sm }}>
                 Based on {stats.totalReviews} reviews
               </Text>
             </View>
@@ -457,7 +467,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
                 const percentage = rating === 5 ? 72 : rating === 4 ? 18 : rating === 3 ? 7 : rating === 2 ? 2 : 1;
                 return (
                   <View key={rating} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textLight, width: 20 }}>
+                    <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary, width: 20 }}>
                       {rating}
                     </Text>
                     <Star size={12} color={COLORS.gold} fill={COLORS.gold} style={{ marginRight: SPACING.sm }} />
@@ -465,7 +475,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
                       style={{
                         flex: 1,
                         height: 8,
-                        backgroundColor: COLORS.mediumGray,
+                        backgroundColor: LIGHT_COLORS.border,
                         borderRadius: RADIUS.full,
                         overflow: 'hidden',
                       }}
@@ -479,7 +489,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
                         }}
                       />
                     </View>
-                    <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginLeft: SPACING.sm, width: 35 }}>
+                    <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginLeft: SPACING.sm, width: 35 }}>
                       {percentage}%
                     </Text>
                   </View>
@@ -490,7 +500,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
 
           <View
             style={{
-              backgroundColor: COLORS.darkGray,
+              backgroundColor: LIGHT_COLORS.surface,
               borderRadius: RADIUS.xl,
               padding: SPACING.xl,
             }}
@@ -501,7 +511,7 @@ export default function AnalyticsScreen(): React.JSX.Element {
                 style={{
                   fontSize: TYPOGRAPHY.md,
                   fontWeight: TYPOGRAPHY.semibold,
-                  color: COLORS.textInverse,
+                  color: LIGHT_COLORS.textPrimary,
                   marginLeft: SPACING.sm,
                 }}
               >
@@ -511,26 +521,26 @@ export default function AnalyticsScreen(): React.JSX.Element {
 
             <View style={{ gap: SPACING.md }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>Total Clients</Text>
-                <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textInverse }}>
+                <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>Total Clients</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary }}>
                   {MOCK_CLIENTS.length}
                 </Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>VIP Clients</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>VIP Clients</Text>
                 <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.semibold, color: COLORS.gold }}>
                   {MOCK_CLIENTS.filter((c) => c.isVip).length}
                 </Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>New This Month</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>New This Month</Text>
                 <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.semibold, color: COLORS.success }}>
                   +{MOCK_CLIENTS.filter((c) => c.tags.includes('new')).length}
                 </Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>Avg Client Value</Text>
-                <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textInverse }}>
+                <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>Avg Client Value</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary }}>
                   ₪{Math.round(MOCK_CLIENTS.reduce((sum, c) => sum + c.totalSpent, 0) / MOCK_CLIENTS.length)}
                 </Text>
               </View>

@@ -4,7 +4,8 @@ import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { User, Briefcase, Scissors, MapPin, DollarSign, BarChart3, ArrowRight } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { useOnboardingStore } from '@/stores/useOnboardingStore';
 
@@ -27,13 +28,13 @@ export default function UserTypeScreen(): React.JSX.Element {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + SPACING.xl, paddingBottom: insets.bottom }]}>
-      <Animated.View entering={FadeInDown.duration(400)} style={styles.header}>
+      <Animated.View entering={webSafeFadeInDown(0, 400)} style={styles.header}>
         <Text style={styles.title}>How will you use BarberConnect?</Text>
         <Text style={styles.subtitle}>Choose the option that best describes you</Text>
       </Animated.View>
 
       <View style={styles.options}>
-        <Animated.View entering={FadeInDown.delay(200).duration(400)}>
+        <Animated.View entering={webSafeFadeInDown(200, 400)}>
           <Pressable onPress={handleSelectCustomer}>
             <Surface style={styles.optionCard} elevation={2}>
               <View style={[styles.iconContainer, { backgroundColor: COLORS.goldMuted }]}>
@@ -62,7 +63,7 @@ export default function UserTypeScreen(): React.JSX.Element {
           </Pressable>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(400).duration(400)}>
+        <Animated.View entering={webSafeFadeInDown(400, 400)}>
           <Pressable onPress={handleSelectBarber}>
             <Surface style={styles.optionCard} elevation={2}>
               <View style={[styles.iconContainer, { backgroundColor: COLORS.burgundy + '20' }]}>
@@ -92,7 +93,7 @@ export default function UserTypeScreen(): React.JSX.Element {
         </Animated.View>
       </View>
 
-      <Animated.View entering={FadeInDown.delay(600).duration(400)} style={styles.footer}>
+      <Animated.View entering={webSafeFadeInDown(600, 400)} style={styles.footer}>
         <Text style={styles.footerText}>
           You can switch between modes later in settings
         </Text>

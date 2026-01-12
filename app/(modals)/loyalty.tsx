@@ -26,6 +26,16 @@ import {
 } from 'lucide-react-native';
 import * as Clipboard from 'expo-clipboard';
 import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '@/constants/theme';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 import {
   MOCK_LOYALTY_ACCOUNT,
   MOCK_LOYALTY_TRANSACTIONS,
@@ -110,14 +120,14 @@ const TierProgressBar = ({ currentTier, lifetimeBookings, lifetimeSpendCents }: 
   return (
     <View style={{ marginTop: SPACING.lg }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: SPACING.sm }}>
-        <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textSecondary }}>
+        <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary }}>
           Progress to {nextTierInfo.label}
         </Text>
         <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.gold, fontWeight: TYPOGRAPHY.medium }}>
           {overallProgress.toFixed(0)}%
         </Text>
       </View>
-      <View style={{ height: 8, backgroundColor: COLORS.border, borderRadius: RADIUS.full, overflow: 'hidden' }}>
+      <View style={{ height: 8, backgroundColor: LIGHT_COLORS.border, borderRadius: RADIUS.full, overflow: 'hidden' }}>
         <View
           style={{
             height: '100%',
@@ -128,10 +138,10 @@ const TierProgressBar = ({ currentTier, lifetimeBookings, lifetimeSpendCents }: 
         />
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: SPACING.sm }}>
-        <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>
+        <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>
           {bookingsNeeded > 0 ? `${bookingsNeeded} more bookings` : 'Bookings met'}
         </Text>
-        <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>
+        <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>
           {spendNeeded > 0 ? `₪${spendNeeded.toLocaleString()} more to spend` : 'Spend met'}
         </Text>
       </View>
@@ -149,37 +159,37 @@ const RewardCard = ({ reward, availablePoints, onRedeem }: {
   return (
     <View
       style={{
-        backgroundColor: COLORS.surface,
+        backgroundColor: LIGHT_COLORS.surface,
         borderRadius: RADIUS.lg,
         padding: SPACING.lg,
         marginBottom: SPACING.md,
         borderWidth: 1,
-        borderColor: canRedeem ? COLORS.gold : COLORS.border,
+        borderColor: canRedeem ? COLORS.gold : LIGHT_COLORS.border,
         opacity: reward.isAvailable ? 1 : 0.6,
       }}
     >
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: TYPOGRAPHY.md, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textPrimary }}>
+          <Text style={{ fontSize: TYPOGRAPHY.md, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary }}>
             {reward.title}
           </Text>
-          <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textSecondary, marginTop: SPACING.xs }}>
+          <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary, marginTop: SPACING.xs }}>
             {reward.description}
           </Text>
         </View>
         <View
           style={{
-            backgroundColor: canRedeem ? COLORS.gold : COLORS.border,
+            backgroundColor: canRedeem ? COLORS.gold : LIGHT_COLORS.border,
             paddingHorizontal: SPACING.md,
             paddingVertical: SPACING.sm,
             borderRadius: RADIUS.md,
             alignItems: 'center',
           }}
         >
-          <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: canRedeem ? COLORS.charcoal : COLORS.textMuted }}>
+          <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: canRedeem ? COLORS.charcoal : LIGHT_COLORS.textMuted }}>
             {reward.pointsCost}
           </Text>
-          <Text style={{ fontSize: TYPOGRAPHY.xs, color: canRedeem ? COLORS.charcoal : COLORS.textMuted }}>
+          <Text style={{ fontSize: TYPOGRAPHY.xs, color: canRedeem ? COLORS.charcoal : LIGHT_COLORS.textMuted }}>
             pts
           </Text>
         </View>
@@ -189,13 +199,13 @@ const RewardCard = ({ reward, availablePoints, onRedeem }: {
         disabled={!canRedeem}
         style={{
           marginTop: SPACING.md,
-          backgroundColor: canRedeem ? COLORS.gold : COLORS.border,
+          backgroundColor: canRedeem ? COLORS.gold : LIGHT_COLORS.border,
           paddingVertical: SPACING.sm,
           borderRadius: RADIUS.md,
           alignItems: 'center',
         }}
       >
-        <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.semibold, color: canRedeem ? COLORS.charcoal : COLORS.textMuted }}>
+        <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.semibold, color: canRedeem ? COLORS.charcoal : LIGHT_COLORS.textMuted }}>
           {canRedeem ? 'Redeem Now' : `Need ${reward.pointsCost - availablePoints} more pts`}
         </Text>
       </TouchableOpacity>
@@ -259,7 +269,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
     <View style={{ padding: SPACING.xl }}>
       <View
         style={{
-          backgroundColor: COLORS.surface,
+          backgroundColor: LIGHT_COLORS.surface,
           borderRadius: RADIUS.xl,
           padding: SPACING.xl,
           alignItems: 'center',
@@ -268,14 +278,14 @@ export default function LoyaltyScreen(): React.JSX.Element {
         }}
       >
         <TierBadge tier={account.currentTier} size="lg" />
-        <Text style={{ fontSize: TYPOGRAPHY['3xl'], fontWeight: TYPOGRAPHY.bold, color: COLORS.textPrimary, marginTop: SPACING.lg }}>
+        <Text style={{ fontSize: TYPOGRAPHY['3xl'], fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary, marginTop: SPACING.lg }}>
           {account.availablePoints.toLocaleString()}
         </Text>
-        <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textSecondary }}>
+        <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary }}>
           Available Points
         </Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: SPACING.sm }}>
-          <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>
+          <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>
             {account.totalPoints.toLocaleString()} total earned
           </Text>
         </View>
@@ -287,7 +297,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
       </View>
 
       <View style={{ marginTop: SPACING.xl }}>
-        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textPrimary, marginBottom: SPACING.md }}>
+        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary, marginBottom: SPACING.md }}>
           Your Benefits
         </Text>
         {tierInfo.benefits.map((benefit, index) => (
@@ -298,7 +308,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
               alignItems: 'center',
               paddingVertical: SPACING.sm,
               borderBottomWidth: index < tierInfo.benefits.length - 1 ? 1 : 0,
-              borderBottomColor: COLORS.border,
+              borderBottomColor: LIGHT_COLORS.border,
             }}
           >
             <View
@@ -314,7 +324,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
             >
               <Check size={14} color={tierInfo.color} />
             </View>
-            <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textPrimary, flex: 1 }}>
+            <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textPrimary, flex: 1 }}>
               {benefit}
             </Text>
           </View>
@@ -324,25 +334,25 @@ export default function LoyaltyScreen(): React.JSX.Element {
       <View
         style={{
           marginTop: SPACING.xl,
-          backgroundColor: COLORS.surface,
+          backgroundColor: LIGHT_COLORS.surface,
           borderRadius: RADIUS.lg,
           padding: SPACING.lg,
         }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.md }}>
           <Share2 size={20} color={COLORS.gold} />
-          <Text style={{ fontSize: TYPOGRAPHY.md, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textPrimary, marginLeft: SPACING.sm }}>
+          <Text style={{ fontSize: TYPOGRAPHY.md, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary, marginLeft: SPACING.sm }}>
             Refer a Friend
           </Text>
         </View>
-        <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textSecondary, marginBottom: SPACING.md }}>
+        <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary, marginBottom: SPACING.md }}>
           Get {POINTS_CONFIG.pointsPerReferral} points for each friend who joins. They get {POINTS_CONFIG.refereeBonus} bonus points too!
         </Text>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: COLORS.background,
+            backgroundColor: LIGHT_COLORS.surfaceHighlight,
             borderRadius: RADIUS.md,
             padding: SPACING.md,
             marginBottom: SPACING.md,
@@ -352,7 +362,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
             {referralCode.code}
           </Text>
           <TouchableOpacity onPress={handleCopyCode} style={{ padding: SPACING.sm }}>
-            <Copy size={20} color={COLORS.textPrimary} />
+            <Copy size={20} color={LIGHT_COLORS.textPrimary} />
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: 'row', gap: SPACING.md }}>
@@ -374,16 +384,16 @@ export default function LoyaltyScreen(): React.JSX.Element {
             </Text>
           </TouchableOpacity>
         </View>
-        <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginTop: SPACING.md, textAlign: 'center' }}>
+        <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginTop: SPACING.md, textAlign: 'center' }}>
           {referralCode.usesCount} friends have joined using your code
         </Text>
       </View>
 
       <View style={{ marginTop: SPACING.xl }}>
-        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textPrimary, marginBottom: SPACING.md }}>
+        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary, marginBottom: SPACING.md }}>
           How to Earn Points
         </Text>
-        <View style={{ backgroundColor: COLORS.surface, borderRadius: RADIUS.lg, overflow: 'hidden' }}>
+        <View style={{ backgroundColor: LIGHT_COLORS.surface, borderRadius: RADIUS.lg, overflow: 'hidden' }}>
           {[
             { label: 'Every ₪10 spent', points: POINTS_CONFIG.pointsPerShekel * 10, icon: Star },
             { label: 'Leave a review', points: POINTS_CONFIG.pointsPerReview, icon: Star },
@@ -396,7 +406,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
                 alignItems: 'center',
                 padding: SPACING.md,
                 borderBottomWidth: index < 2 ? 1 : 0,
-                borderBottomColor: COLORS.border,
+                borderBottomColor: LIGHT_COLORS.border,
               }}
             >
               <View
@@ -412,7 +422,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
               >
                 <item.icon size={20} color={COLORS.gold} />
               </View>
-              <Text style={{ flex: 1, fontSize: TYPOGRAPHY.sm, color: COLORS.textPrimary }}>
+              <Text style={{ flex: 1, fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textPrimary }}>
                 {item.label}
               </Text>
               <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.bold, color: COLORS.gold }}>
@@ -439,7 +449,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
       >
         <Gift size={24} color={COLORS.gold} />
         <View style={{ marginLeft: SPACING.md }}>
-          <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textSecondary }}>
+          <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary }}>
             Available to redeem
           </Text>
           <Text style={{ fontSize: TYPOGRAPHY.xl, fontWeight: TYPOGRAPHY.bold, color: COLORS.gold }}>
@@ -459,13 +469,13 @@ export default function LoyaltyScreen(): React.JSX.Element {
 
       <View
         style={{
-          backgroundColor: COLORS.surface,
+          backgroundColor: LIGHT_COLORS.surface,
           borderRadius: RADIUS.lg,
           padding: SPACING.lg,
           marginTop: SPACING.md,
         }}
       >
-        <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textSecondary, textAlign: 'center' }}>
+        <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary, textAlign: 'center' }}>
           {POINTS_CONFIG.redemptionRate} points = ₪1 value
         </Text>
       </View>
@@ -483,7 +493,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
           <View
             key={transaction.id}
             style={{
-              backgroundColor: COLORS.surface,
+              backgroundColor: LIGHT_COLORS.surface,
               borderRadius: RADIUS.lg,
               padding: SPACING.lg,
               marginBottom: SPACING.md,
@@ -504,10 +514,10 @@ export default function LoyaltyScreen(): React.JSX.Element {
                 <IconComponent size={22} color={config.color} />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.medium, color: COLORS.textPrimary }}>
+                <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.medium, color: LIGHT_COLORS.textPrimary }}>
                   {transaction.description || config.label}
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginTop: 2 }}>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginTop: 2 }}>
                   {formatDate(transaction.createdAt)}
                 </Text>
               </View>
@@ -521,7 +531,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
                 >
                   {isPositive ? '+' : ''}{transaction.points}
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>
                   pts
                 </Text>
               </View>
@@ -533,7 +543,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: LIGHT_COLORS.background }}>
       <View
         style={{
           flexDirection: 'row',
@@ -541,13 +551,13 @@ export default function LoyaltyScreen(): React.JSX.Element {
           paddingHorizontal: SPACING.xl,
           paddingVertical: SPACING.lg,
           borderBottomWidth: 1,
-          borderBottomColor: COLORS.border,
+          borderBottomColor: LIGHT_COLORS.border,
         }}
       >
         <TouchableOpacity onPress={() => router.back()} style={{ marginRight: SPACING.md }}>
-          <ArrowLeft size={24} color={COLORS.textPrimary} />
+          <ArrowLeft size={24} color={LIGHT_COLORS.textPrimary} />
         </TouchableOpacity>
-        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textPrimary, flex: 1 }}>
+        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary, flex: 1 }}>
           Rewards & Loyalty
         </Text>
         <TierBadge tier={account.currentTier} size="sm" />
@@ -562,7 +572,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
               flex: 1,
               paddingVertical: SPACING.sm,
               borderRadius: RADIUS.md,
-              backgroundColor: activeTab === tab ? COLORS.gold : COLORS.surface,
+              backgroundColor: activeTab === tab ? COLORS.gold : LIGHT_COLORS.surface,
               alignItems: 'center',
             }}
           >
@@ -570,7 +580,7 @@ export default function LoyaltyScreen(): React.JSX.Element {
               style={{
                 fontSize: TYPOGRAPHY.sm,
                 fontWeight: TYPOGRAPHY.medium,
-                color: activeTab === tab ? COLORS.charcoal : COLORS.textSecondary,
+                color: activeTab === tab ? COLORS.charcoal : LIGHT_COLORS.textSecondary,
                 textTransform: 'capitalize',
               }}
             >

@@ -8,11 +8,11 @@ export default function TabsLayout(): React.JSX.Element {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: COLORS.gold,
-        tabBarInactiveTintColor: COLORS.textMuted,
+        tabBarActiveTintColor: '#135bec',
+        tabBarInactiveTintColor: '#94a3b8',
         tabBarStyle: {
-          backgroundColor: COLORS.surface,
-          borderTopColor: COLORS.border,
+          backgroundColor: '#ffffff',
+          borderTopColor: '#e2e8f0',
           borderTopWidth: 1,
           height: 84,
           paddingTop: 8,

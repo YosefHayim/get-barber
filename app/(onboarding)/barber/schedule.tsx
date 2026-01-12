@@ -3,12 +3,23 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import { router } from 'expo-router';
 import { MapPin, Clock, Navigation } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 import Slider from '@react-native-community/slider';
 import { OnboardingLayout } from '@/components/onboarding/OnboardingLayout';
 import { SelectableChip } from '@/components/onboarding/SelectableChip';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 import { useOnboardingStore } from '@/stores/useOnboardingStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 const DAYS_OF_WEEK = [
   { id: 0, label: 'Sun', labelHe: 'א' },
@@ -70,9 +81,9 @@ export default function BarberScheduleScreen(): React.JSX.Element {
       nextDisabled={!isValid}
     >
       <View style={styles.content}>
-        <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(100, 400)} style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Clock size={18} color={COLORS.textSecondary} />
+            <Clock size={18} color={LIGHT_COLORS.textSecondary} />
             <Text style={styles.sectionTitle}>Working Days *</Text>
           </View>
           <Text style={styles.sectionSubtitle}>Select the days you're available</Text>
@@ -100,7 +111,7 @@ export default function BarberScheduleScreen(): React.JSX.Element {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(200).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(200, 400)} style={styles.section}>
           <Text style={styles.sectionTitle}>Available Times *</Text>
           <Text style={styles.sectionSubtitle}>Choose your preferred time slots</Text>
           <View style={styles.timeSlotsGrid}>
@@ -135,9 +146,9 @@ export default function BarberScheduleScreen(): React.JSX.Element {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(300).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(300, 400)} style={styles.section}>
           <View style={styles.sectionHeader}>
-            <MapPin size={18} color={COLORS.textSecondary} />
+            <MapPin size={18} color={LIGHT_COLORS.textSecondary} />
             <Text style={styles.sectionTitle}>Base Location *</Text>
           </View>
           <Text style={styles.sectionSubtitle}>Where you start your day</Text>
@@ -146,16 +157,16 @@ export default function BarberScheduleScreen(): React.JSX.Element {
             placeholder="Enter your base address"
             value={barberData.baseAddress}
             onChangeText={(text) => setBarberBaseLocation(text, null)}
-            outlineColor={COLORS.border}
+            outlineColor={LIGHT_COLORS.border}
             activeOutlineColor={COLORS.gold}
             style={styles.input}
-            left={<TextInput.Icon icon={() => <MapPin size={20} color={COLORS.textMuted} />} />}
+            left={<TextInput.Icon icon={() => <MapPin size={20} color={LIGHT_COLORS.textMuted} />} />}
           />
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(400).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(400, 400)} style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Navigation size={18} color={COLORS.textSecondary} />
+            <Navigation size={18} color={LIGHT_COLORS.textSecondary} />
             <Text style={styles.sectionTitle}>Travel Distance</Text>
           </View>
           <Text style={styles.sectionSubtitle}>
@@ -171,7 +182,7 @@ export default function BarberScheduleScreen(): React.JSX.Element {
                 value={barberData.maxTravelDistanceKm}
                 onValueChange={setBarberTravelDistance}
                 minimumTrackTintColor={COLORS.gold}
-                maximumTrackTintColor={COLORS.borderLight}
+                maximumTrackTintColor={LIGHT_COLORS.border}
                 thumbTintColor={COLORS.goldDark}
               />
             </View>
@@ -203,11 +214,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   sectionSubtitle: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   daysGrid: {
     flexDirection: 'row',
@@ -218,9 +229,9 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: RADIUS.md,
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     borderWidth: 1.5,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -231,7 +242,7 @@ const styles = StyleSheet.create({
   dayLabel: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
   },
   dayLabelSelected: {
     color: COLORS.goldDark,
@@ -246,9 +257,9 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.md,
     paddingHorizontal: SPACING.sm,
     borderRadius: RADIUS.lg,
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     borderWidth: 1.5,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
     alignItems: 'center',
   },
   timeSlotCardSelected: {
@@ -258,7 +269,7 @@ const styles = StyleSheet.create({
   timeSlotLabel: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: '600',
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     marginBottom: SPACING.xxs,
   },
   timeSlotLabelSelected: {
@@ -266,13 +277,13 @@ const styles = StyleSheet.create({
   },
   timeSlotTime: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   timeSlotTimeSelected: {
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
   },
   input: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     marginTop: SPACING.xs,
   },
   sliderContainer: {
@@ -286,7 +297,7 @@ const styles = StyleSheet.create({
   },
   sliderLabel: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     width: 40,
     textAlign: 'center',
   },
@@ -295,14 +306,14 @@ const styles = StyleSheet.create({
     color: COLORS.goldDark,
   },
   distanceHint: {
-    backgroundColor: COLORS.backgroundSecondary,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     padding: SPACING.md,
     borderRadius: RADIUS.md,
     marginTop: SPACING.sm,
   },
   hintText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     textAlign: 'center',
   },
 });

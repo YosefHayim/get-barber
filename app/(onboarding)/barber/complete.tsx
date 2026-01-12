@@ -12,16 +12,25 @@ import {
   ArrowRight,
 } from 'lucide-react-native';
 import Animated, {
-  FadeIn,
-  FadeInDown,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withSequence,
   withDelay,
 } from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown } from '@/utils/animations';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { useOnboardingStore } from '@/stores/useOnboardingStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 const TIPS = [
   {
@@ -90,7 +99,7 @@ export default function BarberCompleteScreen(): React.JSX.Element {
           </Animated.View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(400).duration(500)} style={styles.textContent}>
+        <Animated.View entering={webSafeFadeInDown(400, 500)} style={styles.textContent}>
           <Text style={styles.title}>
             {needsReview ? 'Almost there!' : "You're ready!"}
           </Text>
@@ -102,7 +111,7 @@ export default function BarberCompleteScreen(): React.JSX.Element {
         </Animated.View>
 
         {needsReview ? (
-          <Animated.View entering={FadeInDown.delay(600).duration(500)} style={styles.reviewCard}>
+          <Animated.View entering={webSafeFadeInDown(600, 500)} style={styles.reviewCard}>
             <Clock size={24} color={COLORS.warning} />
             <View style={styles.reviewContent}>
               <Text style={styles.reviewTitle}>Profile Under Review</Text>
@@ -113,7 +122,7 @@ export default function BarberCompleteScreen(): React.JSX.Element {
             </View>
           </Animated.View>
         ) : (
-          <Animated.View entering={FadeInDown.delay(600).duration(500)} style={styles.successCard}>
+          <Animated.View entering={webSafeFadeInDown(600, 500)} style={styles.successCard}>
             <CheckCircle2 size={24} color={COLORS.success} />
             <View style={styles.successCardContent}>
               <Text style={styles.successTitle}>Profile Approved!</Text>
@@ -124,14 +133,14 @@ export default function BarberCompleteScreen(): React.JSX.Element {
           </Animated.View>
         )}
 
-        <Animated.View entering={FadeInDown.delay(800).duration(500)} style={styles.tipsSection}>
+        <Animated.View entering={webSafeFadeInDown(800, 500)} style={styles.tipsSection}>
           <Text style={styles.tipsTitle}>Tips for success</Text>
           {TIPS.map((tip, index) => {
             const IconComponent = tip.icon;
             return (
               <Animated.View
                 key={tip.title}
-                entering={FadeInDown.delay(900 + index * 100).duration(400)}
+                entering={webSafeFadeInDown(900 + index * 100, 400)}
                 style={styles.tipItem}
               >
                 <View style={styles.tipIcon}>
@@ -148,7 +157,7 @@ export default function BarberCompleteScreen(): React.JSX.Element {
       </View>
 
       <Animated.View
-        entering={FadeIn.delay(1200).duration(500)}
+        entering={webSafeFadeIn(500)}
         style={[styles.bottomSection, { paddingBottom: insets.bottom + SPACING.xl }]}
       >
         <Button
@@ -176,7 +185,7 @@ export default function BarberCompleteScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   content: {
     flex: 1,
@@ -200,12 +209,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '800',
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.sm,
   },
   subtitle: {
     fontSize: TYPOGRAPHY.lg,
-    color: COLORS.textLight,
+    color: LIGHT_COLORS.textSecondary,
     textAlign: 'center',
   },
   reviewCard: {
@@ -228,7 +237,7 @@ const styles = StyleSheet.create({
   },
   reviewText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     lineHeight: 20,
   },
   successCard: {
@@ -251,7 +260,7 @@ const styles = StyleSheet.create({
   },
   successText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     lineHeight: 20,
   },
   tipsSection: {
@@ -261,7 +270,7 @@ const styles = StyleSheet.create({
   tipsTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: '600',
-    color: COLORS.textLight,
+    color: LIGHT_COLORS.textSecondary,
     marginBottom: SPACING.xs,
   },
   tipItem: {
@@ -269,7 +278,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     gap: SPACING.md,
     padding: SPACING.md,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.md,
   },
   tipIcon: {
@@ -286,12 +295,12 @@ const styles = StyleSheet.create({
   tipItemTitle: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: '600',
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.xxs,
   },
   tipItemText: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textLight,
+    color: LIGHT_COLORS.textSecondary,
   },
   bottomSection: {
     paddingHorizontal: SPACING.xl,
@@ -311,7 +320,7 @@ const styles = StyleSheet.create({
     color: COLORS.charcoal,
   },
   secondaryButtonLabel: {
-    color: COLORS.textLight,
+    color: LIGHT_COLORS.textSecondary,
     fontSize: TYPOGRAPHY.md,
   },
 });

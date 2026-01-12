@@ -14,11 +14,22 @@ import {
   Target,
   Award,
 } from 'lucide-react-native';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown } from '@/utils/animations';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { MOCK_BARBER_STATS } from '@/constants/mockData';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 type PeriodType = 'day' | 'week' | 'month';
 
@@ -57,7 +68,7 @@ function EarningsChart(): React.JSX.Element {
                 styles.chartBar,
                 {
                   height: (value / 100) * maxHeight,
-                  backgroundColor: index === bars.length - 1 ? COLORS.gold : COLORS.mediumGray,
+                  backgroundColor: index === bars.length - 1 ? COLORS.gold : LIGHT_COLORS.border,
                 },
               ]}
             />
@@ -85,7 +96,7 @@ function StatRow({
   delay?: number;
 }): React.JSX.Element {
   return (
-    <Animated.View entering={FadeInDown.delay(delay).duration(300)}>
+    <Animated.View entering={webSafeFadeInDown(delay, 300)}>
       <Surface style={styles.statRow} elevation={2}>
         <View style={styles.statRowIcon}>{icon}</View>
         <View style={styles.statRowContent}>
@@ -153,7 +164,7 @@ export default function BarberEarningsScreen(): React.JSX.Element {
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
     >
-      <Animated.View entering={FadeIn.duration(300)} style={styles.header}>
+      <Animated.View entering={webSafeFadeIn(300)} style={styles.header}>
         <View style={styles.headerContent}>
           <Text style={styles.title}>Earnings</Text>
           <View style={styles.headerIcon}>
@@ -180,7 +191,7 @@ export default function BarberEarningsScreen(): React.JSX.Element {
         />
       </View>
 
-      <Animated.View entering={FadeInDown.delay(100).duration(300)}>
+      <Animated.View entering={webSafeFadeInDown(100, 300)}>
         <Surface style={styles.earningsCard} elevation={3}>
           <Text style={styles.earningsLabel}>{getPeriodLabel()} Earnings</Text>
           <View style={styles.earningsRow}>
@@ -233,7 +244,7 @@ export default function BarberEarningsScreen(): React.JSX.Element {
       <View style={styles.goalsSection}>
         <Text style={styles.sectionTitle}>Goals</Text>
 
-        <Animated.View entering={FadeInDown.delay(350).duration(300)}>
+        <Animated.View entering={webSafeFadeInDown(350, 300)}>
           <Surface style={styles.goalCard} elevation={2}>
             <View style={styles.goalHeader}>
               <View style={styles.goalIconContainer}>
@@ -259,7 +270,7 @@ export default function BarberEarningsScreen(): React.JSX.Element {
       <View style={styles.tipsSection}>
         <Text style={styles.sectionTitle}>Tips to Earn More</Text>
         
-        <Animated.View entering={FadeInDown.delay(400).duration(300)}>
+        <Animated.View entering={webSafeFadeInDown(400, 300)}>
           <Surface style={styles.tipCard} elevation={1}>
             <View style={styles.tipIcon}>
               <Clock size={18} color={COLORS.goldDark} />
@@ -271,7 +282,7 @@ export default function BarberEarningsScreen(): React.JSX.Element {
           </Surface>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(450).duration(300)}>
+        <Animated.View entering={webSafeFadeInDown(450, 300)}>
           <Surface style={styles.tipCard} elevation={1}>
             <View style={styles.tipIcon}>
               <Star size={18} color={COLORS.goldDark} />
@@ -290,7 +301,7 @@ export default function BarberEarningsScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollContent: {
     paddingBottom: SPACING['4xl'],
@@ -307,7 +318,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: TYPOGRAPHY['2xl'],
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   headerIcon: {
     width: 40,
@@ -327,7 +338,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: SPACING.md,
     borderRadius: RADIUS.md,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     alignItems: 'center',
   },
   periodButtonActive: {
@@ -346,7 +357,7 @@ const styles = StyleSheet.create({
     marginHorizontal: SPACING.lg,
     borderRadius: RADIUS.xl,
     padding: SPACING.xl,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
   },
   earningsLabel: {
     fontSize: TYPOGRAPHY.sm,
@@ -361,7 +372,7 @@ const styles = StyleSheet.create({
   earningsAmount: {
     fontSize: 36,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   earningsChange: {
     flexDirection: 'row',
@@ -386,7 +397,7 @@ const styles = StyleSheet.create({
     marginTop: SPACING.xl,
     paddingTop: SPACING.lg,
     borderTopWidth: 1,
-    borderTopColor: COLORS.mediumGray,
+    borderTopColor: LIGHT_COLORS.border,
   },
   chartBars: {
     flexDirection: 'row',
@@ -415,13 +426,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.md,
   },
   statRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     marginBottom: SPACING.sm,
@@ -431,7 +442,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -445,7 +456,7 @@ const styles = StyleSheet.create({
   statRowValue: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginTop: SPACING.xxs,
   },
   changeBadge: {
@@ -465,7 +476,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.lg,
   },
   goalCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.xl,
     padding: SPACING.lg,
   },
@@ -488,7 +499,7 @@ const styles = StyleSheet.create({
   goalTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   goalSubtext: {
     fontSize: TYPOGRAPHY.sm,
@@ -502,7 +513,7 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     height: 8,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.border,
     borderRadius: 4,
     marginTop: SPACING.lg,
     overflow: 'hidden',
@@ -530,7 +541,7 @@ const styles = StyleSheet.create({
   tipCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     marginBottom: SPACING.sm,
@@ -550,7 +561,7 @@ const styles = StyleSheet.create({
   tipTitle: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   tipText: {
     fontSize: TYPOGRAPHY.xs,

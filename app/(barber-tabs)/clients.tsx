@@ -31,6 +31,17 @@ import {
   User,
 } from 'lucide-react-native';
 import { COLORS, SHADOWS, RADIUS, SPACING, TYPOGRAPHY } from '@/constants/theme';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
+
 import {
   MOCK_CLIENTS,
   CLIENT_TAG_CONFIG,
@@ -149,7 +160,7 @@ export default function ClientsScreen(): React.JSX.Element {
     ({ item }: { item: MockClient }) => (
       <TouchableOpacity
         style={{
-          backgroundColor: COLORS.darkGray,
+          backgroundColor: LIGHT_COLORS.surface,
           borderRadius: RADIUS.lg,
           padding: SPACING.lg,
           marginBottom: SPACING.md,
@@ -176,14 +187,14 @@ export default function ClientsScreen(): React.JSX.Element {
                 width: 56,
                 height: 56,
                 borderRadius: 28,
-                backgroundColor: COLORS.mediumGray,
+                backgroundColor: LIGHT_COLORS.surfaceHighlight,
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderWidth: item.isVip ? 2 : 0,
                 borderColor: item.isVip ? COLORS.gold : 'transparent',
               }}
             >
-              <User size={24} color={COLORS.textMuted} />
+              <User size={24} color={LIGHT_COLORS.textMuted} />
             </View>
           )}
 
@@ -193,7 +204,7 @@ export default function ClientsScreen(): React.JSX.Element {
                 style={{
                   fontSize: TYPOGRAPHY.md,
                   fontWeight: TYPOGRAPHY.semibold,
-                  color: COLORS.textInverse,
+                  color: LIGHT_COLORS.textPrimary,
                 }}
               >
                 {item.displayName}
@@ -215,10 +226,10 @@ export default function ClientsScreen(): React.JSX.Element {
               >
                 {item.averageRating.toFixed(1)}
               </Text>
-              <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted, marginLeft: 12 }}>
+              <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted, marginLeft: 12 }}>
                 {item.totalBookings} visits
               </Text>
-              <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted, marginLeft: 12 }}>
+              <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted, marginLeft: 12 }}>
                 ₪{item.totalSpent.toLocaleString()}
               </Text>
             </View>
@@ -249,13 +260,13 @@ export default function ClientsScreen(): React.JSX.Element {
           </View>
 
           <View style={{ alignItems: 'flex-end' }}>
-            <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginBottom: 4 }}>
+            <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginBottom: 4 }}>
               Last visit
             </Text>
-            <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textLight }}>
+            <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary }}>
               {formatDate(item.lastVisit)}
             </Text>
-            <ChevronRight size={20} color={COLORS.textMuted} style={{ marginTop: 8 }} />
+            <ChevronRight size={20} color={LIGHT_COLORS.textMuted} style={{ marginTop: 8 }} />
           </View>
         </View>
       </TouchableOpacity>
@@ -268,16 +279,16 @@ export default function ClientsScreen(): React.JSX.Element {
       <View
         key={note.id}
         style={{
-          backgroundColor: COLORS.mediumGray,
+          backgroundColor: LIGHT_COLORS.surfaceHighlight,
           borderRadius: RADIUS.md,
           padding: SPACING.md,
           marginBottom: SPACING.sm,
         }}
       >
-        <Text style={{ fontSize: TYPOGRAPHY.base, color: COLORS.textInverse, lineHeight: 22 }}>
+        <Text style={{ fontSize: TYPOGRAPHY.base, color: LIGHT_COLORS.textPrimary, lineHeight: 22 }}>
           {note.content}
         </Text>
-        <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginTop: SPACING.sm }}>
+        <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginTop: SPACING.sm }}>
           {new Date(note.createdAt).toLocaleDateString()}
         </Text>
       </View>
@@ -290,21 +301,21 @@ export default function ClientsScreen(): React.JSX.Element {
       <View
         key={booking.id}
         style={{
-          backgroundColor: COLORS.mediumGray,
+          backgroundColor: LIGHT_COLORS.surfaceHighlight,
           borderRadius: RADIUS.md,
           padding: SPACING.md,
           marginBottom: SPACING.sm,
         }}
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-          <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textLight }}>
+          <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary }}>
             {new Date(booking.date).toLocaleDateString()}
           </Text>
           <Text style={{ fontSize: TYPOGRAPHY.md, color: COLORS.gold, fontWeight: TYPOGRAPHY.semibold }}>
             ₪{booking.totalPrice}
           </Text>
         </View>
-        <Text style={{ fontSize: TYPOGRAPHY.base, color: COLORS.textInverse, marginBottom: 4 }}>
+        <Text style={{ fontSize: TYPOGRAPHY.base, color: LIGHT_COLORS.textPrimary, marginBottom: 4 }}>
           {booking.services.join(', ')}
         </Text>
         {booking.rating && (
@@ -317,7 +328,7 @@ export default function ClientsScreen(): React.JSX.Element {
               <Text
                 style={{
                   fontSize: TYPOGRAPHY.sm,
-                  color: COLORS.textMuted,
+                  color: LIGHT_COLORS.textMuted,
                   marginLeft: 8,
                   flex: 1,
                 }}
@@ -334,13 +345,13 @@ export default function ClientsScreen(): React.JSX.Element {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.charcoal }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: LIGHT_COLORS.background }}>
       <View style={{ paddingHorizontal: SPACING.xl, paddingTop: SPACING.lg, paddingBottom: SPACING.md }}>
         <Text
           style={{
             fontSize: TYPOGRAPHY['2xl'],
             fontWeight: TYPOGRAPHY.bold,
-            color: COLORS.textInverse,
+            color: LIGHT_COLORS.textPrimary,
             marginBottom: SPACING.lg,
           }}
         >
@@ -351,16 +362,16 @@ export default function ClientsScreen(): React.JSX.Element {
           <View
             style={{
               flex: 1,
-              backgroundColor: COLORS.darkGray,
+              backgroundColor: LIGHT_COLORS.surface,
               borderRadius: RADIUS.md,
               padding: SPACING.md,
               alignItems: 'center',
             }}
           >
-            <Text style={{ fontSize: TYPOGRAPHY['xl'], fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+            <Text style={{ fontSize: TYPOGRAPHY['xl'], fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
               {stats.total}
             </Text>
-            <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>Total</Text>
+            <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>Total</Text>
           </View>
           <View
             style={{
@@ -379,30 +390,30 @@ export default function ClientsScreen(): React.JSX.Element {
           <View
             style={{
               flex: 1,
-              backgroundColor: COLORS.darkGray,
+              backgroundColor: LIGHT_COLORS.surface,
               borderRadius: RADIUS.md,
               padding: SPACING.md,
               alignItems: 'center',
             }}
           >
-            <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+            <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
               ₪{(stats.totalRevenue / 1000).toFixed(1)}k
             </Text>
-            <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>Revenue</Text>
+            <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>Revenue</Text>
           </View>
           <View
             style={{
               flex: 1,
-              backgroundColor: COLORS.darkGray,
+              backgroundColor: LIGHT_COLORS.surface,
               borderRadius: RADIUS.md,
               padding: SPACING.md,
               alignItems: 'center',
             }}
           >
-            <Text style={{ fontSize: TYPOGRAPHY['xl'], fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+            <Text style={{ fontSize: TYPOGRAPHY['xl'], fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
               {stats.avgRating.toFixed(1)}
             </Text>
-            <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>Avg Rating</Text>
+            <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>Avg Rating</Text>
           </View>
         </View>
 
@@ -410,29 +421,29 @@ export default function ClientsScreen(): React.JSX.Element {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            backgroundColor: COLORS.darkGray,
+            backgroundColor: LIGHT_COLORS.surface,
             borderRadius: RADIUS.lg,
             paddingHorizontal: SPACING.md,
             marginBottom: SPACING.md,
           }}
         >
-          <Search size={20} color={COLORS.textMuted} />
+          <Search size={20} color={LIGHT_COLORS.textMuted} />
           <TextInput
             style={{
               flex: 1,
               paddingVertical: SPACING.md,
               paddingHorizontal: SPACING.sm,
               fontSize: TYPOGRAPHY.base,
-              color: COLORS.textInverse,
+              color: LIGHT_COLORS.textPrimary,
             }}
             placeholder="Search by name, phone, or email..."
-            placeholderTextColor={COLORS.textMuted}
+            placeholderTextColor={LIGHT_COLORS.textMuted}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <X size={18} color={COLORS.textMuted} />
+              <X size={18} color={LIGHT_COLORS.textMuted} />
             </TouchableOpacity>
           )}
         </View>
@@ -454,14 +465,14 @@ export default function ClientsScreen(): React.JSX.Element {
                     paddingVertical: SPACING.sm,
                     borderRadius: RADIUS.full,
                     backgroundColor:
-                      selectedFilter === filter ? COLORS.gold : COLORS.darkGray,
+                      selectedFilter === filter ? COLORS.gold : LIGHT_COLORS.surface,
                   }}
                 >
                   <Text
                     style={{
                       fontSize: TYPOGRAPHY.sm,
                       fontWeight: TYPOGRAPHY.medium,
-                      color: selectedFilter === filter ? COLORS.charcoal : COLORS.textLight,
+                      color: selectedFilter === filter ? COLORS.charcoal : LIGHT_COLORS.textSecondary,
                     }}
                   >
                     {filter === 'all'
@@ -485,14 +496,14 @@ export default function ClientsScreen(): React.JSX.Element {
               paddingHorizontal: SPACING.md,
               paddingVertical: SPACING.sm,
               borderRadius: RADIUS.full,
-              backgroundColor: COLORS.darkGray,
+              backgroundColor: LIGHT_COLORS.surface,
             }}
           >
-            <SortAsc size={16} color={COLORS.textLight} />
+            <SortAsc size={16} color={LIGHT_COLORS.textSecondary} />
             <Text
               style={{
                 fontSize: TYPOGRAPHY.sm,
-                color: COLORS.textLight,
+                color: LIGHT_COLORS.textSecondary,
                 marginLeft: 4,
                 textTransform: 'capitalize',
               }}
@@ -511,11 +522,11 @@ export default function ClientsScreen(): React.JSX.Element {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={{ alignItems: 'center', paddingTop: SPACING['4xl'] }}>
-            <User size={48} color={COLORS.textMuted} />
+            <User size={48} color={LIGHT_COLORS.textMuted} />
             <Text
               style={{
                 fontSize: TYPOGRAPHY.lg,
-                color: COLORS.textMuted,
+                color: LIGHT_COLORS.textMuted,
                 marginTop: SPACING.md,
               }}
             >
@@ -532,7 +543,7 @@ export default function ClientsScreen(): React.JSX.Element {
         onRequestClose={() => setShowClientModal(false)}
       >
         {selectedClient && (
-          <View style={{ flex: 1, backgroundColor: COLORS.charcoal }}>
+          <View style={{ flex: 1, backgroundColor: LIGHT_COLORS.background }}>
             <SafeAreaView style={{ flex: 1 }}>
               <View
                 style={{
@@ -542,17 +553,17 @@ export default function ClientsScreen(): React.JSX.Element {
                   paddingHorizontal: SPACING.xl,
                   paddingVertical: SPACING.lg,
                   borderBottomWidth: 1,
-                  borderBottomColor: COLORS.darkGray,
+                  borderBottomColor: LIGHT_COLORS.border,
                 }}
               >
                 <TouchableOpacity onPress={() => setShowClientModal(false)}>
-                  <X size={24} color={COLORS.textInverse} />
+                  <X size={24} color={LIGHT_COLORS.textPrimary} />
                 </TouchableOpacity>
                 <Text
                   style={{
                     fontSize: TYPOGRAPHY.lg,
                     fontWeight: TYPOGRAPHY.semibold,
-                    color: COLORS.textInverse,
+                    color: LIGHT_COLORS.textPrimary,
                   }}
                 >
                   Client Details
@@ -560,7 +571,7 @@ export default function ClientsScreen(): React.JSX.Element {
                 <TouchableOpacity onPress={toggleVip}>
                   <Crown
                     size={24}
-                    color={selectedClient.isVip ? COLORS.gold : COLORS.textMuted}
+                    color={selectedClient.isVip ? COLORS.gold : LIGHT_COLORS.textMuted}
                     fill={selectedClient.isVip ? COLORS.gold : 'transparent'}
                   />
                 </TouchableOpacity>
@@ -585,14 +596,14 @@ export default function ClientsScreen(): React.JSX.Element {
                         width: 100,
                         height: 100,
                         borderRadius: 50,
-                        backgroundColor: COLORS.mediumGray,
+                        backgroundColor: LIGHT_COLORS.surfaceHighlight,
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderWidth: selectedClient.isVip ? 3 : 0,
                         borderColor: COLORS.gold,
                       }}
                     >
-                      <User size={40} color={COLORS.textMuted} />
+                      <User size={40} color={LIGHT_COLORS.textMuted} />
                     </View>
                   )}
 
@@ -601,7 +612,7 @@ export default function ClientsScreen(): React.JSX.Element {
                       style={{
                         fontSize: TYPOGRAPHY['xl'],
                         fontWeight: TYPOGRAPHY.bold,
-                        color: COLORS.textInverse,
+                        color: LIGHT_COLORS.textPrimary,
                       }}
                     >
                       {selectedClient.displayName}
@@ -623,10 +634,10 @@ export default function ClientsScreen(): React.JSX.Element {
                     >
                       {selectedClient.averageRating.toFixed(1)}
                     </Text>
-                    <Text style={{ fontSize: TYPOGRAPHY.md, color: COLORS.textMuted, marginLeft: 16 }}>
+                    <Text style={{ fontSize: TYPOGRAPHY.md, color: LIGHT_COLORS.textMuted, marginLeft: 16 }}>
                       {selectedClient.totalBookings} visits
                     </Text>
-                    <Text style={{ fontSize: TYPOGRAPHY.md, color: COLORS.textMuted, marginLeft: 16 }}>
+                    <Text style={{ fontSize: TYPOGRAPHY.md, color: LIGHT_COLORS.textMuted, marginLeft: 16 }}>
                       ₪{selectedClient.totalSpent.toLocaleString()} spent
                     </Text>
                   </View>
@@ -667,11 +678,11 @@ export default function ClientsScreen(): React.JSX.Element {
                         borderRadius: RADIUS.lg,
                       }}
                     >
-                      <Phone size={18} color={COLORS.textInverse} />
+                      <Phone size={18} color="#ffffff" />
                       <Text
                         style={{
                           fontSize: TYPOGRAPHY.sm,
-                          color: COLORS.textInverse,
+                          color: '#ffffff',
                           fontWeight: TYPOGRAPHY.semibold,
                           marginLeft: 8,
                         }}
@@ -692,11 +703,11 @@ export default function ClientsScreen(): React.JSX.Element {
                           borderRadius: RADIUS.lg,
                         }}
                       >
-                        <Mail size={18} color={COLORS.textInverse} />
+                        <Mail size={18} color="#ffffff" />
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.sm,
-                            color: COLORS.textInverse,
+                            color: '#ffffff',
                             fontWeight: TYPOGRAPHY.semibold,
                             marginLeft: 8,
                           }}
@@ -710,17 +721,17 @@ export default function ClientsScreen(): React.JSX.Element {
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        backgroundColor: COLORS.darkGray,
+                        backgroundColor: LIGHT_COLORS.surfaceHighlight,
                         paddingHorizontal: SPACING.lg,
                         paddingVertical: SPACING.md,
                         borderRadius: RADIUS.lg,
                       }}
                     >
-                      <MessageSquare size={18} color={COLORS.textInverse} />
+                      <MessageSquare size={18} color={LIGHT_COLORS.textPrimary} />
                       <Text
                         style={{
                           fontSize: TYPOGRAPHY.sm,
-                          color: COLORS.textInverse,
+                          color: LIGHT_COLORS.textPrimary,
                           fontWeight: TYPOGRAPHY.semibold,
                           marginLeft: 8,
                         }}
@@ -735,7 +746,7 @@ export default function ClientsScreen(): React.JSX.Element {
                   style={{
                     flexDirection: 'row',
                     borderBottomWidth: 1,
-                    borderBottomColor: COLORS.darkGray,
+                    borderBottomColor: LIGHT_COLORS.border,
                     marginHorizontal: SPACING.xl,
                   }}
                 >
@@ -759,13 +770,13 @@ export default function ClientsScreen(): React.JSX.Element {
                     >
                       <tab.icon
                         size={18}
-                        color={activeTab === tab.id ? COLORS.gold : COLORS.textMuted}
+                        color={activeTab === tab.id ? COLORS.gold : LIGHT_COLORS.textMuted}
                       />
                       <Text
                         style={{
                           fontSize: TYPOGRAPHY.sm,
                           fontWeight: TYPOGRAPHY.medium,
-                          color: activeTab === tab.id ? COLORS.gold : COLORS.textMuted,
+                          color: activeTab === tab.id ? COLORS.gold : LIGHT_COLORS.textMuted,
                           marginLeft: 6,
                         }}
                       >
@@ -782,7 +793,7 @@ export default function ClientsScreen(): React.JSX.Element {
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.sm,
-                            color: COLORS.textMuted,
+                            color: LIGHT_COLORS.textMuted,
                             marginBottom: 4,
                           }}
                         >
@@ -791,7 +802,7 @@ export default function ClientsScreen(): React.JSX.Element {
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.md,
-                            color: COLORS.textInverse,
+                            color: LIGHT_COLORS.textPrimary,
                           }}
                         >
                           {selectedClient.phone}
@@ -803,7 +814,7 @@ export default function ClientsScreen(): React.JSX.Element {
                           <Text
                             style={{
                               fontSize: TYPOGRAPHY.sm,
-                              color: COLORS.textMuted,
+                              color: LIGHT_COLORS.textMuted,
                               marginBottom: 4,
                             }}
                           >
@@ -812,7 +823,7 @@ export default function ClientsScreen(): React.JSX.Element {
                           <Text
                             style={{
                               fontSize: TYPOGRAPHY.md,
-                              color: COLORS.textInverse,
+                              color: LIGHT_COLORS.textPrimary,
                             }}
                           >
                             {selectedClient.email}
@@ -824,7 +835,7 @@ export default function ClientsScreen(): React.JSX.Element {
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.sm,
-                            color: COLORS.textMuted,
+                            color: LIGHT_COLORS.textMuted,
                             marginBottom: 4,
                           }}
                         >
@@ -833,7 +844,7 @@ export default function ClientsScreen(): React.JSX.Element {
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.md,
-                            color: COLORS.textInverse,
+                            color: LIGHT_COLORS.textPrimary,
                           }}
                         >
                           {new Date(selectedClient.firstVisit).toLocaleDateString()}
@@ -844,7 +855,7 @@ export default function ClientsScreen(): React.JSX.Element {
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.sm,
-                            color: COLORS.textMuted,
+                            color: LIGHT_COLORS.textMuted,
                             marginBottom: 4,
                           }}
                         >
@@ -853,7 +864,7 @@ export default function ClientsScreen(): React.JSX.Element {
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.md,
-                            color: COLORS.textInverse,
+                            color: LIGHT_COLORS.textPrimary,
                           }}
                         >
                           {formatDate(selectedClient.lastVisit)}
@@ -864,7 +875,7 @@ export default function ClientsScreen(): React.JSX.Element {
                         <Text
                           style={{
                             fontSize: TYPOGRAPHY.sm,
-                            color: COLORS.textMuted,
+                            color: LIGHT_COLORS.textMuted,
                             marginBottom: SPACING.sm,
                           }}
                         >
@@ -875,7 +886,7 @@ export default function ClientsScreen(): React.JSX.Element {
                             <View
                               key={service}
                               style={{
-                                backgroundColor: COLORS.darkGray,
+                                backgroundColor: LIGHT_COLORS.surfaceHighlight,
                                 paddingHorizontal: SPACING.md,
                                 paddingVertical: SPACING.sm,
                                 borderRadius: RADIUS.sm,
@@ -884,7 +895,7 @@ export default function ClientsScreen(): React.JSX.Element {
                               <Text
                                 style={{
                                   fontSize: TYPOGRAPHY.sm,
-                                  color: COLORS.textLight,
+                                  color: LIGHT_COLORS.textSecondary,
                                 }}
                               >
                                 {service}
@@ -927,11 +938,11 @@ export default function ClientsScreen(): React.JSX.Element {
                         selectedClient.notes.map(renderNoteItem)
                       ) : (
                         <View style={{ alignItems: 'center', paddingVertical: SPACING.xl }}>
-                          <StickyNote size={40} color={COLORS.textMuted} />
+                          <StickyNote size={40} color={LIGHT_COLORS.textMuted} />
                           <Text
                             style={{
                               fontSize: TYPOGRAPHY.md,
-                              color: COLORS.textMuted,
+                              color: LIGHT_COLORS.textMuted,
                               marginTop: SPACING.md,
                             }}
                           >
@@ -948,11 +959,11 @@ export default function ClientsScreen(): React.JSX.Element {
                         selectedClient.bookingHistory.map(renderBookingItem)
                       ) : (
                         <View style={{ alignItems: 'center', paddingVertical: SPACING.xl }}>
-                          <History size={40} color={COLORS.textMuted} />
+                          <History size={40} color={LIGHT_COLORS.textMuted} />
                           <Text
                             style={{
                               fontSize: TYPOGRAPHY.md,
-                              color: COLORS.textMuted,
+                              color: LIGHT_COLORS.textMuted,
                               marginTop: SPACING.md,
                             }}
                           >
@@ -978,14 +989,14 @@ export default function ClientsScreen(): React.JSX.Element {
         <View
           style={{
             flex: 1,
-            backgroundColor: COLORS.overlay,
+            backgroundColor: 'rgba(0,0,0,0.5)',
             justifyContent: 'center',
             padding: SPACING.xl,
           }}
         >
           <View
             style={{
-              backgroundColor: COLORS.charcoal,
+              backgroundColor: LIGHT_COLORS.surface,
               borderRadius: RADIUS.xl,
               padding: SPACING.xl,
             }}
@@ -1002,28 +1013,28 @@ export default function ClientsScreen(): React.JSX.Element {
                 style={{
                   fontSize: TYPOGRAPHY.lg,
                   fontWeight: TYPOGRAPHY.semibold,
-                  color: COLORS.textInverse,
+                  color: LIGHT_COLORS.textPrimary,
                 }}
               >
                 Add Note
               </Text>
               <TouchableOpacity onPress={() => setShowAddNoteModal(false)}>
-                <X size={24} color={COLORS.textMuted} />
+                <X size={24} color={LIGHT_COLORS.textMuted} />
               </TouchableOpacity>
             </View>
 
             <TextInput
               style={{
-                backgroundColor: COLORS.darkGray,
+                backgroundColor: LIGHT_COLORS.surfaceHighlight,
                 borderRadius: RADIUS.md,
                 padding: SPACING.md,
                 fontSize: TYPOGRAPHY.base,
-                color: COLORS.textInverse,
+                color: LIGHT_COLORS.textPrimary,
                 minHeight: 120,
                 textAlignVertical: 'top',
               }}
               placeholder="Write a note about this client..."
-              placeholderTextColor={COLORS.textMuted}
+              placeholderTextColor={LIGHT_COLORS.textMuted}
               value={newNoteContent}
               onChangeText={setNewNoteContent}
               multiline
@@ -1036,7 +1047,7 @@ export default function ClientsScreen(): React.JSX.Element {
                   flex: 1,
                   paddingVertical: SPACING.md,
                   borderRadius: RADIUS.lg,
-                  backgroundColor: COLORS.darkGray,
+                  backgroundColor: LIGHT_COLORS.surfaceHighlight,
                   alignItems: 'center',
                 }}
               >
@@ -1044,7 +1055,7 @@ export default function ClientsScreen(): React.JSX.Element {
                   style={{
                     fontSize: TYPOGRAPHY.md,
                     fontWeight: TYPOGRAPHY.semibold,
-                    color: COLORS.textLight,
+                    color: LIGHT_COLORS.textSecondary,
                   }}
                 >
                   Cancel

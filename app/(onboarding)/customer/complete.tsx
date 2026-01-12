@@ -5,16 +5,25 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { CheckCircle2, Sparkles, Gift, ArrowRight } from 'lucide-react-native';
 import Animated, {
-  FadeIn,
-  FadeInDown,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withSequence,
   withDelay,
 } from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown } from '@/utils/animations';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 import { useOnboardingStore } from '@/stores/useOnboardingStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 export default function CustomerCompleteScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
@@ -59,14 +68,14 @@ export default function CustomerCompleteScreen(): React.JSX.Element {
           </Animated.View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(400).duration(500)} style={styles.textContent}>
+        <Animated.View entering={webSafeFadeInDown(400, 500)} style={styles.textContent}>
           <Text style={styles.title}>You're all set!</Text>
           <Text style={styles.subtitle}>
             Welcome to BarberConnect, {customerData.fullName.split(' ')[0]}!
           </Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(600).duration(500)} style={styles.promoCard}>
+        <Animated.View entering={webSafeFadeInDown(600, 500)} style={styles.promoCard}>
           <View style={styles.promoIcon}>
             <Gift size={24} color={COLORS.gold} />
           </View>
@@ -79,7 +88,7 @@ export default function CustomerCompleteScreen(): React.JSX.Element {
           <Sparkles size={20} color={COLORS.gold} />
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(800).duration(500)} style={styles.features}>
+        <Animated.View entering={webSafeFadeInDown(800, 500)} style={styles.features}>
           <View style={styles.featureItem}>
             <View style={styles.featureDot} />
             <Text style={styles.featureText}>Browse top-rated barbers near you</Text>
@@ -96,7 +105,7 @@ export default function CustomerCompleteScreen(): React.JSX.Element {
       </View>
 
       <Animated.View
-        entering={FadeIn.delay(1000).duration(500)}
+        entering={webSafeFadeIn(500)}
         style={[styles.bottomSection, { paddingBottom: insets.bottom + SPACING.xl }]}
       >
         <Button
@@ -123,7 +132,7 @@ export default function CustomerCompleteScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: LIGHT_COLORS.background,
   },
   content: {
     flex: 1,
@@ -147,12 +156,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '800',
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.sm,
   },
   subtitle: {
     fontSize: TYPOGRAPHY.lg,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     textAlign: 'center',
   },
   promoCard: {
@@ -170,7 +179,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: RADIUS.md,
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -184,7 +193,7 @@ const styles = StyleSheet.create({
   },
   promoDescription: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     marginTop: SPACING.xxs,
   },
   promoCode: {
@@ -208,7 +217,7 @@ const styles = StyleSheet.create({
   },
   featureText: {
     fontSize: TYPOGRAPHY.md,
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   bottomSection: {
     paddingHorizontal: SPACING.xl,
@@ -226,7 +235,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   secondaryButtonLabel: {
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     fontSize: TYPOGRAPHY.md,
   },
 });

@@ -3,28 +3,43 @@ import { View, StyleSheet, Pressable, ScrollView, Image, TouchableOpacity } from
 import { Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { FlashList } from '@shopify/flash-list';
 import { format, isToday, isTomorrow, isPast, differenceInHours } from 'date-fns';
 import {
   Calendar,
   Clock,
-  MapPin,
   MessageCircle,
-  ChevronRight,
+  ChevronLeft,
   Navigation,
   CalendarDays,
   History,
-  X,
+  Check,
 } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 
-import { DARK_COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
+import { COLORS, SPACING, RADIUS } from '@/constants/theme';
 import { useAppStore } from '@/stores/useAppStore';
 import {
   MOCK_BOOKINGS_CUSTOMER,
   MOCK_BOOKINGS_BARBER,
   type MockBooking,
 } from '@/constants/mockData';
+
+const DESIGN_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#e5e7eb',
+  textPrimary: '#111618',
+  textSecondary: '#6b7280',
+  primary: '#135bec',
+  border: '#e5e7eb',
+  confirmedBg: '#dcfce7',
+  confirmedText: '#15803d',
+  upcomingBg: '#dbeafe',
+  upcomingText: '#1d4ed8',
+  pendingBg: '#fef3c7',
+  pendingText: '#a16207',
+};
 
 type TabType = 'confirmed' | 'pending';
 
@@ -50,37 +65,43 @@ function getTimeUntil(dateString: string): string | null {
   return null;
 }
 
-function getStatusConfig(status: string) {
+function getStatusConfig(status: string, isImmediate: boolean) {
   switch (status) {
     case 'confirmed':
       return {
         label: 'Confirmed',
-        bgColor: 'rgba(34, 197, 94, 0.15)',
-        textColor: '#4ade80',
+        bgColor: DESIGN_COLORS.confirmedBg,
+        textColor: DESIGN_COLORS.confirmedText,
       };
     case 'pending':
       return {
         label: 'Pending',
-        bgColor: 'rgba(245, 158, 11, 0.15)',
-        textColor: '#fbbf24',
+        bgColor: DESIGN_COLORS.pendingBg,
+        textColor: DESIGN_COLORS.pendingText,
       };
     case 'completed':
       return {
         label: 'Completed',
-        bgColor: 'rgba(59, 130, 246, 0.15)',
-        textColor: '#60a5fa',
+        bgColor: DESIGN_COLORS.upcomingBg,
+        textColor: DESIGN_COLORS.upcomingText,
       };
     case 'cancelled':
       return {
         label: 'Cancelled',
-        bgColor: 'rgba(239, 68, 68, 0.15)',
-        textColor: '#f87171',
+        bgColor: '#fee2e2',
+        textColor: '#b91c1c',
+      };
+    case 'upcoming':
+      return {
+        label: 'Upcoming',
+        bgColor: DESIGN_COLORS.upcomingBg,
+        textColor: DESIGN_COLORS.upcomingText,
       };
     default:
       return {
         label: 'Upcoming',
-        bgColor: 'rgba(59, 130, 246, 0.15)',
-        textColor: '#60a5fa',
+        bgColor: DESIGN_COLORS.upcomingBg,
+        textColor: DESIGN_COLORS.upcomingText,
       };
   }
 }
@@ -96,17 +117,29 @@ function BookingCard({ booking, userMode, onPress, isPending }: BookingCardProps
   const isUpcoming = !isPast(new Date(booking.scheduledAt)) && booking.status !== 'cancelled' && booking.status !== 'completed';
   const personName = userMode === 'barber' ? booking.customerName : booking.barberName;
   const personAvatar = userMode === 'barber' ? booking.customerAvatar : booking.barberAvatar;
-  const statusConfig = getStatusConfig(booking.status);
-  const timeUntil = getTimeUntil(booking.scheduledAt);
   const isImmediate = isToday(new Date(booking.scheduledAt)) && isUpcoming;
+  const statusConfig = getStatusConfig(
+    isPending ? 'pending' : booking.status,
+    isImmediate
+  );
+  // For confirmed but not immediate bookings, show "Upcoming" status
+  const displayStatusConfig = booking.status === 'confirmed' && !isImmediate && !isPending
+    ? getStatusConfig('upcoming', false)
+    : statusConfig;
+  const timeUntil = getTimeUntil(booking.scheduledAt);
 
   return (
-    <Animated.View entering={FadeInDown.duration(300)}>
+    <Animated.View entering={webSafeFadeInDown(0, 300)}>
       <Pressable onPress={onPress}>
-        <View style={[styles.bookingCard, isPending && styles.bookingCardPending]}>
-          {isImmediate && <View style={styles.urgencyStripe} />}
-          
+        <View style={[
+          styles.bookingCard,
+          isPending && styles.bookingCardPending,
+        ]}>
+          {/* Urgency Indicator Stripe - only for confirmed immediate bookings */}
+          {isImmediate && !isPending && <View style={styles.urgencyStripe} />}
+
           <View style={styles.cardContent}>
+            {/* Barber/Customer Image */}
             <View style={styles.avatarSection}>
               <Image
                 source={{
@@ -114,25 +147,27 @@ function BookingCard({ booking, userMode, onPress, isPending }: BookingCardProps
                 }}
                 style={[styles.avatar, isPending && styles.avatarPending]}
               />
-              {booking.status === 'confirmed' && (
+              {/* Confirmed checkmark badge */}
+              {booking.status === 'confirmed' && !isPending && (
                 <View style={styles.confirmedBadge}>
-                  <Text style={styles.confirmedBadgeIcon}>✓</Text>
+                  <Check size={10} color="#fff" strokeWidth={3} />
                 </View>
               )}
+              {/* Pending pulsing dot */}
               {isPending && (
                 <View style={styles.pendingDot}>
-                  <Animated.View style={styles.pendingDotPing} />
                   <View style={styles.pendingDotCore} />
                 </View>
               )}
             </View>
 
+            {/* Details Section */}
             <View style={styles.detailsSection}>
               <View style={styles.headerRow}>
                 <Text style={styles.personName} numberOfLines={1}>{personName}</Text>
-                <View style={[styles.statusBadge, { backgroundColor: statusConfig.bgColor }]}>
-                  <Text style={[styles.statusText, { color: statusConfig.textColor }]}>
-                    {statusConfig.label}
+                <View style={[styles.statusBadge, { backgroundColor: displayStatusConfig.bgColor }]}>
+                  <Text style={[styles.statusText, { color: displayStatusConfig.textColor }]}>
+                    {displayStatusConfig.label}
                   </Text>
                 </View>
               </View>
@@ -143,16 +178,16 @@ function BookingCard({ booking, userMode, onPress, isPending }: BookingCardProps
 
               <View style={styles.timeRow}>
                 {isPending ? (
-                  <Clock size={16} color="#fbbf24" />
+                  <Clock size={16} color="#eab308" />
                 ) : isImmediate ? (
-                  <Clock size={16} color={DARK_COLORS.primary} />
+                  <Clock size={16} color={DESIGN_COLORS.primary} />
                 ) : (
-                  <CalendarDays size={16} color={DARK_COLORS.textMuted} />
+                  <CalendarDays size={16} color={DESIGN_COLORS.textSecondary} />
                 )}
                 <Text style={styles.timeText}>
                   {isPending ? 'Req: ' : ''}{formatBookingDate(booking.scheduledAt)}, {formatBookingTime(booking.scheduledAt)}
                 </Text>
-                {timeUntil && (
+                {timeUntil && !isPending && (
                   <>
                     <Text style={styles.timeSeparator}>•</Text>
                     <Text style={styles.timeUntilText}>{timeUntil}</Text>
@@ -162,7 +197,8 @@ function BookingCard({ booking, userMode, onPress, isPending }: BookingCardProps
             </View>
           </View>
 
-          {isUpcoming && !isPending && (
+          {/* Actions for immediate confirmed bookings */}
+          {isUpcoming && !isPending && isImmediate && (
             <View style={styles.actionsRow}>
               <TouchableOpacity
                 style={styles.primaryAction}
@@ -175,11 +211,12 @@ function BookingCard({ booking, userMode, onPress, isPending }: BookingCardProps
                 style={styles.secondaryAction}
                 onPress={() => router.push(`/(modals)/chat/${booking.id}`)}
               >
-                <MessageCircle size={18} color={DARK_COLORS.textSecondary} />
+                <MessageCircle size={18} color={DESIGN_COLORS.textSecondary} />
               </TouchableOpacity>
             </View>
           )}
 
+          {/* Footer for non-immediate confirmed bookings */}
           {isUpcoming && !isPending && !isImmediate && (
             <View style={styles.footerRow}>
               <TouchableOpacity>
@@ -191,6 +228,7 @@ function BookingCard({ booking, userMode, onPress, isPending }: BookingCardProps
             </View>
           )}
 
+          {/* Cancel button for pending bookings */}
           {isPending && (
             <View style={styles.pendingActions}>
               <TouchableOpacity style={styles.cancelRequestButton}>
@@ -224,16 +262,18 @@ export default function BookingsScreen(): React.JSX.Element {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
+      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.headerButton}>
-          <ChevronRight size={24} color={DARK_COLORS.textPrimary} style={{ transform: [{ rotate: '180deg' }] }} />
+          <ChevronLeft size={24} color={DESIGN_COLORS.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>My Bookings</Text>
         <TouchableOpacity style={styles.headerButton}>
-          <History size={22} color={DARK_COLORS.textPrimary} />
+          <History size={22} color={DESIGN_COLORS.textPrimary} />
         </TouchableOpacity>
       </View>
 
+      {/* Segmented Control Tabs */}
       <View style={styles.tabsWrapper}>
         <View style={styles.tabsContainer}>
           <TouchableOpacity
@@ -251,20 +291,17 @@ export default function BookingsScreen(): React.JSX.Element {
             <Text style={[styles.tabText, activeTab === 'pending' && styles.tabTextActive]}>
               Pending
             </Text>
-            {pendingBookings.length > 0 && (
-              <View style={styles.pendingBadge}>
-                <Text style={styles.pendingBadgeText}>{pendingBookings.length}</Text>
-              </View>
-            )}
           </TouchableOpacity>
         </View>
       </View>
 
+      {/* Main Content */}
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
+        {/* Section Header */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>
             {activeTab === 'confirmed' ? 'Upcoming Appointments' : 'Pending Requests'}
@@ -281,10 +318,11 @@ export default function BookingsScreen(): React.JSX.Element {
           )}
         </View>
 
+        {/* Bookings List or Empty State */}
         {displayedBookings.length === 0 ? (
           <View style={styles.emptyState}>
             <View style={styles.emptyIconContainer}>
-              <Calendar size={48} color={DARK_COLORS.primary} />
+              <Calendar size={48} color={DESIGN_COLORS.primary} />
             </View>
             <Text style={styles.emptyTitle}>
               {activeTab === 'confirmed' ? 'No upcoming bookings' : 'No pending requests'}
@@ -305,7 +343,7 @@ export default function BookingsScreen(): React.JSX.Element {
           </View>
         ) : (
           <View style={styles.bookingsList}>
-            {displayedBookings.map((booking, index) => (
+            {displayedBookings.map((booking) => (
               <BookingCard
                 key={booking.id}
                 booking={booking}
@@ -317,6 +355,30 @@ export default function BookingsScreen(): React.JSX.Element {
           </View>
         )}
 
+        {/* Pending Requests Section (shown when on Confirmed tab and there are pending) */}
+        {activeTab === 'confirmed' && pendingBookings.length > 0 && (
+          <>
+            <View style={[styles.sectionHeader, styles.pendingSection]}>
+              <Text style={styles.sectionTitle}>Pending Requests</Text>
+              <View style={styles.newBadge}>
+                <Text style={styles.newBadgeText}>{pendingBookings.length} New</Text>
+              </View>
+            </View>
+            <View style={styles.bookingsList}>
+              {pendingBookings.map((booking) => (
+                <BookingCard
+                  key={booking.id}
+                  booking={booking}
+                  userMode={userMode}
+                  onPress={() => handleBookingPress(booking.id)}
+                  isPending
+                />
+              ))}
+            </View>
+          </>
+        )}
+
+        {/* Bottom padding for scroll */}
         <View style={{ height: 100 }} />
       </ScrollView>
     </View>
@@ -326,16 +388,17 @@ export default function BookingsScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: DESIGN_COLORS.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.lg,
+    backgroundColor: DESIGN_COLORS.background,
     borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.border,
+    borderBottomColor: '#e5e7eb',
   },
   headerButton: {
     width: 40,
@@ -347,76 +410,73 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: DESIGN_COLORS.textPrimary,
+    letterSpacing: -0.3,
   },
   tabsWrapper: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.border,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.lg,
+    backgroundColor: DESIGN_COLORS.background,
   },
   tabsContainer: {
     flexDirection: 'row',
-    backgroundColor: DARK_COLORS.surfaceLight,
-    borderRadius: 12,
+    backgroundColor: DESIGN_COLORS.surfaceHighlight,
+    borderRadius: RADIUS.md,
     padding: 4,
+    height: 48,
   },
   tab: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: RADIUS.sm,
   },
   tabActive: {
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: DESIGN_COLORS.surface,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   tabText: {
     fontSize: 14,
     fontWeight: '600',
-    color: DARK_COLORS.textMuted,
+    color: DESIGN_COLORS.textSecondary,
   },
   tabTextActive: {
-    color: DARK_COLORS.primary,
-  },
-  pendingBadge: {
-    backgroundColor: '#fbbf24',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
-  },
-  pendingBadgeText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#000',
+    color: DESIGN_COLORS.primary,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: 16,
-    paddingTop: 24,
+    paddingHorizontal: SPACING.lg,
+    paddingTop: SPACING.xl,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: SPACING.lg,
+  },
+  pendingSection: {
+    marginTop: SPACING.xl,
+    opacity: 0.85,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: DARK_COLORS.textPrimary,
+    color: DESIGN_COLORS.textPrimary,
   },
   seeCalendarText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '500',
-    color: DARK_COLORS.primary,
+    color: DESIGN_COLORS.primary,
   },
   newBadge: {
-    backgroundColor: 'rgba(245, 158, 11, 0.2)',
+    backgroundColor: DESIGN_COLORS.pendingBg,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -424,22 +484,27 @@ const styles = StyleSheet.create({
   newBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#fbbf24',
+    color: DESIGN_COLORS.pendingText,
   },
   bookingsList: {
-    gap: 16,
+    gap: SPACING.lg,
   },
   bookingCard: {
-    backgroundColor: DARK_COLORS.surface,
-    borderRadius: 12,
+    backgroundColor: DESIGN_COLORS.surface,
+    borderRadius: RADIUS.md,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: '#f3f4f6',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   bookingCardPending: {
     borderStyle: 'dashed',
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    opacity: 0.95,
+    borderColor: '#d1d5db',
+    opacity: 0.9,
   },
   urgencyStripe: {
     position: 'absolute',
@@ -447,21 +512,23 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 4,
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: DESIGN_COLORS.primary,
   },
   cardContent: {
     flexDirection: 'row',
-    padding: 16,
-    gap: 16,
+    padding: SPACING.lg,
+    gap: SPACING.lg,
   },
   avatarSection: {
     position: 'relative',
+    width: 80,
+    height: 80,
   },
   avatar: {
     width: 80,
     height: 80,
-    borderRadius: 8,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    borderRadius: RADIUS.sm,
+    backgroundColor: DESIGN_COLORS.surfaceHighlight,
   },
   avatarPending: {
     opacity: 0.8,
@@ -475,32 +542,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#22c55e',
     borderWidth: 2,
-    borderColor: DARK_COLORS.surface,
+    borderColor: DESIGN_COLORS.surface,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  confirmedBadgeIcon: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#fff',
   },
   pendingDot: {
     position: 'absolute',
     top: -4,
     right: -4,
-  },
-  pendingDotPing: {
-    position: 'absolute',
     width: 12,
     height: 12,
-    borderRadius: 6,
-    backgroundColor: 'rgba(251, 191, 36, 0.75)',
   },
   pendingDotCore: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#fbbf24',
+    backgroundColor: '#eab308',
   },
   detailsSection: {
     flex: 1,
@@ -516,7 +573,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: DESIGN_COLORS.textPrimary,
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -531,7 +588,7 @@ const styles = StyleSheet.create({
   },
   servicesText: {
     fontSize: 14,
-    color: DARK_COLORS.textSecondary,
+    color: DESIGN_COLORS.textSecondary,
     marginTop: 4,
   },
   timeRow: {
@@ -543,22 +600,22 @@ const styles = StyleSheet.create({
   timeText: {
     fontSize: 14,
     fontWeight: '500',
-    color: DARK_COLORS.textPrimary,
+    color: DESIGN_COLORS.textPrimary,
   },
   timeSeparator: {
     fontSize: 12,
-    color: DARK_COLORS.textMuted,
+    color: DESIGN_COLORS.textSecondary,
   },
   timeUntilText: {
     fontSize: 12,
-    color: DARK_COLORS.textMuted,
+    color: DESIGN_COLORS.textSecondary,
   },
   actionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingHorizontal: 16,
-    paddingBottom: 16,
+    paddingHorizontal: SPACING.lg,
+    paddingBottom: SPACING.lg,
     marginTop: 4,
   },
   primaryAction: {
@@ -568,8 +625,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     height: 40,
-    borderRadius: 8,
-    backgroundColor: DARK_COLORS.primary,
+    borderRadius: RADIUS.sm,
+    backgroundColor: DESIGN_COLORS.primary,
   },
   primaryActionText: {
     fontSize: 14,
@@ -579,8 +636,8 @@ const styles = StyleSheet.create({
   secondaryAction: {
     width: 40,
     height: 40,
-    borderRadius: 8,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    borderRadius: RADIUS.sm,
+    backgroundColor: DESIGN_COLORS.surfaceHighlight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -588,44 +645,44 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
+    paddingHorizontal: SPACING.lg,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: DARK_COLORS.border,
+    borderTopColor: DESIGN_COLORS.border,
   },
   cancelText: {
     fontSize: 14,
     fontWeight: '500',
-    color: DARK_COLORS.textMuted,
+    color: DESIGN_COLORS.textSecondary,
   },
   viewDetailsButton: {
-    paddingHorizontal: 16,
+    paddingHorizontal: SPACING.lg,
     paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    borderRadius: RADIUS.sm,
+    backgroundColor: DESIGN_COLORS.surfaceHighlight,
   },
   viewDetailsText: {
     fontSize: 14,
     fontWeight: '600',
-    color: DARK_COLORS.textPrimary,
+    color: DESIGN_COLORS.textPrimary,
   },
   pendingActions: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
+    paddingHorizontal: SPACING.lg,
+    paddingBottom: SPACING.lg,
     marginTop: 4,
   },
   cancelRequestButton: {
     height: 36,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.3)',
+    borderColor: '#fecaca',
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelRequestText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#f87171',
+    color: '#dc2626',
   },
   emptyState: {
     flex: 1,
@@ -637,7 +694,7 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 48,
-    backgroundColor: 'rgba(59, 130, 246, 0.15)',
+    backgroundColor: 'rgba(19, 91, 236, 0.15)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 24,
@@ -645,20 +702,20 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: DARK_COLORS.textPrimary,
+    color: DESIGN_COLORS.textPrimary,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
-    color: DARK_COLORS.textMuted,
+    color: DESIGN_COLORS.textSecondary,
     textAlign: 'center',
     marginBottom: 24,
   },
   emptyButton: {
     paddingHorizontal: 24,
     paddingVertical: 12,
-    borderRadius: 8,
-    backgroundColor: DARK_COLORS.primary,
+    borderRadius: RADIUS.sm,
+    backgroundColor: DESIGN_COLORS.primary,
   },
   emptyButtonText: {
     fontSize: 14,

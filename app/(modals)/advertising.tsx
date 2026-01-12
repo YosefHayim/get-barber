@@ -30,6 +30,17 @@ import {
   ArrowDownRight,
 } from 'lucide-react-native';
 import { COLORS, SHADOWS, RADIUS, SPACING, TYPOGRAPHY } from '@/constants/theme';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
+
 import {
   MOCK_CAMPAIGNS,
   MOCK_WALLET,
@@ -136,7 +147,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
         <TouchableOpacity
           key={campaign.id}
           style={{
-            backgroundColor: COLORS.darkGray,
+            backgroundColor: LIGHT_COLORS.surface,
             borderRadius: RADIUS.lg,
             padding: SPACING.lg,
             marginBottom: SPACING.md,
@@ -168,14 +179,14 @@ export default function AdvertisingScreen(): React.JSX.Element {
                   style={{
                     fontSize: TYPOGRAPHY.md,
                     fontWeight: TYPOGRAPHY.semibold,
-                    color: COLORS.textInverse,
+                    color: LIGHT_COLORS.textPrimary,
                     marginBottom: 2,
                   }}
                   numberOfLines={1}
                 >
                   {campaign.title || typeInfo.label}
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>
+                <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>
                   {typeInfo.label}
                 </Text>
               </View>
@@ -203,43 +214,43 @@ export default function AdvertisingScreen(): React.JSX.Element {
           {stats && (
             <View style={{ flexDirection: 'row', marginBottom: SPACING.md, gap: SPACING.lg }}>
               <View style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                   {stats.impressions.toLocaleString()}
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>Impressions</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>Impressions</Text>
               </View>
               <View style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                   {stats.clicks}
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>Clicks</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>Clicks</Text>
               </View>
               <View style={{ alignItems: 'center' }}>
                 <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: COLORS.gold }}>
                   {stats.bookings}
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>Bookings</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>Bookings</Text>
               </View>
               <View style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                   {stats.ctr.toFixed(1)}%
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>CTR</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>CTR</Text>
               </View>
             </View>
           )}
 
           <View style={{ marginBottom: SPACING.sm }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-              <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>Budget Used</Text>
-              <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textLight }}>
+              <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>Budget Used</Text>
+              <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary }}>
                 {formatCurrency(campaign.spentCents)} / {formatCurrency(campaign.totalBudgetCents || 0)}
               </Text>
             </View>
             <View
               style={{
                 height: 6,
-                backgroundColor: COLORS.mediumGray,
+                backgroundColor: LIGHT_COLORS.border,
                 borderRadius: RADIUS.full,
                 overflow: 'hidden',
               }}
@@ -256,7 +267,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
           </View>
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>
+            <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>
               {formatDate(campaign.startDate)} - {formatDate(campaign.endDate)}
             </Text>
             <View style={{ flexDirection: 'row', gap: SPACING.sm }}>
@@ -265,11 +276,11 @@ export default function AdvertisingScreen(): React.JSX.Element {
                   onPress={() => handleCampaignAction(campaign, 'pause')}
                   style={{
                     padding: SPACING.sm,
-                    backgroundColor: COLORS.mediumGray,
+                    backgroundColor: LIGHT_COLORS.surfaceHighlight,
                     borderRadius: RADIUS.sm,
                   }}
                 >
-                  <Pause size={16} color={COLORS.textLight} />
+                  <Pause size={16} color={LIGHT_COLORS.textSecondary} />
                 </TouchableOpacity>
               )}
               {campaign.status === 'paused' && (
@@ -281,10 +292,10 @@ export default function AdvertisingScreen(): React.JSX.Element {
                     borderRadius: RADIUS.sm,
                   }}
                 >
-                  <Play size={16} color={COLORS.textInverse} />
+                  <Play size={16} color={LIGHT_COLORS.surface} />
                 </TouchableOpacity>
               )}
-              <ChevronRight size={20} color={COLORS.textMuted} />
+              <ChevronRight size={20} color={LIGHT_COLORS.textMuted} />
             </View>
           </View>
         </TouchableOpacity>
@@ -294,7 +305,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.charcoal }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: LIGHT_COLORS.background }}>
       <View
         style={{
           flexDirection: 'row',
@@ -302,13 +313,13 @@ export default function AdvertisingScreen(): React.JSX.Element {
           paddingHorizontal: SPACING.xl,
           paddingVertical: SPACING.lg,
           borderBottomWidth: 1,
-          borderBottomColor: COLORS.darkGray,
+          borderBottomColor: LIGHT_COLORS.border,
         }}
       >
         <TouchableOpacity onPress={() => router.back()} style={{ marginRight: SPACING.md }}>
-          <ArrowLeft size={24} color={COLORS.textInverse} />
+          <ArrowLeft size={24} color={LIGHT_COLORS.textPrimary} />
         </TouchableOpacity>
-        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textInverse, flex: 1 }}>
+        <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary, flex: 1 }}>
           Advertising
         </Text>
         <TouchableOpacity
@@ -344,7 +355,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
             style={{
               fontSize: TYPOGRAPHY.md,
               fontWeight: TYPOGRAPHY.medium,
-              color: activeTab === 'campaigns' ? COLORS.gold : COLORS.textMuted,
+              color: activeTab === 'campaigns' ? COLORS.gold : LIGHT_COLORS.textMuted,
             }}
           >
             Campaigns
@@ -364,7 +375,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
             style={{
               fontSize: TYPOGRAPHY.md,
               fontWeight: TYPOGRAPHY.medium,
-              color: activeTab === 'wallet' ? COLORS.gold : COLORS.textMuted,
+              color: activeTab === 'wallet' ? COLORS.gold : LIGHT_COLORS.textMuted,
             }}
           >
             Wallet
@@ -379,7 +390,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
               <View
                 style={{
                   flex: 1,
-                  backgroundColor: COLORS.darkGray,
+                  backgroundColor: LIGHT_COLORS.surface,
                   borderRadius: RADIUS.lg,
                   padding: SPACING.md,
                   alignItems: 'center',
@@ -388,35 +399,35 @@ export default function AdvertisingScreen(): React.JSX.Element {
                 <Text style={{ fontSize: TYPOGRAPHY['2xl'], fontWeight: TYPOGRAPHY.bold, color: COLORS.gold }}>
                   {activeCampaigns.length}
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>Active</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>Active</Text>
               </View>
               <View
                 style={{
                   flex: 1,
-                  backgroundColor: COLORS.darkGray,
+                  backgroundColor: LIGHT_COLORS.surface,
                   borderRadius: RADIUS.lg,
                   padding: SPACING.md,
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                   {formatCurrency(totalSpent)}
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>Total Spent</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>Total Spent</Text>
               </View>
               <View
                 style={{
                   flex: 1,
-                  backgroundColor: COLORS.darkGray,
+                  backgroundColor: LIGHT_COLORS.surface,
                   borderRadius: RADIUS.lg,
                   padding: SPACING.md,
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                   {(totalImpressionsAllCampaigns / 1000).toFixed(1)}k
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>Impressions</Text>
+                <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>Impressions</Text>
               </View>
             </View>
 
@@ -424,7 +435,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
               style={{
                 fontSize: TYPOGRAPHY.md,
                 fontWeight: TYPOGRAPHY.semibold,
-                color: COLORS.textInverse,
+                color: LIGHT_COLORS.textPrimary,
                 marginBottom: SPACING.md,
               }}
             >
@@ -487,12 +498,12 @@ export default function AdvertisingScreen(): React.JSX.Element {
               <View
                 style={{
                   flex: 1,
-                  backgroundColor: COLORS.darkGray,
+                  backgroundColor: LIGHT_COLORS.surface,
                   borderRadius: RADIUS.lg,
                   padding: SPACING.lg,
                 }}
               >
-                <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted, marginBottom: 4 }}>
+                <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted, marginBottom: 4 }}>
                   Total Deposited
                 </Text>
                 <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: COLORS.success }}>
@@ -502,15 +513,15 @@ export default function AdvertisingScreen(): React.JSX.Element {
               <View
                 style={{
                   flex: 1,
-                  backgroundColor: COLORS.darkGray,
+                  backgroundColor: LIGHT_COLORS.surface,
                   borderRadius: RADIUS.lg,
                   padding: SPACING.lg,
                 }}
               >
-                <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted, marginBottom: 4 }}>
+                <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted, marginBottom: 4 }}>
                   Total Spent
                 </Text>
-                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                   {formatCurrency(MOCK_WALLET.totalSpentCents)}
                 </Text>
               </View>
@@ -519,7 +530,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
             {MOCK_WALLET.autoReplenish && (
               <View
                 style={{
-                  backgroundColor: COLORS.darkGray,
+                  backgroundColor: LIGHT_COLORS.surface,
                   borderRadius: RADIUS.lg,
                   padding: SPACING.lg,
                   marginBottom: SPACING.xl,
@@ -529,10 +540,10 @@ export default function AdvertisingScreen(): React.JSX.Element {
               >
                 <CreditCard size={20} color={COLORS.gold} />
                 <View style={{ marginLeft: SPACING.md, flex: 1 }}>
-                  <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.medium, color: COLORS.textInverse }}>
+                  <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.medium, color: LIGHT_COLORS.textPrimary }}>
                     Auto-Replenish Active
                   </Text>
-                  <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>
+                  <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>
                     Adds {formatCurrency(MOCK_WALLET.autoReplenishAmountCents || 0)} when balance drops below{' '}
                     {formatCurrency(MOCK_WALLET.autoReplenishThresholdCents || 0)}
                   </Text>
@@ -544,7 +555,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
               style={{
                 fontSize: TYPOGRAPHY.md,
                 fontWeight: TYPOGRAPHY.semibold,
-                color: COLORS.textInverse,
+                color: LIGHT_COLORS.textPrimary,
                 marginBottom: SPACING.md,
               }}
             >
@@ -557,7 +568,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  backgroundColor: COLORS.darkGray,
+                  backgroundColor: LIGHT_COLORS.surface,
                   borderRadius: RADIUS.md,
                   padding: SPACING.md,
                   marginBottom: SPACING.sm,
@@ -581,10 +592,10 @@ export default function AdvertisingScreen(): React.JSX.Element {
                   )}
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.medium, color: COLORS.textInverse }}>
+                  <Text style={{ fontSize: TYPOGRAPHY.sm, fontWeight: TYPOGRAPHY.medium, color: LIGHT_COLORS.textPrimary }}>
                     {txn.description}
                   </Text>
-                  <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }}>
+                  <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }}>
                     {new Date(txn.createdAt).toLocaleDateString()}
                   </Text>
                 </View>
@@ -592,7 +603,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
                   style={{
                     fontSize: TYPOGRAPHY.md,
                     fontWeight: TYPOGRAPHY.semibold,
-                    color: txn.amountCents >= 0 ? COLORS.success : COLORS.textInverse,
+                    color: txn.amountCents >= 0 ? COLORS.success : LIGHT_COLORS.textPrimary,
                   }}
                 >
                   {txn.amountCents >= 0 ? '+' : ''}
@@ -611,7 +622,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
         onRequestClose={() => setShowCampaignDetail(false)}
       >
         {selectedCampaign && (
-          <View style={{ flex: 1, backgroundColor: COLORS.charcoal }}>
+          <View style={{ flex: 1, backgroundColor: LIGHT_COLORS.background }}>
             <SafeAreaView style={{ flex: 1 }}>
               <View
                 style={{
@@ -621,13 +632,13 @@ export default function AdvertisingScreen(): React.JSX.Element {
                   paddingHorizontal: SPACING.xl,
                   paddingVertical: SPACING.lg,
                   borderBottomWidth: 1,
-                  borderBottomColor: COLORS.darkGray,
+                  borderBottomColor: LIGHT_COLORS.border,
                 }}
               >
                 <TouchableOpacity onPress={() => setShowCampaignDetail(false)}>
-                  <X size={24} color={COLORS.textInverse} />
+                  <X size={24} color={LIGHT_COLORS.textPrimary} />
                 </TouchableOpacity>
-                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textInverse }}>
+                <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary }}>
                   Campaign Details
                 </Text>
                 <View style={{ width: 24 }} />
@@ -652,7 +663,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
                     style={{
                       fontSize: TYPOGRAPHY['xl'],
                       fontWeight: TYPOGRAPHY.bold,
-                      color: COLORS.textInverse,
+                      color: LIGHT_COLORS.textPrimary,
                       textAlign: 'center',
                     }}
                   >
@@ -685,7 +696,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
                       style={{
                         fontSize: TYPOGRAPHY.md,
                         fontWeight: TYPOGRAPHY.semibold,
-                        color: COLORS.textInverse,
+                        color: LIGHT_COLORS.textPrimary,
                         marginBottom: SPACING.md,
                       }}
                     >
@@ -702,18 +713,18 @@ export default function AdvertisingScreen(): React.JSX.Element {
                           key={stat.label}
                           style={{
                             width: '48%',
-                            backgroundColor: COLORS.darkGray,
+                            backgroundColor: LIGHT_COLORS.surface,
                             borderRadius: RADIUS.md,
                             padding: SPACING.md,
                           }}
                         >
                           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
-                            <stat.icon size={14} color={COLORS.textMuted} />
-                            <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted, marginLeft: 4 }}>
+                            <stat.icon size={14} color={LIGHT_COLORS.textMuted} />
+                            <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted, marginLeft: 4 }}>
                               {stat.label}
                             </Text>
                           </View>
-                          <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse }}>
+                          <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary }}>
                             {stat.value}
                           </Text>
                         </View>
@@ -727,28 +738,28 @@ export default function AdvertisingScreen(): React.JSX.Element {
                     style={{
                       fontSize: TYPOGRAPHY.md,
                       fontWeight: TYPOGRAPHY.semibold,
-                      color: COLORS.textInverse,
+                      color: LIGHT_COLORS.textPrimary,
                       marginBottom: SPACING.md,
                     }}
                   >
                     Budget
                   </Text>
-                  <View style={{ backgroundColor: COLORS.darkGray, borderRadius: RADIUS.lg, padding: SPACING.lg }}>
+                  <View style={{ backgroundColor: LIGHT_COLORS.surface, borderRadius: RADIUS.lg, padding: SPACING.lg }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: SPACING.sm }}>
-                      <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>Spent</Text>
-                      <Text style={{ fontSize: TYPOGRAPHY.md, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textInverse }}>
+                      <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>Spent</Text>
+                      <Text style={{ fontSize: TYPOGRAPHY.md, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary }}>
                         {formatCurrency(selectedCampaign.spentCents)}
                       </Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: SPACING.sm }}>
-                      <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>Total Budget</Text>
-                      <Text style={{ fontSize: TYPOGRAPHY.md, color: COLORS.textLight }}>
+                      <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>Total Budget</Text>
+                      <Text style={{ fontSize: TYPOGRAPHY.md, color: LIGHT_COLORS.textSecondary }}>
                         {formatCurrency(selectedCampaign.totalBudgetCents || 0)}
                       </Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>Daily Budget</Text>
-                      <Text style={{ fontSize: TYPOGRAPHY.md, color: COLORS.textLight }}>
+                      <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>Daily Budget</Text>
+                      <Text style={{ fontSize: TYPOGRAPHY.md, color: LIGHT_COLORS.textSecondary }}>
                         {formatCurrency(selectedCampaign.dailyBudgetCents || 0)}
                       </Text>
                     </View>
@@ -760,22 +771,22 @@ export default function AdvertisingScreen(): React.JSX.Element {
                     style={{
                       fontSize: TYPOGRAPHY.md,
                       fontWeight: TYPOGRAPHY.semibold,
-                      color: COLORS.textInverse,
+                      color: LIGHT_COLORS.textPrimary,
                       marginBottom: SPACING.md,
                     }}
                   >
                     Schedule
                   </Text>
-                  <View style={{ backgroundColor: COLORS.darkGray, borderRadius: RADIUS.lg, padding: SPACING.lg }}>
+                  <View style={{ backgroundColor: LIGHT_COLORS.surface, borderRadius: RADIUS.lg, padding: SPACING.lg }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: SPACING.sm }}>
-                      <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>Start Date</Text>
-                      <Text style={{ fontSize: TYPOGRAPHY.md, color: COLORS.textLight }}>
+                      <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>Start Date</Text>
+                      <Text style={{ fontSize: TYPOGRAPHY.md, color: LIGHT_COLORS.textSecondary }}>
                         {selectedCampaign.startDate ? new Date(selectedCampaign.startDate).toLocaleDateString() : '-'}
                       </Text>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted }}>End Date</Text>
-                      <Text style={{ fontSize: TYPOGRAPHY.md, color: COLORS.textLight }}>
+                      <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted }}>End Date</Text>
+                      <Text style={{ fontSize: TYPOGRAPHY.md, color: LIGHT_COLORS.textSecondary }}>
                         {selectedCampaign.endDate ? new Date(selectedCampaign.endDate).toLocaleDateString() : '-'}
                       </Text>
                     </View>
@@ -788,7 +799,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
                       style={{
                         fontSize: TYPOGRAPHY.md,
                         fontWeight: TYPOGRAPHY.semibold,
-                        color: COLORS.textInverse,
+                        color: LIGHT_COLORS.textPrimary,
                         marginBottom: SPACING.md,
                       }}
                     >
@@ -799,13 +810,13 @@ export default function AdvertisingScreen(): React.JSX.Element {
                         <View
                           key={area}
                           style={{
-                            backgroundColor: COLORS.darkGray,
+                            backgroundColor: LIGHT_COLORS.surfaceHighlight,
                             paddingHorizontal: SPACING.md,
                             paddingVertical: SPACING.sm,
                             borderRadius: RADIUS.sm,
                           }}
                         >
-                          <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textLight }}>{area}</Text>
+                          <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textSecondary }}>{area}</Text>
                         </View>
                       ))}
                     </View>
@@ -821,17 +832,17 @@ export default function AdvertisingScreen(): React.JSX.Element {
         <View
           style={{ flex: 1, backgroundColor: COLORS.overlay, justifyContent: 'center', padding: SPACING.xl }}
         >
-          <View style={{ backgroundColor: COLORS.charcoal, borderRadius: RADIUS.xl, padding: SPACING.xl }}>
+          <View style={{ backgroundColor: LIGHT_COLORS.surface, borderRadius: RADIUS.xl, padding: SPACING.xl }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: SPACING.lg }}>
-              <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textInverse }}>
+              <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary }}>
                 Create Campaign
               </Text>
               <TouchableOpacity onPress={() => setShowCreateModal(false)}>
-                <X size={24} color={COLORS.textMuted} />
+                <X size={24} color={LIGHT_COLORS.textMuted} />
               </TouchableOpacity>
             </View>
 
-            <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted, marginBottom: SPACING.md }}>
+            <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted, marginBottom: SPACING.md }}>
               Select a campaign type:
             </Text>
 
@@ -843,7 +854,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    backgroundColor: COLORS.darkGray,
+                    backgroundColor: LIGHT_COLORS.surfaceHighlight,
                     borderRadius: RADIUS.md,
                     padding: SPACING.md,
                     marginBottom: SPACING.sm,
@@ -867,10 +878,10 @@ export default function AdvertisingScreen(): React.JSX.Element {
                     <CampaignTypeIcon type={type} size={22} color={COLORS.gold} />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: TYPOGRAPHY.md, fontWeight: TYPOGRAPHY.medium, color: COLORS.textInverse }}>
+                    <Text style={{ fontSize: TYPOGRAPHY.md, fontWeight: TYPOGRAPHY.medium, color: LIGHT_COLORS.textPrimary }}>
                       {info.label}
                     </Text>
-                    <Text style={{ fontSize: TYPOGRAPHY.xs, color: COLORS.textMuted }} numberOfLines={1}>
+                    <Text style={{ fontSize: TYPOGRAPHY.xs, color: LIGHT_COLORS.textMuted }} numberOfLines={1}>
                       {info.description}
                     </Text>
                   </View>
@@ -886,36 +897,36 @@ export default function AdvertisingScreen(): React.JSX.Element {
 
       <Modal visible={showTopUpModal} animationType="fade" transparent onRequestClose={() => setShowTopUpModal(false)}>
         <View style={{ flex: 1, backgroundColor: COLORS.overlay, justifyContent: 'center', padding: SPACING.xl }}>
-          <View style={{ backgroundColor: COLORS.charcoal, borderRadius: RADIUS.xl, padding: SPACING.xl }}>
+          <View style={{ backgroundColor: LIGHT_COLORS.surface, borderRadius: RADIUS.xl, padding: SPACING.xl }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: SPACING.lg }}>
-              <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textInverse }}>
+              <Text style={{ fontSize: TYPOGRAPHY.lg, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textPrimary }}>
                 Add Funds
               </Text>
               <TouchableOpacity onPress={() => setShowTopUpModal(false)}>
-                <X size={24} color={COLORS.textMuted} />
+                <X size={24} color={LIGHT_COLORS.textMuted} />
               </TouchableOpacity>
             </View>
 
-            <Text style={{ fontSize: TYPOGRAPHY.sm, color: COLORS.textMuted, marginBottom: SPACING.md }}>
+            <Text style={{ fontSize: TYPOGRAPHY.sm, color: LIGHT_COLORS.textMuted, marginBottom: SPACING.md }}>
               Enter amount to add:
             </Text>
 
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: SPACING.lg }}>
-              <Text style={{ fontSize: TYPOGRAPHY['2xl'], fontWeight: TYPOGRAPHY.bold, color: COLORS.textInverse, marginRight: SPACING.sm }}>
+              <Text style={{ fontSize: TYPOGRAPHY['2xl'], fontWeight: TYPOGRAPHY.bold, color: LIGHT_COLORS.textPrimary, marginRight: SPACING.sm }}>
                 ₪
               </Text>
               <TextInput
                 style={{
                   flex: 1,
-                  backgroundColor: COLORS.darkGray,
+                  backgroundColor: LIGHT_COLORS.surfaceHighlight,
                   borderRadius: RADIUS.md,
                   padding: SPACING.md,
                   fontSize: TYPOGRAPHY.xl,
                   fontWeight: TYPOGRAPHY.bold,
-                  color: COLORS.textInverse,
+                  color: LIGHT_COLORS.textPrimary,
                 }}
                 placeholder="0"
-                placeholderTextColor={COLORS.textMuted}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 value={topUpAmount}
                 onChangeText={setTopUpAmount}
                 keyboardType="numeric"
@@ -930,7 +941,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
                   style={{
                     flex: 1,
                     paddingVertical: SPACING.sm,
-                    backgroundColor: topUpAmount === amount.toString() ? COLORS.gold : COLORS.darkGray,
+                    backgroundColor: topUpAmount === amount.toString() ? COLORS.gold : LIGHT_COLORS.surfaceHighlight,
                     borderRadius: RADIUS.sm,
                     alignItems: 'center',
                   }}
@@ -939,7 +950,7 @@ export default function AdvertisingScreen(): React.JSX.Element {
                     style={{
                       fontSize: TYPOGRAPHY.sm,
                       fontWeight: TYPOGRAPHY.medium,
-                      color: topUpAmount === amount.toString() ? COLORS.charcoal : COLORS.textLight,
+                      color: topUpAmount === amount.toString() ? COLORS.charcoal : LIGHT_COLORS.textSecondary,
                     }}
                   >
                     ₪{amount}
@@ -955,11 +966,11 @@ export default function AdvertisingScreen(): React.JSX.Element {
                   flex: 1,
                   paddingVertical: SPACING.md,
                   borderRadius: RADIUS.lg,
-                  backgroundColor: COLORS.darkGray,
+                  backgroundColor: LIGHT_COLORS.surfaceHighlight,
                   alignItems: 'center',
                 }}
               >
-                <Text style={{ fontSize: TYPOGRAPHY.md, fontWeight: TYPOGRAPHY.semibold, color: COLORS.textLight }}>
+                <Text style={{ fontSize: TYPOGRAPHY.md, fontWeight: TYPOGRAPHY.semibold, color: LIGHT_COLORS.textSecondary }}>
                   Cancel
                 </Text>
               </TouchableOpacity>

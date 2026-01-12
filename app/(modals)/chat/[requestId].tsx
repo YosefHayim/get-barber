@@ -21,12 +21,37 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-  FadeIn,
   FadeOut,
-  FadeInDown,
 } from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown } from '@/utils/animations';
 import { Avatar } from '@/components/ui/Avatar';
-import { DARK_COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
+import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
+
+// Light theme colors for the chat screen
+const LIGHT_THEME = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  primary: '#135bec',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+  // Chat bubble colors
+  bubbleOwn: '#135bec',
+  bubbleOther: '#ffffff',
+  // Status colors from COLORS
+  success: COLORS.success,
+  successLight: COLORS.successLight,
+  warning: COLORS.warning,
+  warningLight: COLORS.warningLight,
+  error: COLORS.error,
+  errorLight: COLORS.errorLight,
+  // Accent colors
+  accent: '#135bec',
+  accentDark: '#0d4abf',
+  primaryMuted: 'rgba(19, 91, 236, 0.1)',
+  borderLight: '#f1f5f9',
+};
 import { useAppStore } from '@/stores/useAppStore';
 import {
   MOCK_CONVERSATIONS_CUSTOMER,
@@ -53,7 +78,7 @@ function TextBubble({
 }): React.JSX.Element {
   return (
     <Animated.View
-      entering={FadeInDown.duration(200)}
+      entering={webSafeFadeInDown(0, 200)}
       style={[styles.messageRow, isOwn && styles.ownMessageRow]}
     >
       {!isOwn && (
@@ -72,7 +97,7 @@ function TextBubble({
           <Text style={styles.timestamp}>
             {formatDistanceToNow(new Date(timestamp), { addSuffix: true })}
           </Text>
-          {isOwn && <CheckCheck size={12} color={DARK_COLORS.textMuted} />}
+          {isOwn && <CheckCheck size={12} color={LIGHT_THEME.textMuted} />}
         </View>
       </View>
     </Animated.View>
@@ -97,10 +122,10 @@ function OfferBubble({
   onCounter?: () => void;
 }): React.JSX.Element {
   const statusConfig = {
-    pending: { label: 'Pending', color: DARK_COLORS.warning, bgColor: DARK_COLORS.warningLight },
-    accepted: { label: 'Accepted', color: DARK_COLORS.success, bgColor: DARK_COLORS.successLight },
-    rejected: { label: 'Rejected', color: DARK_COLORS.error, bgColor: DARK_COLORS.errorLight },
-    expired: { label: 'Expired', color: DARK_COLORS.textMuted, bgColor: DARK_COLORS.borderLight },
+    pending: { label: 'Pending', color: LIGHT_THEME.warning, bgColor: LIGHT_THEME.warningLight },
+    accepted: { label: 'Accepted', color: LIGHT_THEME.success, bgColor: LIGHT_THEME.successLight },
+    rejected: { label: 'Rejected', color: LIGHT_THEME.error, bgColor: LIGHT_THEME.errorLight },
+    expired: { label: 'Expired', color: LIGHT_THEME.textMuted, bgColor: LIGHT_THEME.borderLight },
   };
 
   const config = statusConfig[status];
@@ -108,12 +133,12 @@ function OfferBubble({
 
   return (
     <Animated.View
-      entering={FadeInDown.duration(200)}
+      entering={webSafeFadeInDown(0, 200)}
       style={[styles.offerRow, isOwn && styles.ownOfferRow]}
     >
       <Surface style={styles.offerBubble} elevation={2}>
         <View style={styles.offerHeader}>
-          <Sparkles size={16} color={DARK_COLORS.accent} />
+          <Sparkles size={16} color={LIGHT_THEME.accent} />
           <Text style={styles.offerLabel}>Price Offer</Text>
           <View style={[styles.statusBadge, { backgroundColor: config.bgColor }]}>
             <Text style={[styles.statusText, { color: config.color }]}>
@@ -132,9 +157,9 @@ function OfferBubble({
             <Button
               mode="contained"
               onPress={onAccept}
-              icon={() => <Check size={16} color={DARK_COLORS.textPrimary} />}
+              icon={() => <Check size={16} color="#ffffff" />}
               compact
-              style={[styles.offerButton, { backgroundColor: DARK_COLORS.success }]}
+              style={[styles.offerButton, { backgroundColor: LIGHT_THEME.success }]}
               labelStyle={styles.offerButtonLabel}
             >
               Accept
@@ -149,14 +174,14 @@ function OfferBubble({
               Counter
             </Button>
             <Pressable onPress={onReject} style={styles.rejectButton}>
-              <X size={18} color={DARK_COLORS.error} />
+              <X size={18} color={LIGHT_THEME.error} />
             </Pressable>
           </View>
         )}
 
         {status === 'accepted' && (
           <View style={styles.acceptedBanner}>
-            <Check size={14} color={DARK_COLORS.success} />
+            <Check size={14} color={LIGHT_THEME.success} />
             <Text style={styles.acceptedText}>Booking confirmed!</Text>
           </View>
         )}
@@ -171,7 +196,7 @@ function OfferBubble({
 
 function SystemMessage({ content }: { content: string }): React.JSX.Element {
   return (
-    <Animated.View entering={FadeIn.duration(200)} style={styles.systemContainer}>
+    <Animated.View entering={webSafeFadeIn(200)} style={styles.systemContainer}>
       <Text style={styles.systemText}>{content}</Text>
     </Animated.View>
   );
@@ -235,15 +260,15 @@ function ChatInputComponent({
     <View style={styles.inputContainer}>
       {showOfferInput && (
         <Animated.View
-          entering={FadeIn.duration(200)}
+          entering={webSafeFadeIn(200)}
           exiting={FadeOut.duration(200)}
           style={styles.offerInputContainer}
         >
           <View style={styles.offerInputHeader}>
-            <Sparkles size={16} color={DARK_COLORS.accent} />
+            <Sparkles size={16} color={LIGHT_THEME.accent} />
             <Text style={styles.offerInputLabel}>Send Price Offer</Text>
             <Pressable onPress={toggleOfferInput}>
-              <X size={18} color={DARK_COLORS.textMuted} />
+              <X size={18} color={LIGHT_THEME.textMuted} />
             </Pressable>
           </View>
           <View style={styles.offerInputRow}>
@@ -253,7 +278,7 @@ function ChatInputComponent({
               value={offerAmount}
               onChangeText={setOfferAmount}
               placeholder="0"
-              placeholderTextColor={DARK_COLORS.textMuted}
+              placeholderTextColor={LIGHT_THEME.textMuted}
               keyboardType="numeric"
               maxLength={6}
               editable={!isDisabled}
@@ -266,7 +291,7 @@ function ChatInputComponent({
       <View style={styles.inputRow}>
         <View style={styles.inputActions}>
           <IconButton
-            icon={() => <Camera size={22} color={DARK_COLORS.textMuted} />}
+            icon={() => <Camera size={22} color={LIGHT_THEME.textMuted} />}
             onPress={() => {}}
             disabled={isDisabled}
             size={22}
@@ -275,7 +300,7 @@ function ChatInputComponent({
             icon={() => (
               <DollarSign
                 size={22}
-                color={showOfferInput ? DARK_COLORS.accent : DARK_COLORS.textMuted}
+                color={showOfferInput ? LIGHT_THEME.accent : LIGHT_THEME.textMuted}
               />
             )}
             onPress={toggleOfferInput}
@@ -290,7 +315,7 @@ function ChatInputComponent({
             value={message}
             onChangeText={setMessage}
             placeholder="Type a message..."
-            placeholderTextColor={DARK_COLORS.textMuted}
+            placeholderTextColor={LIGHT_THEME.textMuted}
             multiline
             maxLength={1000}
             editable={!isDisabled}
@@ -308,7 +333,7 @@ function ChatInputComponent({
           >
             <Send
               size={20}
-              color={canSend && !isDisabled ? DARK_COLORS.textPrimary : DARK_COLORS.textMuted}
+              color={canSend && !isDisabled ? '#ffffff' : LIGHT_THEME.textMuted}
             />
           </Pressable>
         </Animated.View>
@@ -430,7 +455,7 @@ export default function ChatScreen(): React.JSX.Element {
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.header}>
           <Pressable onPress={() => router.back()} style={styles.backButton}>
-            <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
+            <ArrowLeft size={24} color={LIGHT_THEME.textPrimary} />
           </Pressable>
           <Text style={styles.headerName}>Conversation not found</Text>
         </View>
@@ -442,7 +467,7 @@ export default function ChatScreen(): React.JSX.Element {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
+          <ArrowLeft size={24} color={LIGHT_THEME.textPrimary} />
         </Pressable>
 
         <Pressable style={styles.headerProfile}>
@@ -456,22 +481,22 @@ export default function ChatScreen(): React.JSX.Element {
             <View style={styles.headerStatusRow}>
               {conversation.status === 'negotiating' && (
                 <>
-                  <Clock size={12} color={DARK_COLORS.warning} />
-                  <Text style={[styles.headerStatus, { color: DARK_COLORS.warning }]}>
+                  <Clock size={12} color={LIGHT_THEME.warning} />
+                  <Text style={[styles.headerStatus, { color: LIGHT_THEME.warning }]}>
                     Negotiating price
                   </Text>
                 </>
               )}
               {conversation.status === 'confirmed' && (
                 <>
-                  <Check size={12} color={DARK_COLORS.success} />
-                  <Text style={[styles.headerStatus, { color: DARK_COLORS.success }]}>
+                  <Check size={12} color={LIGHT_THEME.success} />
+                  <Text style={[styles.headerStatus, { color: LIGHT_THEME.success }]}>
                     Booking confirmed
                   </Text>
                 </>
               )}
               {conversation.status === 'completed' && (
-                <Text style={[styles.headerStatus, { color: DARK_COLORS.textMuted }]}>
+                <Text style={[styles.headerStatus, { color: LIGHT_THEME.textMuted }]}>
                   Completed
                 </Text>
               )}
@@ -481,17 +506,17 @@ export default function ChatScreen(): React.JSX.Element {
 
         <View style={styles.headerActions}>
           <Pressable style={styles.iconButton}>
-            <Phone size={20} color={DARK_COLORS.textMuted} />
+            <Phone size={20} color={LIGHT_THEME.textSecondary} />
           </Pressable>
           <Pressable style={styles.iconButton}>
-            <MoreVertical size={20} color={DARK_COLORS.textMuted} />
+            <MoreVertical size={20} color={LIGHT_THEME.textSecondary} />
           </Pressable>
         </View>
       </View>
 
       {conversation.offeredPrice && (
         <View style={styles.priceBar}>
-          <Sparkles size={14} color={DARK_COLORS.accent} />
+          <Sparkles size={14} color={LIGHT_THEME.accent} />
           <Text style={styles.priceBarText}>
             Agreed price: <Text style={styles.priceBarAmount}>₪{conversation.offeredPrice}</Text>
           </Text>
@@ -530,16 +555,16 @@ export default function ChatScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: LIGHT_THEME.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.border,
+    borderBottomColor: LIGHT_THEME.border,
   },
   backButton: {
     width: 40,
@@ -561,7 +586,7 @@ const styles = StyleSheet.create({
   headerName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   headerStatusRow: {
     flexDirection: 'row',
@@ -590,21 +615,21 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.sm,
-    backgroundColor: DARK_COLORS.primaryMuted,
+    backgroundColor: LIGHT_THEME.primaryMuted,
     borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.border,
+    borderBottomColor: LIGHT_THEME.border,
   },
   priceBarText: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textSecondary,
+    color: LIGHT_THEME.textSecondary,
   },
   priceBarAmount: {
     fontWeight: TYPOGRAPHY.bold,
-    color: DARK_COLORS.accentDark,
+    color: LIGHT_THEME.accent,
   },
   priceBarServices: {
     fontSize: TYPOGRAPHY.xs,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
     marginLeft: 'auto',
   },
   content: {
@@ -638,20 +663,22 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.md,
   },
   ownBubble: {
-    backgroundColor: DARK_COLORS.bubbleOwn,
+    backgroundColor: LIGHT_THEME.bubbleOwn,
     borderBottomRightRadius: SPACING.xxs,
   },
   otherBubble: {
-    backgroundColor: DARK_COLORS.bubbleOther,
+    backgroundColor: LIGHT_THEME.bubbleOther,
     borderBottomLeftRadius: SPACING.xxs,
+    borderWidth: 1,
+    borderColor: LIGHT_THEME.border,
   },
   messageText: {
     fontSize: TYPOGRAPHY.base,
     lineHeight: 22,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   ownMessageText: {
-    color: DARK_COLORS.textPrimary,
+    color: '#ffffff',
   },
   messageFooter: {
     flexDirection: 'row',
@@ -662,7 +689,7 @@ const styles = StyleSheet.create({
   },
   timestamp: {
     fontSize: TYPOGRAPHY.xs,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
   },
   offerRow: {
     alignSelf: 'flex-start',
@@ -675,9 +702,9 @@ const styles = StyleSheet.create({
   offerBubble: {
     borderRadius: RADIUS.xl,
     padding: SPACING.lg,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     borderWidth: 1,
-    borderColor: DARK_COLORS.primaryMuted,
+    borderColor: LIGHT_THEME.primaryMuted,
   },
   offerHeader: {
     flexDirection: 'row',
@@ -688,7 +715,7 @@ const styles = StyleSheet.create({
   offerLabel: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.medium,
-    color: DARK_COLORS.textSecondary,
+    color: LIGHT_THEME.textSecondary,
     flex: 1,
   },
   statusBadge: {
@@ -710,12 +737,12 @@ const styles = StyleSheet.create({
   offerCurrency: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.medium,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
   },
   offerAmount: {
     fontSize: 36,
     fontWeight: TYPOGRAPHY.bold,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   offerActions: {
     flexDirection: 'row',
@@ -732,15 +759,15 @@ const styles = StyleSheet.create({
   },
   counterButtonLabel: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.accentDark,
+    color: LIGHT_THEME.accent,
   },
   rejectButton: {
     width: 36,
     height: 36,
     borderRadius: RADIUS.sm,
     borderWidth: 1,
-    borderColor: DARK_COLORS.errorLight,
-    backgroundColor: DARK_COLORS.errorLight,
+    borderColor: LIGHT_THEME.errorLight,
+    backgroundColor: LIGHT_THEME.errorLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -751,16 +778,16 @@ const styles = StyleSheet.create({
     marginTop: SPACING.md,
     paddingTop: SPACING.md,
     borderTopWidth: 1,
-    borderTopColor: DARK_COLORS.successLight,
+    borderTopColor: LIGHT_THEME.successLight,
   },
   acceptedText: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.success,
+    color: LIGHT_THEME.success,
     fontWeight: TYPOGRAPHY.medium,
   },
   offerTimestamp: {
     fontSize: TYPOGRAPHY.xs,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
     textAlign: 'center',
     marginTop: SPACING.sm,
   },
@@ -771,24 +798,24 @@ const styles = StyleSheet.create({
   },
   systemText: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
     textAlign: 'center',
-    backgroundColor: DARK_COLORS.borderLight,
+    backgroundColor: LIGHT_THEME.borderLight,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.xs,
     borderRadius: RADIUS.md,
   },
   inputContainer: {
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     borderTopWidth: 1,
-    borderTopColor: DARK_COLORS.border,
+    borderTopColor: LIGHT_THEME.border,
     paddingBottom: 34,
   },
   offerInputContainer: {
     padding: SPACING.lg,
-    backgroundColor: DARK_COLORS.primaryMuted,
+    backgroundColor: LIGHT_THEME.primaryMuted,
     borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.border,
+    borderBottomColor: LIGHT_THEME.border,
   },
   offerInputHeader: {
     flexDirection: 'row',
@@ -800,7 +827,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.medium,
-    color: DARK_COLORS.textSecondary,
+    color: LIGHT_THEME.textSecondary,
   },
   offerInputRow: {
     flexDirection: 'row',
@@ -811,12 +838,12 @@ const styles = StyleSheet.create({
   offerInputCurrency: {
     fontSize: TYPOGRAPHY.xl,
     fontWeight: TYPOGRAPHY.semibold,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
   },
   offerInputField: {
     fontSize: 44,
     fontWeight: TYPOGRAPHY.bold,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
     minWidth: 120,
     textAlign: 'center',
   },
@@ -832,13 +859,13 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    backgroundColor: DARK_COLORS.borderLight,
+    backgroundColor: LIGHT_THEME.borderLight,
     borderRadius: RADIUS.xl,
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.md,
     paddingTop: SPACING.md,
     fontSize: TYPOGRAPHY.base,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
     maxHeight: 100,
     minHeight: 40,
   },
@@ -846,11 +873,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: DARK_COLORS.borderLight,
+    backgroundColor: LIGHT_THEME.borderLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   sendButtonActive: {
-    backgroundColor: DARK_COLORS.accentDark,
+    backgroundColor: LIGHT_THEME.primary,
   },
 });

@@ -4,16 +4,28 @@
  */
 
 // =============================================================================
-// PRIMARY COLORS - Navy & Copper Palette (Classic Barbershop)
+// PRIMARY COLORS - Modern Teal & Gold Palette (From Design System)
 // =============================================================================
 export const COLORS = {
-  // Navy Spectrum - Primary
+  // Primary - Teal/Cyan (main brand color from designs)
+  primary: '#11a4d4',
+  primaryDark: '#0d8ab3',
+  primaryLight: '#3bb8e0',
+  primaryMuted: 'rgba(17, 164, 212, 0.15)',
+
+  // Accent - Gold/Amber
+  accent: '#f59e0b',
+  accentLight: '#fbbf24',
+  accentDark: '#d97706',
+  accentMuted: 'rgba(245, 158, 11, 0.15)',
+
+  // Navy Spectrum - Secondary
   navy: '#1B2838',
   navyLight: '#2C3E50',
   navyDark: '#0F1C24',
   navyMuted: 'rgba(27, 40, 56, 0.15)',
 
-  // Copper Spectrum - Accent
+  // Copper Spectrum - Tertiary Accent
   copper: '#B87333',
   copperLight: '#D4956A',
   copperDark: '#8B5A2B',
@@ -25,16 +37,16 @@ export const COLORS = {
   brassDark: '#A08338',
 
   // Legacy colors (for backward compatibility)
-  gold: '#B87333', // Now maps to copper
-  goldLight: '#D4956A',
-  goldDark: '#8B5A2B',
-  goldMuted: 'rgba(184, 115, 51, 0.15)',
+  gold: '#f59e0b',
+  goldLight: '#fbbf24',
+  goldDark: '#d97706',
+  goldMuted: 'rgba(245, 158, 11, 0.15)',
   goldAccent: '#C9A959',
-  burgundy: '#1B2838', // Now maps to navy
+  burgundy: '#1B2838',
   burgundyLight: '#2C3E50',
   burgundyDark: '#0F1C24',
 
-  // Warm Neutrals
+  // Light Theme Neutrals
   cream: '#F5F0E6',
   ivory: '#FAF8F5',
   warmWhite: '#FAFAF8',
@@ -45,22 +57,23 @@ export const COLORS = {
   mediumGray: '#4A4A4A',
 
   // =============================================================================
-  // TEXT COLORS
+  // TEXT COLORS (Light Theme)
   // =============================================================================
-  textPrimary: '#1A1A1A',
-  textSecondary: '#4A4A4A',
-  textMuted: '#64748B',
-  textLight: '#94A3B8',
+  textPrimary: '#111618',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  textLight: '#9aaeb5',
   textInverse: '#FFFFFF',
 
   // =============================================================================
-  // BACKGROUND COLORS
+  // BACKGROUND COLORS (Light Theme)
   // =============================================================================
-  background: '#FAFAF8',
-  backgroundSecondary: '#F5F0E6',
-  surface: '#FFFFFF',
-  surfaceElevated: '#FFFFFF',
-  surfaceHover: '#F8F6F3',
+  background: '#f6f8f8',
+  backgroundSecondary: '#f1f5f5',
+  surface: '#ffffff',
+  surfaceElevated: '#ffffff',
+  surfaceHover: '#f8fafa',
+  card: '#ffffff',
 
   // =============================================================================
   // STATUS COLORS

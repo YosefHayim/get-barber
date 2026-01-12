@@ -21,6 +21,16 @@ import {
 } from 'lucide-react-native';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
+
 interface PayoutMethod {
   id: string;
   type: 'bank' | 'paypal';
@@ -105,8 +115,8 @@ export default function PayoutMethodsScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Payout Methods',
-          headerStyle: { backgroundColor: COLORS.charcoal },
-          headerTitleStyle: { fontWeight: '700', color: COLORS.textInverse },
+          headerStyle: { backgroundColor: LIGHT_COLORS.surface },
+          headerTitleStyle: { fontWeight: '700', color: LIGHT_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
               <ArrowLeft size={24} color={COLORS.gold} />
@@ -211,10 +221,10 @@ export default function PayoutMethodsScreen(): React.JSX.Element {
                 placeholder="e.g., Bank Leumi"
                 mode="outlined"
                 style={styles.input}
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                placeholderTextColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textPrimary}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
               />
             </View>
 
@@ -228,10 +238,10 @@ export default function PayoutMethodsScreen(): React.JSX.Element {
                 placeholder="e.g., 123"
                 mode="outlined"
                 style={styles.input}
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                placeholderTextColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textPrimary}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 keyboardType="numeric"
               />
             </View>
@@ -246,10 +256,10 @@ export default function PayoutMethodsScreen(): React.JSX.Element {
                 placeholder="Enter account number"
                 mode="outlined"
                 style={styles.input}
-                outlineColor={COLORS.mediumGray}
+                outlineColor={LIGHT_COLORS.border}
                 activeOutlineColor={COLORS.gold}
-                textColor={COLORS.textInverse}
-                placeholderTextColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textPrimary}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 keyboardType="numeric"
               />
             </View>
@@ -259,7 +269,7 @@ export default function PayoutMethodsScreen(): React.JSX.Element {
                 mode="outlined"
                 onPress={() => setIsAdding(false)}
                 style={styles.addCancelButton}
-                textColor={COLORS.textMuted}
+                textColor={LIGHT_COLORS.textMuted}
               >
                 Cancel
               </Button>
@@ -299,7 +309,7 @@ export default function PayoutMethodsScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollContent: {
     padding: SPACING.lg,
@@ -310,7 +320,7 @@ const styles = StyleSheet.create({
   summaryCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.xl,
     marginBottom: SPACING.md,
@@ -330,12 +340,12 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.xxs,
   },
   summaryText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
   },
   alertBox: {
     flexDirection: 'row',
@@ -354,13 +364,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     marginBottom: SPACING.md,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   methodsCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     overflow: 'hidden',
     marginBottom: SPACING.lg,
@@ -372,7 +382,7 @@ const styles = StyleSheet.create({
   },
   methodItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.mediumGray,
+    borderBottomColor: LIGHT_COLORS.border,
   },
   methodIcon: {
     width: 44,
@@ -394,7 +404,7 @@ const styles = StyleSheet.create({
   methodName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   defaultBadge: {
     backgroundColor: COLORS.successLight,
@@ -409,7 +419,7 @@ const styles = StyleSheet.create({
   },
   methodDetails: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     marginTop: SPACING.xxs,
   },
   methodActions: {
@@ -420,12 +430,12 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: RADIUS.sm,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   emptyCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING['3xl'],
     alignItems: 'center',
@@ -434,13 +444,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginTop: SPACING.md,
     marginBottom: SPACING.xs,
   },
   emptyText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     textAlign: 'center',
   },
   addButton: {
@@ -462,7 +472,7 @@ const styles = StyleSheet.create({
     color: COLORS.gold,
   },
   addCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     marginBottom: SPACING.lg,
@@ -470,7 +480,7 @@ const styles = StyleSheet.create({
   addTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.lg,
   },
   inputGroup: {
@@ -479,11 +489,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.medium,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     marginBottom: SPACING.xs,
   },
   input: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
   },
   addActions: {
     flexDirection: 'row',
@@ -492,7 +502,7 @@ const styles = StyleSheet.create({
   },
   addCancelButton: {
     flex: 1,
-    borderColor: COLORS.mediumGray,
+    borderColor: LIGHT_COLORS.border,
   },
   addSaveButton: {
     flex: 1,
@@ -515,7 +525,7 @@ const styles = StyleSheet.create({
   },
   securityText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     lineHeight: 20,
   },
 });

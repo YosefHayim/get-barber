@@ -14,13 +14,11 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
-  FadeIn,
-  FadeInDown,
-  FadeInRight,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown, webSafeFadeInRight } from '@/utils/animations';
 import {
   ArrowLeft,
   MoreHorizontal,
@@ -30,7 +28,17 @@ import {
   Navigation,
   Home,
 } from 'lucide-react-native';
-import { DARK_COLORS } from '@/constants/theme';
+// Light theme colors
+const LIGHT_THEME = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  primary: '#135bec',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+  surfaceLight: '#f1f5f9',
+};
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -145,11 +153,11 @@ export default function ServiceBookingScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
 
       {/* Sticky Header */}
       <Animated.View
-        entering={FadeIn.duration(300)}
+        entering={webSafeFadeIn(300)}
         style={styles.header}
       >
         <View style={styles.headerContent}>
@@ -157,13 +165,13 @@ export default function ServiceBookingScreen() {
             style={styles.headerButton}
             onPress={() => router.back()}
           >
-            <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
+            <ArrowLeft size={24} color={LIGHT_THEME.textPrimary} />
           </TouchableOpacity>
 
           <Text style={styles.headerTitle}>Book at Home</Text>
 
           <TouchableOpacity style={styles.headerButton}>
-            <MoreHorizontal size={24} color={DARK_COLORS.textPrimary} />
+            <MoreHorizontal size={24} color={LIGHT_THEME.textPrimary} />
           </TouchableOpacity>
         </View>
 
@@ -220,7 +228,7 @@ export default function ServiceBookingScreen() {
       >
         {/* Services Section */}
         <Animated.View
-          entering={FadeInDown.delay(100).duration(400)}
+          entering={webSafeFadeInDown(100, 400)}
           style={styles.section}
         >
           <View style={styles.sectionHeader}>
@@ -236,7 +244,7 @@ export default function ServiceBookingScreen() {
               return (
                 <Animated.View
                   key={service.id}
-                  entering={FadeInDown.delay(150 + index * 50).duration(400)}
+                  entering={webSafeFadeInDown(150 + index * 50, 400)}
                 >
                   <TouchableOpacity
                     style={[
@@ -283,7 +291,7 @@ export default function ServiceBookingScreen() {
 
         {/* Date & Time Section */}
         <Animated.View
-          entering={FadeInDown.delay(300).duration(400)}
+          entering={webSafeFadeInDown(300, 400)}
           style={styles.section}
         >
           <Text style={styles.sectionTitle}>When should we arrive?</Text>
@@ -301,7 +309,7 @@ export default function ServiceBookingScreen() {
             {DATES.map((date, index) => (
               <Animated.View
                 key={index}
-                entering={FadeInRight.delay(350 + index * 30).duration(300)}
+                entering={webSafeFadeInRight(350 + index * 30, 300)}
               >
                 <TouchableOpacity
                   style={[
@@ -372,7 +380,7 @@ export default function ServiceBookingScreen() {
 
         {/* Location Section */}
         <Animated.View
-          entering={FadeInDown.delay(400).duration(400)}
+          entering={webSafeFadeInDown(400, 400)}
           style={styles.section}
         >
           <Text style={styles.sectionTitle}>Where are we going?</Text>
@@ -381,13 +389,13 @@ export default function ServiceBookingScreen() {
           <View style={styles.inputContainer}>
             <Search
               size={20}
-              color={DARK_COLORS.textMuted}
+              color={LIGHT_THEME.textMuted}
               style={styles.inputIcon}
             />
             <TextInput
               style={styles.input}
               placeholder="Search for your address..."
-              placeholderTextColor={DARK_COLORS.textMuted}
+              placeholderTextColor={LIGHT_THEME.textMuted}
               value={address}
               onChangeText={setAddress}
             />
@@ -395,21 +403,23 @@ export default function ServiceBookingScreen() {
 
           {/* Current Location Button */}
           <TouchableOpacity style={styles.currentLocationButton}>
-            <Navigation size={18} color={DARK_COLORS.primary} />
+            <Navigation size={18} color={LIGHT_THEME.primary} />
             <Text style={styles.currentLocationText}>Use current location</Text>
           </TouchableOpacity>
 
           {/* Map Preview */}
           <View style={styles.mapPreview}>
-            <Image
-              source={{
-                uri: 'https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/34.78,32.08,14,0/400x200?access_token=pk.placeholder',
-              }}
-              style={styles.mapImage}
-              defaultSource={{ uri: 'https://via.placeholder.com/400x200/1C2333/3b82f6?text=Map' }}
-            />
+            <View style={styles.staticMapBackground}>
+              {/* Location pin indicator */}
+              <View style={styles.mapPinContainer}>
+                <View style={styles.mapPin}>
+                  <MapPin size={20} color="#FFFFFF" />
+                </View>
+                <View style={styles.mapPinPointer} />
+              </View>
+            </View>
             <LinearGradient
-              colors={['transparent', 'rgba(16, 22, 34, 0.9)']}
+              colors={['transparent', 'rgba(246, 246, 248, 0.95)']}
               style={styles.mapGradient}
             />
             <View style={styles.mapAddressBadge}>
@@ -424,7 +434,7 @@ export default function ServiceBookingScreen() {
           <TextInput
             style={styles.apartmentInput}
             placeholder="Apartment, suite, etc. (optional)"
-            placeholderTextColor={DARK_COLORS.textMuted}
+            placeholderTextColor={LIGHT_THEME.textMuted}
             value={apartmentInfo}
             onChangeText={setApartmentInfo}
           />
@@ -433,7 +443,7 @@ export default function ServiceBookingScreen() {
 
       {/* Sticky Footer */}
       <Animated.View
-        entering={FadeIn.delay(500).duration(300)}
+        entering={webSafeFadeIn(300)}
         style={[styles.footer, { paddingBottom: insets.bottom + 16 }]}
       >
         <View style={styles.footerContent}>
@@ -474,12 +484,12 @@ export default function ServiceBookingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: LIGHT_THEME.background,
   },
   header: {
-    backgroundColor: 'rgba(16, 22, 34, 0.95)',
+    backgroundColor: 'rgba(255, 255, 255, 0.98)',
     borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.border,
+    borderBottomColor: LIGHT_THEME.border,
   },
   headerContent: {
     flexDirection: 'row',
@@ -498,7 +508,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   progressContainer: {
     flexDirection: 'row',
@@ -514,7 +524,7 @@ const styles = StyleSheet.create({
     right: 48,
     top: '50%',
     height: 2,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_THEME.border,
     borderRadius: 1,
   },
   progressLineActive: {
@@ -522,7 +532,7 @@ const styles = StyleSheet.create({
     left: 48,
     top: '50%',
     height: 2,
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: LIGHT_THEME.primary,
     borderRadius: 1,
   },
   stepContainer: {
@@ -533,22 +543,22 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_THEME.border,
     borderWidth: 4,
-    borderColor: DARK_COLORS.background,
+    borderColor: LIGHT_THEME.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
   stepDotActive: {
-    backgroundColor: DARK_COLORS.primary,
-    shadowColor: DARK_COLORS.primary,
+    backgroundColor: LIGHT_THEME.primary,
+    shadowColor: LIGHT_THEME.primary,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.4,
     shadowRadius: 8,
     elevation: 4,
   },
   stepDotCompleted: {
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: LIGHT_THEME.primary,
   },
   stepLabels: {
     flexDirection: 'row',
@@ -559,10 +569,10 @@ const styles = StyleSheet.create({
   stepLabel: {
     fontSize: 12,
     fontWeight: '500',
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
   },
   stepLabelActive: {
-    color: DARK_COLORS.primary,
+    color: LIGHT_THEME.primary,
   },
   scrollView: {
     flex: 1,
@@ -583,19 +593,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
     letterSpacing: -0.5,
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textSecondary,
     marginTop: 4,
     marginBottom: 16,
   },
   clearAllText: {
     fontSize: 14,
     fontWeight: '500',
-    color: DARK_COLORS.primary,
+    color: LIGHT_THEME.primary,
   },
   servicesContainer: {
     gap: 12,
@@ -604,15 +614,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     borderRadius: 16,
     padding: 12,
     borderWidth: 2,
-    borderColor: 'transparent',
+    borderColor: LIGHT_THEME.border,
   },
   serviceCardSelected: {
-    borderColor: DARK_COLORS.primary,
-    shadowColor: DARK_COLORS.primary,
+    borderColor: LIGHT_THEME.primary,
+    shadowColor: LIGHT_THEME.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 12,
@@ -627,7 +637,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 12,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_THEME.surfaceLight,
   },
   serviceInfo: {
     marginLeft: 16,
@@ -636,17 +646,17 @@ const styles = StyleSheet.create({
   serviceTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   serviceDuration: {
     fontSize: 14,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textSecondary,
     marginTop: 4,
   },
   servicePrice: {
     fontSize: 14,
     fontWeight: '600',
-    color: DARK_COLORS.primary,
+    color: LIGHT_THEME.primary,
     marginTop: 4,
   },
   checkbox: {
@@ -654,17 +664,17 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: DARK_COLORS.textMuted,
+    borderColor: LIGHT_THEME.textMuted,
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkboxSelected: {
-    backgroundColor: DARK_COLORS.primary,
-    borderColor: DARK_COLORS.primary,
+    backgroundColor: LIGHT_THEME.primary,
+    borderColor: LIGHT_THEME.primary,
   },
   divider: {
     height: 1,
-    backgroundColor: DARK_COLORS.border,
+    backgroundColor: LIGHT_THEME.border,
     marginHorizontal: 16,
     marginBottom: 24,
   },
@@ -679,16 +689,16 @@ const styles = StyleSheet.create({
     width: 64,
     height: 80,
     borderRadius: 16,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_THEME.border,
   },
   dateCardSelected: {
-    backgroundColor: DARK_COLORS.primary,
-    borderColor: DARK_COLORS.primary,
-    shadowColor: DARK_COLORS.primary,
+    backgroundColor: LIGHT_THEME.primary,
+    borderColor: LIGHT_THEME.primary,
+    shadowColor: LIGHT_THEME.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -697,7 +707,7 @@ const styles = StyleSheet.create({
   dateDay: {
     fontSize: 12,
     fontWeight: '500',
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textSecondary,
   },
   dateDaySelected: {
     color: 'rgba(255, 255, 255, 0.8)',
@@ -705,7 +715,7 @@ const styles = StyleSheet.create({
   dateNumber: {
     fontSize: 20,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
     marginTop: 2,
   },
   dateNumberSelected: {
@@ -714,7 +724,7 @@ const styles = StyleSheet.create({
   todayLabel: {
     fontSize: 10,
     fontWeight: '500',
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
     marginTop: 4,
   },
   todayLabelSelected: {
@@ -731,37 +741,39 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 8,
     borderRadius: 12,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_THEME.border,
     alignItems: 'center',
   },
   timeSlotDisabled: {
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_THEME.surfaceLight,
     borderColor: 'transparent',
   },
   timeSlotSelected: {
-    backgroundColor: 'rgba(59, 130, 246, 0.15)',
-    borderColor: DARK_COLORS.primary,
+    backgroundColor: 'rgba(19, 91, 236, 0.1)',
+    borderColor: LIGHT_THEME.primary,
   },
   timeSlotText: {
     fontSize: 14,
     fontWeight: '500',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   timeSlotTextDisabled: {
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
   },
   timeSlotTextSelected: {
-    color: DARK_COLORS.primary,
+    color: LIGHT_THEME.primary,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     borderRadius: 12,
     paddingHorizontal: 12,
     marginTop: 16,
+    borderWidth: 1,
+    borderColor: LIGHT_THEME.border,
   },
   inputIcon: {
     marginRight: 8,
@@ -770,7 +782,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 52,
     fontSize: 16,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   currentLocationButton: {
     flexDirection: 'row',
@@ -782,20 +794,49 @@ const styles = StyleSheet.create({
   currentLocationText: {
     fontSize: 14,
     fontWeight: '500',
-    color: DARK_COLORS.primary,
+    color: LIGHT_THEME.primary,
   },
   mapPreview: {
     height: 128,
     borderRadius: 12,
     overflow: 'hidden',
     marginTop: 8,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_THEME.surfaceLight,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_THEME.border,
   },
-  mapImage: {
-    width: '100%',
-    height: '100%',
+  staticMapBackground: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#e8ecf2',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mapPinContainer: {
+    alignItems: 'center',
+  },
+  mapPin: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: LIGHT_THEME.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: LIGHT_THEME.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  mapPinPointer: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 8,
+    borderRightWidth: 8,
+    borderTopWidth: 10,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: LIGHT_THEME.primary,
+    marginTop: -2,
   },
   mapGradient: {
     position: 'absolute',
@@ -816,32 +857,34 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: LIGHT_THEME.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
   mapAddressText: {
     fontSize: 14,
     fontWeight: '500',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   apartmentInput: {
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     borderRadius: 12,
     paddingHorizontal: 16,
     height: 52,
     fontSize: 16,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
     marginTop: 16,
+    borderWidth: 1,
+    borderColor: LIGHT_THEME.border,
   },
   footer: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(15, 21, 21, 0.98)',
+    backgroundColor: 'rgba(255, 255, 255, 0.98)',
     borderTopWidth: 1,
-    borderTopColor: DARK_COLORS.border,
+    borderTopColor: LIGHT_THEME.border,
     paddingTop: 16,
     paddingHorizontal: 16,
   },
@@ -865,40 +908,40 @@ const styles = StyleSheet.create({
   summaryLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textSecondary,
   },
   summaryChevron: {
     fontSize: 10,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textSecondary,
   },
   summaryRight: {
     alignItems: 'flex-end',
   },
   totalLabel: {
     fontSize: 12,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
   },
   totalPrice: {
     fontSize: 18,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   continueButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: LIGHT_THEME.primary,
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 24,
-    shadowColor: DARK_COLORS.primary,
+    shadowColor: LIGHT_THEME.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 4,
   },
   continueButtonDisabled: {
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_THEME.surfaceLight,
     shadowOpacity: 0,
   },
   continueButtonText: {

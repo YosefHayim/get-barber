@@ -3,10 +3,21 @@ import { View, StyleSheet, Pressable, Image } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import { router } from 'expo-router';
 import { Camera, Briefcase } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 import { OnboardingLayout } from '@/components/onboarding/OnboardingLayout';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 import { useOnboardingStore } from '@/stores/useOnboardingStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 export default function BarberProfileScreen(): React.JSX.Element {
   const progress = useOnboardingStore((s) => s.progress);
@@ -46,13 +57,13 @@ export default function BarberProfileScreen(): React.JSX.Element {
       nextDisabled={!isValid}
     >
       <View style={styles.content}>
-        <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.avatarSection}>
+        <Animated.View entering={webSafeFadeInDown(100, 400)} style={styles.avatarSection}>
           <Pressable style={styles.avatarContainer}>
             {barberData.avatarUri ? (
               <Image source={{ uri: barberData.avatarUri }} style={styles.avatar} />
             ) : (
               <View style={styles.avatarPlaceholder}>
-                <Briefcase size={40} color={COLORS.textMuted} />
+                <Briefcase size={40} color={LIGHT_COLORS.textMuted} />
               </View>
             )}
             <View style={styles.cameraButton}>
@@ -63,7 +74,7 @@ export default function BarberProfileScreen(): React.JSX.Element {
           <Text style={styles.avatarSubhint}>A good photo increases bookings by 40%</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(200).duration(400)} style={styles.form}>
+        <Animated.View entering={webSafeFadeInDown(200, 400)} style={styles.form}>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Business / Display Name *</Text>
             <TextInput
@@ -118,11 +129,11 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: COLORS.borderLight,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
     borderStyle: 'dashed',
   },
   cameraButton: {
@@ -136,16 +147,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: COLORS.surface,
+    borderColor: LIGHT_COLORS.surface,
   },
   avatarHint: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     fontWeight: '500',
   },
   avatarSubhint: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   form: {
     gap: SPACING.lg,
@@ -156,18 +167,18 @@ const styles = StyleSheet.create({
   label: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   input: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
   },
   inputOutline: {
     borderRadius: RADIUS.md,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
   },
   hint: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     marginTop: SPACING.xxs,
   },
 });

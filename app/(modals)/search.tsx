@@ -15,22 +15,50 @@ import { router } from 'expo-router';
 import {
   Search,
   X,
-  SlidersHorizontal,
   Star,
   MapPin,
   Verified,
   ChevronDown,
   Check,
+  ArrowLeft,
+  Heart,
+  Clock,
+  Zap,
+  Navigation,
+  Calendar,
+  MessageCircle,
 } from 'lucide-react-native';
-import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown, webSafeFadeInUp } from '@/utils/animations';
 import Slider from '@react-native-community/slider';
-import { COLORS, DARK_COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
+import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { MOCK_BARBERS, MOCK_SERVICES, type MockBarber } from '@/constants/mockData';
 import { useBookingStore } from '@/stores/useBookingStore';
 import { useDebounce } from '@/hooks';
 import { useRecentSearches, RecentSearches, SearchSuggestions } from '@/features/search';
 
+// Light theme colors
+const LIGHT_THEME = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  primary: '#135bec',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+  borderLight: '#e2e8f0',
+  surfaceLight: '#f6f6f8',
+  error: '#ef4444',
+};
+
 type SortOption = 'distance' | 'rating' | 'price_low' | 'price_high' | 'most_booked';
+
+type FilterChip = {
+  id: string;
+  label: string;
+  icon?: React.ReactNode;
+  active?: boolean;
+};
 
 const SORT_OPTIONS: { id: SortOption; label: string }[] = [
   { id: 'distance', label: 'Nearest' },
@@ -57,6 +85,7 @@ export default function SearchScreen(): React.JSX.Element {
   const [sortBy, setSortBy] = useState<SortOption>('distance');
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [activeFilterChip, setActiveFilterChip] = useState<string>('all');
 
   const debouncedQuery = useDebounce(searchQuery, 300);
 
@@ -110,6 +139,13 @@ export default function SearchScreen(): React.JSX.Element {
       results = results.filter((b) => b.isOnline);
     }
 
+    // Apply filter chip filters
+    if (activeFilterChip === 'available') {
+      results = results.filter((b) => b.isOnline);
+    } else if (activeFilterChip === 'top_rated') {
+      results = results.filter((b) => b.rating >= 4.5);
+    }
+
     switch (sortBy) {
       case 'distance':
         results.sort((a, b) => a.distanceMeters - b.distanceMeters);
@@ -138,6 +174,7 @@ export default function SearchScreen(): React.JSX.Element {
     verifiedOnly,
     availableNow,
     sortBy,
+    activeFilterChip,
   ]);
 
   const handleBarberPress = useCallback(
@@ -196,6 +233,7 @@ export default function SearchScreen(): React.JSX.Element {
     setVerifiedOnly(false);
     setAvailableNow(false);
     setSortBy('distance');
+    setActiveFilterChip('all');
   };
 
   const handleClearSearch = () => {
@@ -214,55 +252,117 @@ export default function SearchScreen(): React.JSX.Element {
     return count;
   }, [selectedServices, minRating, maxDistance, priceRange, verifiedOnly, availableNow]);
 
+  const filterChips: FilterChip[] = [
+    { id: 'all', label: 'All', active: activeFilterChip === 'all' },
+    { id: 'available', label: 'Available Now', icon: <Zap size={14} color={activeFilterChip === 'available' ? '#FFFFFF' : LIGHT_THEME.primary} />, active: activeFilterChip === 'available' },
+    { id: 'top_rated', label: 'Top Rated', icon: <Star size={14} color={activeFilterChip === 'top_rated' ? '#FFFFFF' : LIGHT_THEME.primary} />, active: activeFilterChip === 'top_rated' },
+    { id: 'sort', label: SORT_OPTIONS.find((o) => o.id === sortBy)?.label || 'Sort', icon: <ChevronDown size={14} color={LIGHT_THEME.textSecondary} /> },
+  ];
+
+  const handleBookNow = useCallback((barber: MockBarber) => {
+    setSelectedBarber({
+      id: barber.id,
+      user_id: barber.userId,
+      display_name: barber.displayName,
+      avatar_url: barber.avatarUrl,
+      bio: barber.bio,
+      rating: barber.rating,
+      total_reviews: barber.totalReviews,
+      is_verified: barber.isVerified,
+      distance_meters: barber.distanceMeters,
+      price_min: barber.priceMin,
+      price_max: barber.priceMax,
+    });
+    router.push({
+      pathname: '/(modals)/service-booking/[barberId]',
+      params: { barberId: barber.id },
+    });
+  }, [setSelectedBarber]);
+
   const renderBarberItem = ({ item, index }: { item: MockBarber; index: number }) => (
-    <Animated.View entering={FadeInUp.delay(index * 50).duration(300)}>
+    <Animated.View entering={webSafeFadeInUp(index * 50, 300)}>
       <TouchableOpacity
         style={styles.barberCard}
         onPress={() => handleBarberPress(item)}
-        activeOpacity={0.8}
+        activeOpacity={0.9}
       >
-        <Image
-          source={{ uri: item.avatarUrl || 'https://via.placeholder.com/70' }}
-          style={styles.barberAvatar}
-        />
-        <View style={styles.barberInfo}>
-          <View style={styles.barberNameRow}>
-            <Text style={styles.barberName} numberOfLines={1}>
-              {item.displayName}
-            </Text>
-            {item.isVerified && (
-              <Verified size={14} color={DARK_COLORS.accent} fill={DARK_COLORS.primaryMuted} />
+        <View style={styles.cardContent}>
+          {/* Avatar with online status */}
+          <View style={styles.avatarContainer}>
+            <Image
+              source={{ uri: item.avatarUrl || 'https://via.placeholder.com/80' }}
+              style={styles.barberAvatar}
+            />
+            {item.isOnline && (
+              <View style={styles.onlineBadge}>
+                <Text style={styles.onlineBadgeText}>ONLINE</Text>
+              </View>
             )}
           </View>
-          <View style={styles.barberStats}>
-            <Star size={12} color={DARK_COLORS.accent} fill={DARK_COLORS.accent} />
-            <Text style={styles.barberRating}>{item.rating.toFixed(1)}</Text>
-            <Text style={styles.barberReviews}>({item.totalReviews})</Text>
-            <View style={styles.statDivider} />
-            <MapPin size={12} color={DARK_COLORS.textMuted} />
-            <Text style={styles.barberDistance}>
-              {item.distanceMeters < 1000
-                ? `${item.distanceMeters}m`
-                : `${(item.distanceMeters / 1000).toFixed(1)}km`}
-            </Text>
-          </View>
-          <View style={styles.barberSpecialties}>
-            {item.specialties.slice(0, 2).map((s) => (
-              <View key={s} style={styles.specialtyChip}>
-                <Text style={styles.specialtyText}>{s}</Text>
+
+          {/* Barber info */}
+          <View style={styles.barberInfo}>
+            <View style={styles.barberHeader}>
+              <View style={styles.nameContainer}>
+                <Text style={styles.barberName} numberOfLines={1}>
+                  {item.displayName}
+                </Text>
+                {item.isVerified && (
+                  <Verified size={14} color={LIGHT_THEME.primary} fill={LIGHT_THEME.primary} style={{ marginLeft: 4 }} />
+                )}
               </View>
-            ))}
+              <TouchableOpacity style={styles.favoriteButton}>
+                <Heart size={20} color={LIGHT_THEME.primary} />
+              </TouchableOpacity>
+            </View>
+
+            {/* Specialty */}
+            <Text style={styles.specialty} numberOfLines={1}>
+              {item.specialties[0] || 'Barber'}
+            </Text>
+
+            {/* Rating and distance */}
+            <View style={styles.statsRow}>
+              <View style={styles.ratingBadge}>
+                <Star size={12} color="#f59e0b" fill="#f59e0b" />
+                <Text style={styles.ratingText}>{item.rating.toFixed(1)}</Text>
+                <Text style={styles.reviewCount}>({item.totalReviews})</Text>
+              </View>
+              <View style={styles.distanceContainer}>
+                <Navigation size={12} color={LIGHT_THEME.textMuted} />
+                <Text style={styles.distanceText}>
+                  {item.distanceMeters < 1000
+                    ? `${item.distanceMeters}m`
+                    : `${(item.distanceMeters / 1000).toFixed(1)} km`}
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
-        <View style={styles.barberPriceSection}>
-          <Text style={styles.priceLabel}>From</Text>
-          <Text style={styles.priceValue}>{item.priceMin}</Text>
-          <View
-            style={[
-              styles.onlineIndicator,
-              { backgroundColor: item.isOnline ? DARK_COLORS.success : DARK_COLORS.offline },
-            ]}
-          />
+
+        {/* Bottom action row */}
+        <View style={styles.actionRow}>
+          <View style={styles.availabilityInfo}>
+            {item.isOnline ? (
+              <>
+                <Clock size={14} color={LIGHT_THEME.primary} />
+                <Text style={styles.availabilityText}>Available Now</Text>
+              </>
+            ) : (
+              <>
+                <View style={styles.offlineIndicator} />
+                <Text style={styles.availabilityTextOffline}>Next: Tomorrow 9:00 AM</Text>
+              </>
+            )}
+          </View>
+          <TouchableOpacity
+            style={[styles.bookButton, !item.isOnline && styles.bookButtonSecondary]}
+            onPress={() => handleBookNow(item)}
+          >
+            <Text style={[styles.bookButtonText, !item.isOnline && styles.bookButtonTextSecondary]}>
+              {item.isOnline ? 'Book Now' : 'Schedule'}
+            </Text>
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     </Animated.View>
@@ -270,13 +370,17 @@ export default function SearchScreen(): React.JSX.Element {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
+      {/* Search Header */}
       <View style={styles.header}>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <ArrowLeft size={24} color={LIGHT_THEME.textPrimary} />
+        </TouchableOpacity>
         <View style={styles.searchContainer}>
-          <Search size={20} color={DARK_COLORS.textMuted} />
+          <Search size={18} color={LIGHT_THEME.textMuted} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search barbers, services..."
-            placeholderTextColor={DARK_COLORS.textMuted}
+            placeholderTextColor={LIGHT_THEME.textMuted}
             value={searchQuery}
             onChangeText={(text) => {
               setSearchQuery(text);
@@ -288,31 +392,80 @@ export default function SearchScreen(): React.JSX.Element {
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={handleClearSearch}>
-              <X size={18} color={DARK_COLORS.textMuted} />
+              <X size={18} color={LIGHT_THEME.textMuted} />
             </TouchableOpacity>
           )}
         </View>
-        <TouchableOpacity
-          style={[styles.filterButton, activeFilterCount > 0 && styles.filterButtonActive]}
-          onPress={() => setShowFilters(!showFilters)}
-        >
-          <SlidersHorizontal
-            size={20}
-            color={activeFilterCount > 0 ? DARK_COLORS.primary : DARK_COLORS.textSecondary}
-          />
-          {activeFilterCount > 0 && (
-            <View style={styles.filterBadge}>
-              <Text style={styles.filterBadgeText}>{activeFilterCount}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.closeButton} onPress={() => router.back()}>
-          <X size={24} color={DARK_COLORS.textPrimary} />
-        </TouchableOpacity>
       </View>
 
+      {/* Filter Chips */}
+      <View style={styles.filterChipsContainer}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.filterChipsContent}
+        >
+          {filterChips.map((chip) => (
+            <TouchableOpacity
+              key={chip.id}
+              style={[
+                styles.filterChip,
+                chip.active && styles.filterChipActive,
+              ]}
+              onPress={() => {
+                if (chip.id === 'sort') {
+                  setShowSortDropdown(!showSortDropdown);
+                } else {
+                  setActiveFilterChip(chip.id);
+                }
+              }}
+            >
+              {chip.icon && <View style={styles.filterChipIcon}>{chip.icon}</View>}
+              <Text
+                style={[
+                  styles.filterChipText,
+                  chip.active && styles.filterChipTextActive,
+                ]}
+              >
+                {chip.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+
+      {/* Sort Dropdown */}
+      {showSortDropdown && (
+        <Animated.View entering={webSafeFadeIn(200)} style={styles.sortDropdown}>
+          {SORT_OPTIONS.map((option) => (
+            <TouchableOpacity
+              key={option.id}
+              style={[
+                styles.sortOption,
+                sortBy === option.id && styles.sortOptionActive,
+              ]}
+              onPress={() => {
+                setSortBy(option.id);
+                setShowSortDropdown(false);
+              }}
+            >
+              <Text
+                style={[
+                  styles.sortOptionText,
+                  sortBy === option.id && styles.sortOptionTextActive,
+                ]}
+              >
+                {option.label}
+              </Text>
+              {sortBy === option.id && <Check size={16} color={LIGHT_THEME.primary} />}
+            </TouchableOpacity>
+          ))}
+        </Animated.View>
+      )}
+
+      {/* Extended Filters Panel */}
       {showFilters && (
-        <Animated.View entering={FadeInDown.duration(300)} style={styles.filtersContainer}>
+        <Animated.View entering={webSafeFadeInDown(0, 300)} style={styles.filtersContainer}>
           <ScrollView
             horizontal={false}
             showsVerticalScrollIndicator={false}
@@ -357,8 +510,8 @@ export default function SearchScreen(): React.JSX.Element {
                   >
                     <Star
                       size={14}
-                      color={minRating === rating ? DARK_COLORS.accent : DARK_COLORS.textMuted}
-                      fill={minRating === rating ? DARK_COLORS.accent : 'transparent'}
+                      color={minRating === rating ? '#f59e0b' : LIGHT_THEME.textMuted}
+                      fill={minRating === rating ? '#f59e0b' : 'transparent'}
                     />
                     <Text
                       style={[
@@ -411,9 +564,9 @@ export default function SearchScreen(): React.JSX.Element {
                   step={10}
                   value={priceRange[1]}
                   onValueChange={(value) => setPriceRange([priceRange[0], value])}
-                  minimumTrackTintColor={DARK_COLORS.primary}
-                  maximumTrackTintColor={DARK_COLORS.border}
-                  thumbTintColor={DARK_COLORS.primary}
+                  minimumTrackTintColor={LIGHT_THEME.primary}
+                  maximumTrackTintColor={LIGHT_THEME.border}
+                  thumbTintColor={LIGHT_THEME.primary}
                 />
               </View>
             </View>
@@ -465,44 +618,7 @@ export default function SearchScreen(): React.JSX.Element {
             <Text style={styles.resultsCount}>
               {filteredBarbers.length} barber{filteredBarbers.length !== 1 ? 's' : ''} found
             </Text>
-            <TouchableOpacity
-              style={styles.sortButton}
-              onPress={() => setShowSortDropdown(!showSortDropdown)}
-            >
-              <Text style={styles.sortText}>
-                {SORT_OPTIONS.find((o) => o.id === sortBy)?.label}
-              </Text>
-              <ChevronDown size={16} color={DARK_COLORS.textSecondary} />
-            </TouchableOpacity>
           </View>
-
-          {showSortDropdown && (
-            <Animated.View entering={FadeIn.duration(200)} style={styles.sortDropdown}>
-              {SORT_OPTIONS.map((option) => (
-                <TouchableOpacity
-                  key={option.id}
-                  style={[
-                    styles.sortOption,
-                    sortBy === option.id && styles.sortOptionActive,
-                  ]}
-                  onPress={() => {
-                    setSortBy(option.id);
-                    setShowSortDropdown(false);
-                  }}
-                >
-                  <Text
-                    style={[
-                      styles.sortOptionText,
-                      sortBy === option.id && styles.sortOptionTextActive,
-                    ]}
-                  >
-                    {option.label}
-                  </Text>
-                  {sortBy === option.id && <Check size={16} color={DARK_COLORS.primary} />}
-                </TouchableOpacity>
-              ))}
-            </Animated.View>
-          )}
 
           <FlatList
             data={filteredBarbers}
@@ -513,7 +629,9 @@ export default function SearchScreen(): React.JSX.Element {
             onScrollBeginDrag={Keyboard.dismiss}
             ListEmptyComponent={
               <View style={styles.emptyState}>
-                <Search size={48} color={DARK_COLORS.textMuted} />
+                <View style={styles.emptyIconContainer}>
+                  <Search size={40} color={LIGHT_THEME.primary} />
+                </View>
                 <Text style={styles.emptyTitle}>No barbers found</Text>
                 <Text style={styles.emptyText}>
                   Try adjusting your filters or search query
@@ -530,23 +648,30 @@ export default function SearchScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: LIGHT_THEME.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.md,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.borderLight,
+    borderBottomColor: LIGHT_THEME.borderLight,
     gap: SPACING.sm,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   searchContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_THEME.surfaceLight,
     borderRadius: RADIUS.lg,
     paddingHorizontal: SPACING.md,
     height: 44,
@@ -555,46 +680,50 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: TYPOGRAPHY.md,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
-  filterButton: {
-    width: 44,
-    height: 44,
-    borderRadius: RADIUS.md,
-    backgroundColor: DARK_COLORS.surfaceLight,
-    justifyContent: 'center',
+  filterChipsContainer: {
+    backgroundColor: LIGHT_THEME.background,
+    paddingVertical: SPACING.sm,
+  },
+  filterChipsContent: {
+    paddingHorizontal: SPACING.lg,
+    gap: SPACING.sm,
+  },
+  filterChip: {
+    flexDirection: 'row',
     alignItems: 'center',
+    height: 36,
+    paddingHorizontal: SPACING.md,
+    borderRadius: RADIUS.full,
+    backgroundColor: LIGHT_THEME.surface,
+    borderWidth: 1,
+    borderColor: LIGHT_THEME.border,
+    marginRight: SPACING.sm,
   },
-  filterButtonActive: {
-    backgroundColor: DARK_COLORS.primaryMuted,
+  filterChipActive: {
+    backgroundColor: LIGHT_THEME.primary,
+    borderColor: LIGHT_THEME.primary,
   },
-  filterBadge: {
-    position: 'absolute',
-    top: -4,
-    right: -4,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: DARK_COLORS.accent,
-    justifyContent: 'center',
-    alignItems: 'center',
+  filterChipIcon: {
+    marginRight: SPACING.xs,
   },
-  filterBadgeText: {
-    fontSize: 10,
-    fontWeight: '700',
+  filterChipText: {
+    fontSize: TYPOGRAPHY.sm,
+    fontWeight: '500',
+    color: LIGHT_THEME.textPrimary,
+  },
+  filterChipTextActive: {
     color: '#FFFFFF',
-  },
-  closeButton: {
-    padding: SPACING.xs,
   },
   suggestionsContainer: {
     flex: 1,
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: LIGHT_THEME.background,
   },
   filtersContainer: {
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.borderLight,
+    borderBottomColor: LIGHT_THEME.borderLight,
     maxHeight: 350,
   },
   filtersScroll: {
@@ -606,7 +735,7 @@ const styles = StyleSheet.create({
   filterTitle: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: '600',
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
     marginBottom: SPACING.sm,
   },
   serviceChips: {
@@ -618,20 +747,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.xs,
     borderRadius: RADIUS.full,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_THEME.surfaceLight,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_THEME.border,
   },
   serviceChipActive: {
-    backgroundColor: DARK_COLORS.primaryMuted,
-    borderColor: DARK_COLORS.primary,
+    backgroundColor: `${LIGHT_THEME.primary}20`,
+    borderColor: LIGHT_THEME.primary,
   },
   serviceChipText: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textSecondary,
+    color: LIGHT_THEME.textSecondary,
   },
   serviceChipTextActive: {
-    color: DARK_COLORS.primary,
+    color: LIGHT_THEME.primary,
     fontWeight: '600',
   },
   ratingOptions: {
@@ -645,20 +774,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
     borderRadius: RADIUS.md,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_THEME.surfaceLight,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_THEME.border,
   },
   ratingOptionActive: {
-    backgroundColor: DARK_COLORS.primaryMuted,
-    borderColor: DARK_COLORS.accent,
+    backgroundColor: `${LIGHT_THEME.primary}20`,
+    borderColor: '#f59e0b',
   },
   ratingOptionText: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textSecondary,
+    color: LIGHT_THEME.textSecondary,
   },
   ratingOptionTextActive: {
-    color: DARK_COLORS.accent,
+    color: '#f59e0b',
     fontWeight: '600',
   },
   distanceOptions: {
@@ -669,20 +798,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
     borderRadius: RADIUS.md,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    backgroundColor: LIGHT_THEME.surfaceLight,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_THEME.border,
   },
   distanceOptionActive: {
-    backgroundColor: DARK_COLORS.primaryMuted,
-    borderColor: DARK_COLORS.primary,
+    backgroundColor: `${LIGHT_THEME.primary}20`,
+    borderColor: LIGHT_THEME.primary,
   },
   distanceOptionText: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textSecondary,
+    color: LIGHT_THEME.textSecondary,
   },
   distanceOptionTextActive: {
-    color: DARK_COLORS.primary,
+    color: LIGHT_THEME.primary,
     fontWeight: '600',
   },
   sliderContainer: {
@@ -696,20 +825,20 @@ const styles = StyleSheet.create({
   },
   toggleLabel: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   toggle: {
     width: 24,
     height: 24,
     borderRadius: RADIUS.xs,
     borderWidth: 2,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_THEME.border,
     justifyContent: 'center',
     alignItems: 'center',
   },
   toggleActive: {
-    backgroundColor: DARK_COLORS.primary,
-    borderColor: DARK_COLORS.primary,
+    backgroundColor: LIGHT_THEME.primary,
+    borderColor: LIGHT_THEME.primary,
   },
   clearButton: {
     alignItems: 'center',
@@ -717,7 +846,7 @@ const styles = StyleSheet.create({
   },
   clearButtonText: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.error,
+    color: LIGHT_THEME.error,
     fontWeight: '600',
   },
   resultsHeader: {
@@ -729,27 +858,19 @@ const styles = StyleSheet.create({
   },
   resultsCount: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textSecondary,
-  },
-  sortButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: SPACING.xxs,
-  },
-  sortText: {
-    fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textSecondary,
+    color: LIGHT_THEME.textSecondary,
   },
   sortDropdown: {
     position: 'absolute',
-    top: 160,
+    top: 180,
     right: SPACING.lg,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_THEME.surface,
     borderRadius: RADIUS.lg,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_THEME.border,
     zIndex: 100,
     minWidth: 180,
+    ...SHADOWS.lg,
   },
   sortOption: {
     flexDirection: 'row',
@@ -758,17 +879,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.md,
     borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.borderLight,
+    borderBottomColor: LIGHT_THEME.borderLight,
   },
   sortOptionActive: {
-    backgroundColor: DARK_COLORS.primaryMuted,
+    backgroundColor: `${LIGHT_THEME.primary}15`,
   },
   sortOptionText: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_THEME.textPrimary,
   },
   sortOptionTextActive: {
-    color: DARK_COLORS.primary,
+    color: LIGHT_THEME.primary,
     fontWeight: '600',
   },
   listContent: {
@@ -776,107 +897,178 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING['3xl'],
   },
   barberCard: {
-    flexDirection: 'row',
-    backgroundColor: DARK_COLORS.surface,
-    borderRadius: RADIUS.lg,
-    padding: SPACING.md,
+    backgroundColor: LIGHT_THEME.surface,
+    borderRadius: RADIUS.xl,
     marginBottom: SPACING.md,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_THEME.border,
+    overflow: 'hidden',
+  },
+  cardContent: {
+    flexDirection: 'row',
+    padding: SPACING.md,
+    gap: SPACING.md,
+  },
+  avatarContainer: {
+    position: 'relative',
+    width: 80,
+    height: 80,
   },
   barberAvatar: {
-    width: 70,
-    height: 70,
-    borderRadius: RADIUS.md,
-    backgroundColor: DARK_COLORS.surfaceLight,
+    width: 80,
+    height: 80,
+    borderRadius: RADIUS.lg,
+    backgroundColor: LIGHT_THEME.surfaceLight,
+  },
+  onlineBadge: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(34, 197, 94, 0.9)',
+    paddingVertical: 2,
+    alignItems: 'center',
+    borderBottomLeftRadius: RADIUS.lg,
+    borderBottomRightRadius: RADIUS.lg,
+  },
+  onlineBadgeText: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
   },
   barberInfo: {
     flex: 1,
-    marginLeft: SPACING.md,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
-  barberNameRow: {
+  barberHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  nameContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
+    flex: 1,
   },
   barberName: {
     fontSize: TYPOGRAPHY.md,
-    fontWeight: '600',
-    color: DARK_COLORS.textPrimary,
+    fontWeight: '700',
+    color: LIGHT_THEME.textPrimary,
   },
-  barberStats: {
+  favoriteButton: {
+    padding: SPACING.xs,
+  },
+  specialty: {
+    fontSize: TYPOGRAPHY.xs,
+    color: LIGHT_THEME.primary,
+    fontWeight: '500',
+    marginTop: 2,
+  },
+  statsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xxs,
-    marginTop: SPACING.xxs,
-  },
-  barberRating: {
-    fontSize: TYPOGRAPHY.sm,
-    fontWeight: '600',
-    color: DARK_COLORS.textPrimary,
-  },
-  barberReviews: {
-    fontSize: TYPOGRAPHY.xs,
-    color: DARK_COLORS.textMuted,
-  },
-  statDivider: {
-    width: 1,
-    height: 10,
-    backgroundColor: DARK_COLORS.border,
-    marginHorizontal: SPACING.xs,
-  },
-  barberDistance: {
-    fontSize: TYPOGRAPHY.xs,
-    color: DARK_COLORS.textMuted,
-  },
-  barberSpecialties: {
-    flexDirection: 'row',
-    gap: SPACING.xs,
+    gap: SPACING.md,
     marginTop: SPACING.xs,
   },
-  specialtyChip: {
-    backgroundColor: DARK_COLORS.surfaceLight,
+  ratingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: LIGHT_THEME.surfaceLight,
     paddingHorizontal: SPACING.sm,
     paddingVertical: 2,
-    borderRadius: RADIUS.full,
+    borderRadius: RADIUS.sm,
+    gap: 4,
   },
-  specialtyText: {
+  ratingText: {
     fontSize: TYPOGRAPHY.xs,
-    color: DARK_COLORS.textSecondary,
-  },
-  barberPriceSection: {
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
-  priceLabel: {
-    fontSize: TYPOGRAPHY.xs,
-    color: DARK_COLORS.textMuted,
-  },
-  priceValue: {
-    fontSize: TYPOGRAPHY.lg,
     fontWeight: '700',
-    color: DARK_COLORS.primary,
+    color: LIGHT_THEME.textPrimary,
   },
-  onlineIndicator: {
+  reviewCount: {
+    fontSize: TYPOGRAPHY.xs,
+    color: LIGHT_THEME.textMuted,
+  },
+  distanceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  distanceText: {
+    fontSize: TYPOGRAPHY.xs,
+    color: LIGHT_THEME.textMuted,
+  },
+  actionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    borderTopWidth: 1,
+    borderTopColor: LIGHT_THEME.borderLight,
+  },
+  availabilityInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.xs,
+  },
+  availabilityText: {
+    fontSize: TYPOGRAPHY.xs,
+    color: LIGHT_THEME.textSecondary,
+  },
+  availabilityTextOffline: {
+    fontSize: TYPOGRAPHY.xs,
+    color: LIGHT_THEME.textMuted,
+  },
+  offlineIndicator: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    marginTop: SPACING.xs,
+    backgroundColor: '#f59e0b',
+  },
+  bookButton: {
+    backgroundColor: LIGHT_THEME.primary,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.sm,
+    borderRadius: RADIUS.md,
+    minWidth: 100,
+    alignItems: 'center',
+  },
+  bookButtonSecondary: {
+    backgroundColor: `${LIGHT_THEME.primary}15`,
+  },
+  bookButtonText: {
+    fontSize: TYPOGRAPHY.sm,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  bookButtonTextSecondary: {
+    color: LIGHT_THEME.primary,
   },
   emptyState: {
     alignItems: 'center',
     paddingVertical: SPACING['4xl'],
   },
+  emptyIconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: `${LIGHT_THEME.primary}15`,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: SPACING.md,
+  },
   emptyTitle: {
     fontSize: TYPOGRAPHY.lg,
-    fontWeight: '600',
-    color: DARK_COLORS.textPrimary,
-    marginTop: SPACING.lg,
+    fontWeight: '700',
+    color: LIGHT_THEME.textPrimary,
+    marginTop: SPACING.md,
   },
   emptyText: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_THEME.textMuted,
     marginTop: SPACING.xs,
+    textAlign: 'center',
+    maxWidth: 200,
   },
 });

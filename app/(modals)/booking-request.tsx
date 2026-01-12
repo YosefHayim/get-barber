@@ -18,9 +18,20 @@ import {
   Check,
   Scissors,
 } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS, formatPrice } from '@/constants/theme';
 import { useBookingStore } from '@/stores/useBookingStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 interface ServiceItem {
   id: string;
@@ -110,7 +121,7 @@ export default function BookingRequestScreen(): React.JSX.Element {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} style={styles.closeButton}>
-          <X size={24} color={COLORS.textPrimary} />
+          <X size={24} color={LIGHT_COLORS.textPrimary} />
         </Pressable>
         <Text style={styles.headerTitle}>Book Appointment</Text>
         <View style={{ width: 40 }} />
@@ -122,7 +133,7 @@ export default function BookingRequestScreen(): React.JSX.Element {
         showsVerticalScrollIndicator={false}
       >
         {selectedBarber && (
-          <Animated.View entering={FadeInDown.duration(300)} style={styles.barberInfo}>
+          <Animated.View entering={webSafeFadeInDown(0, 300)} style={styles.barberInfo}>
             <View style={styles.barberAvatar}>
               <Text style={styles.barberInitials}>
                 {selectedBarber.display_name?.charAt(0) || 'B'}
@@ -137,7 +148,7 @@ export default function BookingRequestScreen(): React.JSX.Element {
           </Animated.View>
         )}
 
-        <Animated.View entering={FadeInDown.delay(100).duration(300)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(100, 300)} style={styles.section}>
           <Text style={styles.sectionTitle}>Select Services</Text>
           
           {isLoading ? (
@@ -158,7 +169,7 @@ export default function BookingRequestScreen(): React.JSX.Element {
                     <View style={styles.serviceInfo}>
                       <Text style={styles.serviceName}>{service.name}</Text>
                       <View style={styles.serviceMeta}>
-                        <Clock size={12} color={COLORS.textMuted} />
+                        <Clock size={12} color={LIGHT_COLORS.textMuted} />
                         <Text style={styles.serviceDuration}>{service.duration} min</Text>
                       </View>
                     </View>
@@ -172,7 +183,7 @@ export default function BookingRequestScreen(): React.JSX.Element {
           )}
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(200).duration(300)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(200, 300)} style={styles.section}>
           <Text style={styles.sectionTitle}>Service Location</Text>
           
           <View style={styles.locationOptions}>
@@ -181,7 +192,7 @@ export default function BookingRequestScreen(): React.JSX.Element {
               onPress={() => setIsHomeService(false)}
             >
               <View style={[styles.locationIcon, !isHomeService && styles.locationIconSelected]}>
-                <Scissors size={20} color={!isHomeService ? COLORS.textInverse : COLORS.textMuted} />
+                <Scissors size={20} color={!isHomeService ? COLORS.textInverse : LIGHT_COLORS.textMuted} />
               </View>
               <Text style={[styles.locationLabel, !isHomeService && styles.locationLabelSelected]}>
                 At Barber's Location
@@ -193,7 +204,7 @@ export default function BookingRequestScreen(): React.JSX.Element {
               onPress={() => setIsHomeService(true)}
             >
               <View style={[styles.locationIcon, isHomeService && styles.locationIconSelected]}>
-                <Home size={20} color={isHomeService ? COLORS.textInverse : COLORS.textMuted} />
+                <Home size={20} color={isHomeService ? COLORS.textInverse : LIGHT_COLORS.textMuted} />
               </View>
               <View>
                 <Text style={[styles.locationLabel, isHomeService && styles.locationLabelSelected]}>
@@ -205,12 +216,12 @@ export default function BookingRequestScreen(): React.JSX.Element {
           </View>
 
           {isHomeService && (
-            <Animated.View entering={FadeInDown.duration(200)} style={styles.addressInput}>
-              <MapPin size={20} color={COLORS.textMuted} />
+            <Animated.View entering={webSafeFadeInDown(0, 200)} style={styles.addressInput}>
+              <MapPin size={20} color={LIGHT_COLORS.textMuted} />
               <TextInput
                 style={styles.addressTextInput}
                 placeholder="Enter your home address"
-                placeholderTextColor={COLORS.textMuted}
+                placeholderTextColor={LIGHT_COLORS.textMuted}
                 value={homeAddress}
                 onChangeText={setHomeAddress}
                 multiline
@@ -219,12 +230,12 @@ export default function BookingRequestScreen(): React.JSX.Element {
           )}
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(300).duration(300)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(300, 300)} style={styles.section}>
           <Text style={styles.sectionTitle}>Additional Notes (Optional)</Text>
           <TextInput
             style={styles.notesInput}
             placeholder="Any special requests or preferences..."
-            placeholderTextColor={COLORS.textMuted}
+            placeholderTextColor={LIGHT_COLORS.textMuted}
             value={notes}
             onChangeText={setNotes}
             multiline
@@ -263,7 +274,7 @@ export default function BookingRequestScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: LIGHT_COLORS.background,
   },
   header: {
     flexDirection: 'row',
@@ -271,22 +282,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.md,
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderLight,
+    borderBottomColor: LIGHT_COLORS.border,
   },
   closeButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.backgroundSecondary,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   scrollView: {
     flex: 1,
@@ -297,7 +308,7 @@ const styles = StyleSheet.create({
   barberInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     padding: SPACING.md,
     borderRadius: RADIUS.lg,
     marginBottom: SPACING.lg,
@@ -322,11 +333,11 @@ const styles = StyleSheet.create({
   barberName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   barberRating: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   section: {
     marginBottom: SPACING.xl,
@@ -334,7 +345,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.md,
   },
   servicesList: {
@@ -343,11 +354,11 @@ const styles = StyleSheet.create({
   serviceItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     padding: SPACING.md,
     borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
   },
   serviceItemSelected: {
     borderColor: COLORS.copper,
@@ -358,7 +369,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: RADIUS.sm,
     borderWidth: 2,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: SPACING.md,
@@ -373,7 +384,7 @@ const styles = StyleSheet.create({
   serviceName: {
     fontSize: TYPOGRAPHY.base,
     fontWeight: TYPOGRAPHY.medium,
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   serviceMeta: {
     flexDirection: 'row',
@@ -383,12 +394,12 @@ const styles = StyleSheet.create({
   },
   serviceDuration: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   servicePrice: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
   },
   servicePriceSelected: {
     color: COLORS.copper,
@@ -404,8 +415,8 @@ const styles = StyleSheet.create({
     padding: SPACING.md,
     borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.surface,
+    borderColor: LIGHT_COLORS.border,
+    backgroundColor: LIGHT_COLORS.surface,
     gap: SPACING.sm,
   },
   locationOptionSelected: {
@@ -416,7 +427,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.backgroundSecondary,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -426,10 +437,10 @@ const styles = StyleSheet.create({
   locationLabel: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.medium,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
   },
   locationLabelSelected: {
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   locationSurcharge: {
     fontSize: TYPOGRAPHY.xs,
@@ -439,29 +450,29 @@ const styles = StyleSheet.create({
   addressInput: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     padding: SPACING.md,
     borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
     marginTop: SPACING.md,
     gap: SPACING.sm,
   },
   addressTextInput: {
     flex: 1,
     fontSize: TYPOGRAPHY.base,
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     minHeight: 60,
     textAlignVertical: 'top',
   },
   notesInput: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     padding: SPACING.md,
     borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
     fontSize: TYPOGRAPHY.base,
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     minHeight: 80,
     textAlignVertical: 'top',
   },
@@ -470,10 +481,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     padding: SPACING.lg,
     borderTopWidth: 1,
-    borderTopColor: COLORS.borderLight,
+    borderTopColor: LIGHT_COLORS.border,
     ...SHADOWS.lg,
   },
   summaryRow: {
@@ -483,12 +494,12 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   summaryTotal: {
     fontSize: TYPOGRAPHY.xl,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.navy,
+    color: LIGHT_COLORS.textPrimary,
   },
   submitButton: {
     borderRadius: RADIUS.lg,

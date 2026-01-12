@@ -19,10 +19,21 @@ import {
   Megaphone,
   Bell,
 } from 'lucide-react-native';
-import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown } from '@/utils/animations';
 import { Avatar } from '@/components/ui/Avatar';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { useAppStore } from '@/stores/useAppStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 import {
   MOCK_BARBER_STATS,
   MOCK_SERVICE_REQUESTS,
@@ -47,7 +58,7 @@ function StatCard({
   delay?: number;
 }): React.JSX.Element {
   return (
-    <Animated.View entering={FadeInDown.delay(delay).duration(300)} style={styles.statCard}>
+    <Animated.View entering={webSafeFadeInDown(delay, 300)} style={styles.statCard}>
       <Surface style={styles.statCardInner} elevation={2}>
         <View style={[styles.statIconContainer, { backgroundColor: `${color}20` }]}>
           {icon}
@@ -91,7 +102,7 @@ function RequestPreviewCard({
               <Star size={12} color={COLORS.gold} fill={COLORS.gold} />
               <Text style={styles.requestRating}>{request.customerRating}</Text>
               <Text style={styles.requestDivider}>•</Text>
-              <MapPin size={12} color={COLORS.textMuted} />
+              <MapPin size={12} color={LIGHT_COLORS.textMuted} />
               <Text style={styles.requestDistance}>
                 {(request.distanceMeters / 1000).toFixed(1)} km
               </Text>
@@ -122,7 +133,7 @@ function RequestPreviewCard({
           <Text style={styles.requestAddress} numberOfLines={1}>
             {request.address}
           </Text>
-          <ChevronRight size={18} color={COLORS.textMuted} />
+          <ChevronRight size={18} color={LIGHT_COLORS.textMuted} />
         </View>
       </Surface>
     </Pressable>
@@ -151,7 +162,7 @@ export default function BarberDashboardScreen(): React.JSX.Element {
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
     >
-      <Animated.View entering={FadeIn.duration(300)} style={styles.header}>
+      <Animated.View entering={webSafeFadeIn(300)} style={styles.header}>
         <View style={styles.headerTop}>
           <View>
             <Text style={styles.greeting}>Good morning!</Text>
@@ -162,7 +173,7 @@ export default function BarberDashboardScreen(): React.JSX.Element {
               style={styles.notificationButton}
               onPress={() => router.push('/(modals)/notifications')}
             >
-              <Bell size={22} color={COLORS.textInverse} />
+              <Bell size={22} color={LIGHT_COLORS.textPrimary} />
               {unreadNotificationsCount > 0 && (
                 <View style={styles.notificationBadge}>
                   <Text style={styles.notificationBadgeText}>
@@ -253,7 +264,7 @@ export default function BarberDashboardScreen(): React.JSX.Element {
 
         {newRequests.length === 0 ? (
           <Surface style={styles.emptyCard} elevation={1}>
-            <AlertCircle size={32} color={COLORS.textMuted} />
+            <AlertCircle size={32} color={LIGHT_COLORS.textMuted} />
             <Text style={styles.emptyText}>No new requests</Text>
             <Text style={styles.emptySubtext}>
               {isOnline
@@ -287,7 +298,7 @@ export default function BarberDashboardScreen(): React.JSX.Element {
 
         {upcomingBookings.length === 0 ? (
           <Surface style={styles.emptyCard} elevation={1}>
-            <Calendar size={32} color={COLORS.textMuted} />
+            <Calendar size={32} color={LIGHT_COLORS.textMuted} />
             <Text style={styles.emptyText}>No appointments today</Text>
             <Text style={styles.emptySubtext}>Accept requests to fill your schedule</Text>
           </Surface>
@@ -309,7 +320,7 @@ export default function BarberDashboardScreen(): React.JSX.Element {
                     {booking.services.join(' + ')}
                   </Text>
                   <View style={styles.scheduleAddressRow}>
-                    <MapPin size={12} color={COLORS.textMuted} />
+                    <MapPin size={12} color={LIGHT_COLORS.textMuted} />
                     <Text style={styles.scheduleAddress} numberOfLines={1}>
                       {booking.address}
                     </Text>
@@ -361,7 +372,7 @@ export default function BarberDashboardScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollContent: {
     paddingBottom: SPACING['4xl'],
@@ -384,7 +395,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -401,27 +412,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 4,
     borderWidth: 2,
-    borderColor: COLORS.charcoal,
+    borderColor: LIGHT_COLORS.background,
   },
   notificationBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.surface,
   },
   greeting: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
   },
   businessName: {
     fontSize: TYPOGRAPHY['2xl'],
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginTop: SPACING.xxs,
   },
   statusCard: {
     borderRadius: RADIUS.xl,
     padding: SPACING.lg,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
   },
   statusContent: {
     flexDirection: 'row',
@@ -441,11 +452,11 @@ const styles = StyleSheet.create({
   statusLabel: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   statusSubtext: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     marginTop: SPACING.xxs,
   },
   statsGrid: {
@@ -460,7 +471,7 @@ const styles = StyleSheet.create({
   statCardInner: {
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     alignItems: 'center',
   },
   statIconContainer: {
@@ -474,11 +485,11 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: TYPOGRAPHY.xl,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   statLabel: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     marginTop: SPACING.xxs,
   },
   statSubValue: {
@@ -504,7 +515,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   seeAllText: {
     fontSize: TYPOGRAPHY.sm,
@@ -514,18 +525,18 @@ const styles = StyleSheet.create({
   emptyCard: {
     borderRadius: RADIUS.lg,
     padding: SPACING.xl,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     alignItems: 'center',
     gap: SPACING.sm,
   },
   emptyText: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.medium,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   emptySubtext: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     textAlign: 'center',
   },
   requestsList: {
@@ -534,7 +545,7 @@ const styles = StyleSheet.create({
   requestCard: {
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
   },
   requestCardNew: {
     borderWidth: 1,
@@ -556,7 +567,7 @@ const styles = StyleSheet.create({
   requestName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   newBadge: {
     backgroundColor: COLORS.gold,
@@ -577,16 +588,16 @@ const styles = StyleSheet.create({
   },
   requestRating: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   requestDivider: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     marginHorizontal: SPACING.xxs,
   },
   requestDistance: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   requestTime: {
     flexDirection: 'row',
@@ -621,11 +632,11 @@ const styles = StyleSheet.create({
     marginTop: SPACING.md,
     paddingTop: SPACING.md,
     borderTopWidth: 1,
-    borderTopColor: COLORS.mediumGray,
+    borderTopColor: LIGHT_COLORS.border,
   },
   requestAddress: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     flex: 1,
   },
   scheduleList: {
@@ -636,7 +647,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     gap: SPACING.md,
   },
   scheduleTime: {
@@ -657,11 +668,11 @@ const styles = StyleSheet.create({
   scheduleCustomer: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   scheduleServices: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
   },
   scheduleAddressRow: {
     flexDirection: 'row',
@@ -670,7 +681,7 @@ const styles = StyleSheet.create({
   },
   scheduleAddress: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     flex: 1,
   },
   schedulePrice: {
@@ -685,7 +696,7 @@ const styles = StyleSheet.create({
   quickActionsTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.md,
   },
   quickActionsGrid: {
@@ -706,7 +717,7 @@ const styles = StyleSheet.create({
   },
   quickActionLabel: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     fontWeight: TYPOGRAPHY.medium,
   },
 });

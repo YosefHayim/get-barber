@@ -8,6 +8,13 @@ export default function OnboardingLayout(): React.JSX.Element {
         headerShown: false,
         animation: 'slide_from_right',
         gestureEnabled: false,
+        headerStyle: {
+          backgroundColor: '#f6f6f8',
+        },
+        headerTintColor: '#0d181b',
+        contentStyle: {
+          backgroundColor: '#f6f6f8',
+        },
       }}
     >
       <Stack.Screen name="index" />

@@ -4,86 +4,107 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
+  Switch,
+  Linking,
 } from 'react-native';
-import { Text, Surface, Switch } from 'react-native-paper';
+import { Text, Surface } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, Stack } from 'expo-router';
 import {
   ArrowLeft,
-  Bell,
-  MessageSquare,
-  Calendar,
-  Star,
-  Gift,
-  Megaphone,
+  BellOff,
+  ChevronRight,
+  ExternalLink,
+  BellMinus,
 } from 'lucide-react-native';
-import { DARK_COLORS } from '@/constants/theme';
+
+const LIGHT_COLORS = {
+  background: '#f6f8f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  primary: '#11a4d4',
+  primaryDark: '#0e8ab3',
+  textPrimary: '#111618',
+  textSecondary: '#617f89',
+  textMuted: '#9aaeb5',
+  border: '#dbe3e6',
+  warningBg: 'rgba(245, 158, 11, 0.1)',
+  warningIcon: '#d97706',
+};
 
 interface NotificationSetting {
   id: string;
   label: string;
   description: string;
-  icon: React.ReactNode;
   enabled: boolean;
+}
+
+interface NotificationSection {
+  title: string;
+  settings: NotificationSetting[];
 }
 
 export default function NotificationsScreen(): React.JSX.Element {
   const insets = useSafeAreaInsets();
 
-  const [settings, setSettings] = useState<NotificationSetting[]>([
+  const [systemNotificationsEnabled, setSystemNotificationsEnabled] = useState(false);
+  const [pauseAllNotifications, setPauseAllNotifications] = useState(false);
+
+  const [activeBookingsSettings, setActiveBookingsSettings] = useState<NotificationSetting[]>([
     {
-      id: 'push',
-      label: 'Push Notifications',
-      description: 'Receive push notifications on your device',
-      icon: <Bell size={20} color={DARK_COLORS.primary} />,
+      id: 'reminders',
+      label: 'Appointment Reminders',
+      description: 'Get alerted 1 hour before your cut',
       enabled: true,
     },
     {
-      id: 'messages',
-      label: 'New Messages',
-      description: 'Get notified when barbers message you',
-      icon: <MessageSquare size={20} color={DARK_COLORS.primary} />,
+      id: 'arrival',
+      label: 'Barber Arrival',
+      description: 'Know when your barber is en route',
       enabled: true,
     },
     {
-      id: 'bookings',
-      label: 'Booking Updates',
-      description: 'Updates about your upcoming and past bookings',
-      icon: <Calendar size={20} color={DARK_COLORS.primary} />,
-      enabled: true,
-    },
-    {
-      id: 'reviews',
-      label: 'Review Reminders',
-      description: 'Reminders to rate your barber after service',
-      icon: <Star size={20} color={DARK_COLORS.accent} />,
-      enabled: false,
-    },
-    {
-      id: 'promotions',
-      label: 'Promotions & Offers',
-      description: 'Special deals and discounts from barbers',
-      icon: <Gift size={20} color={DARK_COLORS.accent} />,
-      enabled: false,
-    },
-    {
-      id: 'news',
-      label: 'App Updates & News',
-      description: 'New features and important announcements',
-      icon: <Megaphone size={20} color={DARK_COLORS.primary} />,
+      id: 'status',
+      label: 'Booking Status',
+      description: 'Confirmations and schedule changes',
       enabled: true,
     },
   ]);
 
-  const handleToggle = (id: string) => {
-    setSettings(
-      settings.map((s) =>
+  const [discoverySettings, setDiscoverySettings] = useState<NotificationSetting[]>([
+    {
+      id: 'availability',
+      label: 'New Barber Availability',
+      description: 'Notify me when top-rated barbers open slots',
+      enabled: false,
+    },
+    {
+      id: 'promotions',
+      label: 'Promotions & Deals',
+      description: 'Exclusive discounts on haircuts',
+      enabled: true,
+    },
+  ]);
+
+  const handleToggleActiveBookings = (id: string) => {
+    setActiveBookingsSettings(
+      activeBookingsSettings.map((s) =>
         s.id === id ? { ...s, enabled: !s.enabled } : s
       )
     );
   };
 
-  const enabledCount = settings.filter((s) => s.enabled).length;
+  const handleToggleDiscovery = (id: string) => {
+    setDiscoverySettings(
+      discoverySettings.map((s) =>
+        s.id === id ? { ...s, enabled: !s.enabled } : s
+      )
+    );
+  };
+
+  const handleOpenSettings = () => {
+    Linking.openSettings();
+  };
 
   return (
     <>
@@ -91,11 +112,11 @@ export default function NotificationsScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Notifications',
-          headerStyle: { backgroundColor: DARK_COLORS.background },
-          headerTitleStyle: { fontWeight: '700', color: DARK_COLORS.textPrimary },
+          headerStyle: { backgroundColor: LIGHT_COLORS.background },
+          headerTitleStyle: { fontWeight: '700', color: LIGHT_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
-              <ArrowLeft size={24} color={DARK_COLORS.textPrimary} />
+              <ArrowLeft size={24} color={LIGHT_COLORS.textPrimary} />
             </Pressable>
           ),
         }}
@@ -107,59 +128,115 @@ export default function NotificationsScreen(): React.JSX.Element {
           { paddingBottom: insets.bottom + 24 },
         ]}
       >
-        <Surface style={styles.summaryCard} elevation={0}>
-          <View style={styles.summaryIcon}>
-            <Bell size={28} color={DARK_COLORS.primary} />
-          </View>
-          <View style={styles.summaryContent}>
-            <Text style={styles.summaryTitle}>Notification Status</Text>
-            <Text style={styles.summaryText}>
-              {enabledCount} of {settings.length} notifications enabled
-            </Text>
-          </View>
-        </Surface>
-
-        <Text style={styles.sectionTitle}>Notification Preferences</Text>
-
-        <Surface style={styles.settingsCard} elevation={0}>
-          {settings.map((setting, index) => (
-            <View
-              key={setting.id}
-              style={[
-                styles.settingItem,
-                index !== settings.length - 1 && styles.settingItemBorder,
-              ]}
-            >
-              <View style={styles.settingIconContainer}>{setting.icon}</View>
-              <View style={styles.settingContent}>
-                <Text style={styles.settingLabel}>{setting.label}</Text>
-                <Text style={styles.settingDescription}>
-                  {setting.description}
+        {/* System Status Banner */}
+        {!systemNotificationsEnabled && (
+          <Surface style={styles.systemBanner} elevation={0}>
+            <View style={styles.bannerContent}>
+              <View style={styles.bannerIcon}>
+                <BellOff size={20} color={LIGHT_COLORS.warningIcon} />
+              </View>
+              <View style={styles.bannerText}>
+                <Text style={styles.bannerTitle}>System Notifications Disabled</Text>
+                <Text style={styles.bannerDescription}>
+                  Enable push notifications in iOS settings to receive alerts from your barber when they arrive.
                 </Text>
               </View>
-              <Switch
-                value={setting.enabled}
-                onValueChange={() => handleToggle(setting.id)}
-                color={DARK_COLORS.primary}
-              />
             </View>
-          ))}
+            <Pressable style={styles.bannerButton} onPress={handleOpenSettings}>
+              <Text style={styles.bannerButtonText}>Open Settings</Text>
+              <ExternalLink size={14} color="#FFFFFF" />
+            </Pressable>
+          </Surface>
+        )}
+
+        {/* Global Controls */}
+        <Surface style={styles.globalControlCard} elevation={0}>
+          <View style={styles.controlRow}>
+            <View style={styles.controlIcon}>
+              <BellMinus size={18} color={LIGHT_COLORS.textSecondary} />
+            </View>
+            <Text style={styles.controlLabel}>Pause All Notifications</Text>
+            <Switch
+              value={pauseAllNotifications}
+              onValueChange={setPauseAllNotifications}
+              trackColor={{ false: '#cbd5e1', true: LIGHT_COLORS.primary }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
         </Surface>
 
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>About Notifications</Text>
-          <Text style={styles.infoText}>
-            You can customize which notifications you receive. Important
-            notifications about your active bookings will always be sent.
-          </Text>
+        {/* Active Bookings Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>ACTIVE BOOKINGS</Text>
+          <Surface style={styles.settingsCard} elevation={0}>
+            {activeBookingsSettings.map((setting, index) => (
+              <View
+                key={setting.id}
+                style={[
+                  styles.settingItem,
+                  index !== activeBookingsSettings.length - 1 && styles.settingItemBorder,
+                ]}
+              >
+                <View style={styles.settingContent}>
+                  <Text style={styles.settingLabel}>{setting.label}</Text>
+                  <Text style={styles.settingDescription}>
+                    {setting.description}
+                  </Text>
+                </View>
+                <Switch
+                  value={setting.enabled}
+                  onValueChange={() => handleToggleActiveBookings(setting.id)}
+                  trackColor={{ false: '#cbd5e1', true: LIGHT_COLORS.primary }}
+                  thumbColor="#FFFFFF"
+                />
+              </View>
+            ))}
+          </Surface>
         </View>
 
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>Quiet Hours</Text>
-          <Text style={styles.infoText}>
-            During Shabbat (Friday sunset to Saturday sunset), we pause
-            non-urgent notifications to respect your time.
-          </Text>
+        {/* Discovery & Offers Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>DISCOVERY & OFFERS</Text>
+          <Surface style={styles.settingsCard} elevation={0}>
+            {discoverySettings.map((setting, index) => (
+              <View
+                key={setting.id}
+                style={[
+                  styles.settingItem,
+                  index !== discoverySettings.length - 1 && styles.settingItemBorder,
+                ]}
+              >
+                <View style={styles.settingContent}>
+                  <Text style={styles.settingLabel}>{setting.label}</Text>
+                  <Text style={styles.settingDescription}>
+                    {setting.description}
+                  </Text>
+                </View>
+                <Switch
+                  value={setting.enabled}
+                  onValueChange={() => handleToggleDiscovery(setting.id)}
+                  trackColor={{ false: '#cbd5e1', true: LIGHT_COLORS.primary }}
+                  thumbColor="#FFFFFF"
+                />
+              </View>
+            ))}
+          </Surface>
+        </View>
+
+        {/* System Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>SYSTEM</Text>
+          <Surface style={styles.settingsCard} elevation={0}>
+            <Pressable style={styles.linkItem}>
+              <View style={styles.settingContent}>
+                <Text style={styles.settingLabel}>Advanced Settings</Text>
+                <Text style={styles.settingDescription}>
+                  Manage system-level permissions
+                </Text>
+              </View>
+              <ChevronRight size={20} color={LIGHT_COLORS.textSecondary} />
+            </Pressable>
+          </Surface>
         </View>
       </ScrollView>
     </>
@@ -169,7 +246,7 @@ export default function NotificationsScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollContent: {
     padding: 16,
@@ -177,54 +254,105 @@ const styles = StyleSheet.create({
   headerButton: {
     padding: 8,
   },
-  summaryCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 16,
-    backgroundColor: DARK_COLORS.surface,
-    padding: 20,
-    marginBottom: 24,
+  // System Banner
+  systemBanner: {
+    borderRadius: 12,
+    backgroundColor: LIGHT_COLORS.surface,
+    padding: 16,
+    marginBottom: 16,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_COLORS.border,
+    gap: 16,
   },
-  summaryIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 14,
-    backgroundColor: DARK_COLORS.primaryMuted,
+  bannerContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 16,
+  },
+  bannerIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: LIGHT_COLORS.warningBg,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
   },
-  summaryContent: {
+  bannerText: {
     flex: 1,
+    gap: 4,
   },
-  summaryTitle: {
-    fontSize: 17,
+  bannerTitle: {
+    fontSize: 16,
     fontWeight: '700',
-    color: DARK_COLORS.textPrimary,
-    marginBottom: 4,
+    color: LIGHT_COLORS.textPrimary,
   },
-  summaryText: {
+  bannerDescription: {
     fontSize: 14,
-    color: DARK_COLORS.textMuted,
+    fontWeight: '500',
+    color: LIGHT_COLORS.textSecondary,
+    lineHeight: 20,
   },
-  sectionTitle: {
+  bannerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: LIGHT_COLORS.primary,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  bannerButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: DARK_COLORS.textMuted,
-    marginBottom: 12,
-    marginLeft: 4,
+    color: '#FFFFFF',
+  },
+  // Global Controls
+  globalControlCard: {
+    borderRadius: 12,
+    backgroundColor: LIGHT_COLORS.surface,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: LIGHT_COLORS.border,
+  },
+  controlRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+  },
+  controlIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  controlLabel: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '600',
+    color: LIGHT_COLORS.textPrimary,
+  },
+  // Section
+  section: {
+    marginTop: 16,
+  },
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: LIGHT_COLORS.textSecondary,
+    letterSpacing: 0.8,
+    marginBottom: 8,
+    marginLeft: 8,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
   settingsCard: {
-    borderRadius: 16,
-    backgroundColor: DARK_COLORS.surface,
+    borderRadius: 12,
+    backgroundColor: LIGHT_COLORS.surface,
     overflow: 'hidden',
-    marginBottom: 24,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_COLORS.border,
   },
   settingItem: {
     flexDirection: 'row',
@@ -233,49 +361,25 @@ const styles = StyleSheet.create({
   },
   settingItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.border,
-  },
-  settingIconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    backgroundColor: DARK_COLORS.primaryMuted,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 14,
+    borderBottomColor: LIGHT_COLORS.border,
   },
   settingContent: {
     flex: 1,
-    marginRight: 12,
+    marginRight: 16,
   },
   settingLabel: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: DARK_COLORS.textPrimary,
-    marginBottom: 2,
+    fontSize: 16,
+    fontWeight: '500',
+    color: LIGHT_COLORS.textPrimary,
   },
   settingDescription: {
-    fontSize: 13,
-    color: DARK_COLORS.textMuted,
-    lineHeight: 18,
-  },
-  infoBox: {
-    backgroundColor: DARK_COLORS.surfaceLight,
-    borderRadius: 14,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: DARK_COLORS.border,
-  },
-  infoTitle: {
     fontSize: 14,
-    fontWeight: '600',
-    color: DARK_COLORS.primary,
-    marginBottom: 6,
+    color: LIGHT_COLORS.textSecondary,
+    marginTop: 2,
   },
-  infoText: {
-    fontSize: 13,
-    color: DARK_COLORS.textSecondary,
-    lineHeight: 20,
+  linkItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
   },
 });

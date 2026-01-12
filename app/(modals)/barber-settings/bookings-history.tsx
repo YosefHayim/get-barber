@@ -24,6 +24,16 @@ import { COLORS, SPACING, RADIUS, TYPOGRAPHY, getStatusColor, getStatusLabel } f
 import type { BookingStatus } from '@/constants/theme';
 import { MOCK_BOOKINGS_BARBER } from '@/constants/mockData';
 
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
+
 type FilterType = 'all' | BookingStatus;
 
 interface BookingItemProps {
@@ -73,15 +83,15 @@ function BookingItem({ booking }: BookingItemProps): React.JSX.Element {
 
       <View style={styles.bookingDetails}>
         <View style={styles.detailRow}>
-          <Calendar size={14} color={COLORS.textMuted} />
+          <Calendar size={14} color={LIGHT_COLORS.textMuted} />
           <Text style={styles.detailText}>{formattedDate}</Text>
         </View>
         <View style={styles.detailRow}>
-          <Clock size={14} color={COLORS.textMuted} />
+          <Clock size={14} color={LIGHT_COLORS.textMuted} />
           <Text style={styles.detailText}>{formattedTime}</Text>
         </View>
         <View style={styles.detailRow}>
-          <MapPin size={14} color={COLORS.textMuted} />
+          <MapPin size={14} color={LIGHT_COLORS.textMuted} />
           <Text style={styles.detailText} numberOfLines={1}>{booking.address}</Text>
         </View>
       </View>
@@ -134,8 +144,8 @@ export default function BookingsHistoryScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Bookings History',
-          headerStyle: { backgroundColor: COLORS.charcoal },
-          headerTitleStyle: { fontWeight: '700', color: COLORS.textInverse },
+          headerStyle: { backgroundColor: LIGHT_COLORS.surface },
+          headerTitleStyle: { fontWeight: '700', color: LIGHT_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
               <ArrowLeft size={24} color={COLORS.gold} />
@@ -197,7 +207,7 @@ export default function BookingsHistoryScreen(): React.JSX.Element {
 
         {filteredBookings.length === 0 ? (
           <View style={styles.emptyState}>
-            <Calendar size={48} color={COLORS.textMuted} />
+            <Calendar size={48} color={LIGHT_COLORS.textMuted} />
             <Text style={styles.emptyTitle}>No Bookings Found</Text>
             <Text style={styles.emptyText}>
               {filter === 'all'
@@ -222,13 +232,13 @@ export default function BookingsHistoryScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   headerButton: {
     padding: SPACING.sm,
   },
   summaryCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     marginHorizontal: SPACING.lg,
     marginTop: SPACING.lg,
     borderRadius: RADIUS.lg,
@@ -250,12 +260,12 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   summaryDivider: {
     width: 1,
     height: 40,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.border,
   },
   filtersContainer: {
     marginTop: SPACING.lg,
@@ -268,10 +278,10 @@ const styles = StyleSheet.create({
   filterChip: {
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.sm,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.full,
     borderWidth: 1,
-    borderColor: COLORS.mediumGray,
+    borderColor: LIGHT_COLORS.border,
   },
   filterChipActive: {
     backgroundColor: COLORS.gold,
@@ -280,17 +290,17 @@ const styles = StyleSheet.create({
   filterChipText: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.medium,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
   },
   filterChipTextActive: {
-    color: COLORS.charcoal,
+    color: LIGHT_COLORS.textPrimary,
   },
   listContent: {
     padding: SPACING.lg,
     gap: SPACING.md,
   },
   bookingCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
   },
@@ -312,7 +322,7 @@ const styles = StyleSheet.create({
   customerName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.xxs,
   },
   servicesRow: {
@@ -321,7 +331,7 @@ const styles = StyleSheet.create({
   },
   serviceName: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   statusBadge: {
     paddingHorizontal: SPACING.sm,
@@ -339,7 +349,7 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.md,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: COLORS.mediumGray,
+    borderColor: LIGHT_COLORS.border,
   },
   detailRow: {
     flexDirection: 'row',
@@ -348,7 +358,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   bookingFooter: {
     flexDirection: 'row',
@@ -388,13 +398,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginTop: SPACING.lg,
     marginBottom: SPACING.xs,
   },
   emptyText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     textAlign: 'center',
   },
 });

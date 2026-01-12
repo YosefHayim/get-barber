@@ -8,11 +8,11 @@ export default function BarberTabsLayout(): React.JSX.Element {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: COLORS.gold,
-        tabBarInactiveTintColor: COLORS.textMuted,
+        tabBarActiveTintColor: '#135bec',
+        tabBarInactiveTintColor: '#94a3b8',
         tabBarStyle: {
-          backgroundColor: COLORS.charcoal,
-          borderTopColor: COLORS.darkGray,
+          backgroundColor: '#ffffff',
+          borderTopColor: '#e2e8f0',
           borderTopWidth: 1,
           height: 84,
           paddingTop: 8,
@@ -39,7 +39,7 @@ export default function BarberTabsLayout(): React.JSX.Element {
           tabBarBadge: 3,
           tabBarBadgeStyle: {
             backgroundColor: COLORS.gold,
-            color: COLORS.charcoal,
+            color: '#ffffff',
             fontSize: 10,
             fontWeight: '700',
           },

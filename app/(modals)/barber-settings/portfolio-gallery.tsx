@@ -26,8 +26,19 @@ import {
   Sparkles,
   Link as LinkIcon,
 } from 'lucide-react-native';
-import Animated, { FadeInDown, ZoomIn } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown, webSafeZoomIn } from '@/utils/animations';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 const MAX_PORTFOLIO_IMAGES = 12;
 
@@ -163,8 +174,8 @@ export default function PortfolioGalleryScreen(): React.JSX.Element {
         options={{
           headerShown: true,
           title: 'Portfolio & Social',
-          headerStyle: { backgroundColor: COLORS.charcoal },
-          headerTitleStyle: { fontWeight: '700', color: COLORS.textInverse },
+          headerStyle: { backgroundColor: LIGHT_COLORS.surface },
+          headerTitleStyle: { fontWeight: '700', color: LIGHT_COLORS.textPrimary },
           headerLeft: () => (
             <Pressable onPress={() => router.back()} style={styles.headerButton}>
               <ArrowLeft size={24} color={COLORS.gold} />
@@ -179,7 +190,7 @@ export default function PortfolioGalleryScreen(): React.JSX.Element {
           { paddingBottom: insets.bottom + 24 },
         ]}
       >
-        <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.tipsCard}>
+        <Animated.View entering={webSafeFadeInDown(100, 400)} style={styles.tipsCard}>
           <Sparkles size={20} color={COLORS.gold} />
           <View style={styles.tipsContent}>
             <Text style={styles.tipsTitle}>Showcase Your Best Work</Text>
@@ -190,7 +201,7 @@ export default function PortfolioGalleryScreen(): React.JSX.Element {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(200).duration(400)}>
+        <Animated.View entering={webSafeFadeInDown(200, 400)}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Work Gallery</Text>
             <Text style={styles.counterText}>
@@ -202,7 +213,7 @@ export default function PortfolioGalleryScreen(): React.JSX.Element {
             {portfolioImages.map((uri, index) => (
               <Animated.View
                 key={uri}
-                entering={ZoomIn.delay(index * 50).duration(300)}
+                entering={webSafeZoomIn(index * 50, 300)}
                 style={styles.imageContainer}
               >
                 <Image source={{ uri }} style={styles.portfolioImage} />
@@ -230,7 +241,7 @@ export default function PortfolioGalleryScreen(): React.JSX.Element {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(300).duration(400)} style={styles.section}>
+        <Animated.View entering={webSafeFadeInDown(300, 400)} style={styles.section}>
           <Text style={styles.sectionTitle}>Social Media Links</Text>
           <Text style={styles.sectionSubtitle}>
             Connect your profiles to let customers follow your work
@@ -249,11 +260,11 @@ export default function PortfolioGalleryScreen(): React.JSX.Element {
                   onChangeText={(text) =>
                     setSocialLinks({ ...socialLinks, instagram: text })
                   }
-                  outlineColor={COLORS.mediumGray}
+                  outlineColor={LIGHT_COLORS.border}
                   activeOutlineColor={COLORS.gold}
                   style={styles.socialInput}
-                  textColor={COLORS.textInverse}
-                  placeholderTextColor={COLORS.textMuted}
+                  textColor={LIGHT_COLORS.textPrimary}
+                  placeholderTextColor={LIGHT_COLORS.textMuted}
                 />
               </View>
               {socialLinks.instagram ? (
@@ -284,11 +295,11 @@ export default function PortfolioGalleryScreen(): React.JSX.Element {
                   onChangeText={(text) =>
                     setSocialLinks({ ...socialLinks, facebook: text })
                   }
-                  outlineColor={COLORS.mediumGray}
+                  outlineColor={LIGHT_COLORS.border}
                   activeOutlineColor={COLORS.gold}
                   style={styles.socialInput}
-                  textColor={COLORS.textInverse}
-                  placeholderTextColor={COLORS.textMuted}
+                  textColor={LIGHT_COLORS.textPrimary}
+                  placeholderTextColor={LIGHT_COLORS.textMuted}
                 />
               </View>
               {socialLinks.facebook && (
@@ -315,11 +326,11 @@ export default function PortfolioGalleryScreen(): React.JSX.Element {
                   onChangeText={(text) =>
                     setSocialLinks({ ...socialLinks, website: text })
                   }
-                  outlineColor={COLORS.mediumGray}
+                  outlineColor={LIGHT_COLORS.border}
                   activeOutlineColor={COLORS.gold}
                   style={styles.socialInput}
-                  textColor={COLORS.textInverse}
-                  placeholderTextColor={COLORS.textMuted}
+                  textColor={LIGHT_COLORS.textPrimary}
+                  placeholderTextColor={LIGHT_COLORS.textMuted}
                   autoCapitalize="none"
                   keyboardType="url"
                 />
@@ -358,7 +369,7 @@ export default function PortfolioGalleryScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollContent: {
     padding: SPACING.lg,
@@ -370,7 +381,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: SPACING.md,
     padding: SPACING.lg,
-    backgroundColor: COLORS.goldMuted,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     borderRadius: RADIUS.lg,
     marginBottom: SPACING.xl,
   },
@@ -385,7 +396,7 @@ const styles = StyleSheet.create({
   },
   tipsText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     lineHeight: 20,
   },
   sectionHeader: {
@@ -397,19 +408,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   sectionSubtitle: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     marginBottom: SPACING.md,
   },
   counterText: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: '600',
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   portfolioGrid: {
     flexDirection: 'row',
@@ -450,11 +461,11 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: RADIUS.md,
     borderWidth: 2,
-    borderColor: COLORS.mediumGray,
+    borderColor: LIGHT_COLORS.border,
     borderStyle: 'dashed',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     gap: SPACING.xs,
   },
   addButtonText: {
@@ -466,7 +477,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xl,
   },
   socialCard: {
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.lg,
     overflow: 'hidden',
   },
@@ -487,12 +498,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   socialInput: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
     height: 44,
   },
   socialDivider: {
     height: 1,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.border,
     marginHorizontal: SPACING.md,
   },
   openLinkButton: {
@@ -507,13 +518,13 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: RADIUS.sm,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   privacyNote: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     marginTop: SPACING.md,
     textAlign: 'center',
   },

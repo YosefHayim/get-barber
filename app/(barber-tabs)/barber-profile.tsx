@@ -22,11 +22,22 @@ import {
   Calendar,
   ImageIcon,
 } from 'lucide-react-native';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown } from '@/utils/animations';
 import { Avatar } from '@/components/ui/Avatar';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { useAppStore } from '@/stores/useAppStore';
 import { MOCK_BARBER_STATS } from '@/constants/mockData';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 interface MenuItemProps {
   icon: React.ReactNode;
@@ -122,12 +133,12 @@ export default function BarberProfileScreen(): React.JSX.Element {
       contentContainerStyle={styles.scrollContent}
       showsVerticalScrollIndicator={false}
     >
-      <Animated.View entering={FadeIn.duration(300)} style={styles.header}>
+      <Animated.View entering={webSafeFadeIn(300)} style={styles.header}>
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
             <Avatar uri={null} name="Yossi Cohen" size={90} />
             <Pressable style={styles.cameraButton}>
-              <Camera size={18} color={COLORS.textInverse} />
+              <Camera size={18} color={LIGHT_COLORS.textPrimary} />
             </Pressable>
           </View>
           <View style={styles.profileInfo}>
@@ -174,19 +185,19 @@ export default function BarberProfileScreen(): React.JSX.Element {
       </Animated.View>
 
       <View style={styles.statsGrid}>
-        <Animated.View entering={FadeInDown.delay(100).duration(300)} style={styles.statItem}>
+        <Animated.View entering={webSafeFadeInDown(100, 300)} style={styles.statItem}>
           <Surface style={styles.statCard} elevation={1}>
             <Text style={styles.statValue}>{stats.totalBookings}</Text>
             <Text style={styles.statLabel}>Bookings</Text>
           </Surface>
         </Animated.View>
-        <Animated.View entering={FadeInDown.delay(150).duration(300)} style={styles.statItem}>
+        <Animated.View entering={webSafeFadeInDown(150, 300)} style={styles.statItem}>
           <Surface style={styles.statCard} elevation={1}>
             <Text style={styles.statValue}>{stats.responseRate}%</Text>
             <Text style={styles.statLabel}>Response</Text>
           </Surface>
         </Animated.View>
-        <Animated.View entering={FadeInDown.delay(200).duration(300)} style={styles.statItem}>
+        <Animated.View entering={webSafeFadeInDown(200, 300)} style={styles.statItem}>
           <Surface style={styles.statCard} elevation={1}>
             <Text style={styles.statValue}>15</Text>
             <Text style={styles.statLabel}>Years Exp.</Text>
@@ -219,7 +230,7 @@ export default function BarberProfileScreen(): React.JSX.Element {
             icon={<MapPin size={20} color={COLORS.gold} />}
             label="Service Area"
             value="10 km"
-            onPress={() => {}}
+            onPress={() => router.push('/(modals)/barber-settings/service-area')}
           />
           <MenuItem
             icon={<Calendar size={20} color={COLORS.gold} />}
@@ -297,7 +308,7 @@ export default function BarberProfileScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   scrollContent: {
     paddingBottom: SPACING['4xl'],
@@ -325,7 +336,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: COLORS.charcoal,
+    borderColor: LIGHT_COLORS.background,
   },
   profileInfo: {
     flex: 1,
@@ -339,7 +350,7 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: TYPOGRAPHY.xl,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   verifiedBadge: {
     width: 20,
@@ -375,7 +386,7 @@ const styles = StyleSheet.create({
   statusCard: {
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
   },
   statusRow: {
     flexDirection: 'row',
@@ -394,7 +405,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     fontWeight: TYPOGRAPHY.medium,
   },
   statsGrid: {
@@ -408,7 +419,7 @@ const styles = StyleSheet.create({
   statCard: {
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     alignItems: 'center',
   },
   statValue: {
@@ -435,7 +446,7 @@ const styles = StyleSheet.create({
   },
   menuCard: {
     borderRadius: RADIUS.lg,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     overflow: 'hidden',
   },
   menuItem: {
@@ -443,13 +454,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.mediumGray,
+    borderBottomColor: LIGHT_COLORS.border,
   },
   menuIcon: {
     width: 40,
     height: 40,
     borderRadius: RADIUS.sm,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: SPACING.md,
@@ -457,7 +468,7 @@ const styles = StyleSheet.create({
   menuLabel: {
     flex: 1,
     fontSize: TYPOGRAPHY.md,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   menuLabelDestructive: {
     color: COLORS.error,

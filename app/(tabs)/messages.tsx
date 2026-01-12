@@ -14,8 +14,18 @@ import {
   Sparkles,
 } from 'lucide-react-native';
 import { Avatar } from '@/components/ui/Avatar';
-import { DARK_COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
+import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 import { useAppStore } from '@/stores/useAppStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 import {
   MOCK_CONVERSATIONS_CUSTOMER,
   MOCK_CONVERSATIONS_BARBER,
@@ -25,13 +35,13 @@ import {
 function getStatusIcon(status: MockConversation['status']) {
   switch (status) {
     case 'negotiating':
-      return <Clock size={14} color={DARK_COLORS.warning} />;
+      return <Clock size={14} color={COLORS.warning} />;
     case 'confirmed':
-      return <CheckCircle2 size={14} color={DARK_COLORS.success} />;
+      return <CheckCircle2 size={14} color={COLORS.success} />;
     case 'completed':
-      return <CheckCheck size={14} color={DARK_COLORS.textMuted} />;
+      return <CheckCheck size={14} color={LIGHT_COLORS.textMuted} />;
     case 'cancelled':
-      return <XCircle size={14} color={DARK_COLORS.error} />;
+      return <XCircle size={14} color={COLORS.error} />;
     default:
       return null;
   }
@@ -55,15 +65,15 @@ function getStatusLabel(status: MockConversation['status']): string {
 function getStatusColor(status: MockConversation['status']): string {
   switch (status) {
     case 'negotiating':
-      return DARK_COLORS.warning;
+      return COLORS.warning;
     case 'confirmed':
-      return DARK_COLORS.success;
+      return COLORS.success;
     case 'completed':
-      return DARK_COLORS.textMuted;
+      return LIGHT_COLORS.textMuted;
     case 'cancelled':
-      return DARK_COLORS.error;
+      return COLORS.error;
     default:
-      return DARK_COLORS.textMuted;
+      return LIGHT_COLORS.textMuted;
   }
 }
 
@@ -123,7 +133,7 @@ function ConversationCard({ conversation, onPress }: ConversationCardProps): Rea
           {conversation.offeredPrice && (
             <>
               <View style={styles.priceDot} />
-              <Sparkles size={12} color={DARK_COLORS.accent} />
+              <Sparkles size={12} color={COLORS.accent} />
               <Text style={styles.priceText}>₪{conversation.offeredPrice}</Text>
             </>
           )}
@@ -184,7 +194,7 @@ export default function MessagesScreen(): React.JSX.Element {
       {conversations.length === 0 ? (
         <View style={styles.emptyState}>
           <View style={styles.emptyIconContainer}>
-            <MessageCircle size={48} color={DARK_COLORS.primary} />
+            <MessageCircle size={48} color={COLORS.primary} />
           </View>
           <Text style={styles.emptyTitle}>No messages yet</Text>
           <Text style={styles.emptyText}>
@@ -212,7 +222,7 @@ export default function MessagesScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_COLORS.background,
+    backgroundColor: LIGHT_COLORS.background,
   },
   listContainer: {
     flex: 1,
@@ -220,9 +230,9 @@ const styles = StyleSheet.create({
   header: {
     padding: SPACING.xl,
     paddingBottom: SPACING.lg,
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: DARK_COLORS.border,
+    borderBottomColor: LIGHT_COLORS.border,
   },
   headerContent: {
     flexDirection: 'row',
@@ -232,10 +242,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: TYPOGRAPHY['2xl'],
     fontWeight: TYPOGRAPHY.bold,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   headerBadge: {
-    backgroundColor: DARK_COLORS.primaryMuted,
+    backgroundColor: COLORS.primaryMuted,
     paddingHorizontal: SPACING.sm,
     paddingVertical: SPACING.xxs,
     borderRadius: RADIUS.full,
@@ -243,11 +253,11 @@ const styles = StyleSheet.create({
   headerBadgeText: {
     fontSize: TYPOGRAPHY.xs,
     fontWeight: TYPOGRAPHY.semibold,
-    color: DARK_COLORS.primary,
+    color: COLORS.primary,
   },
   subtitle: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     marginTop: SPACING.xxs,
   },
   listContent: {
@@ -258,11 +268,11 @@ const styles = StyleSheet.create({
   },
   conversationCard: {
     flexDirection: 'row',
-    backgroundColor: DARK_COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     borderRadius: RADIUS.xl,
     padding: SPACING.lg,
     borderWidth: 1,
-    borderColor: DARK_COLORS.border,
+    borderColor: LIGHT_COLORS.border,
   },
   avatarContainer: {
     position: 'relative',
@@ -274,9 +284,9 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: DARK_COLORS.success,
+    backgroundColor: COLORS.success,
     borderWidth: 2,
-    borderColor: DARK_COLORS.surface,
+    borderColor: LIGHT_COLORS.surface,
   },
   conversationContent: {
     flex: 1,
@@ -291,12 +301,12 @@ const styles = StyleSheet.create({
   participantName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     flex: 1,
   },
   timeText: {
     fontSize: TYPOGRAPHY.xs,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   servicesRow: {
     flexDirection: 'row',
@@ -305,7 +315,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   serviceTag: {
-    backgroundColor: DARK_COLORS.primaryMuted,
+    backgroundColor: COLORS.primaryMuted,
     paddingHorizontal: SPACING.sm,
     paddingVertical: SPACING.xxs,
     borderRadius: RADIUS.sm,
@@ -313,11 +323,11 @@ const styles = StyleSheet.create({
   serviceTagText: {
     fontSize: TYPOGRAPHY.xs,
     fontWeight: TYPOGRAPHY.medium,
-    color: DARK_COLORS.primary,
+    color: COLORS.primary,
   },
   moreServices: {
     fontSize: TYPOGRAPHY.xs,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
   },
   messageRow: {
     flexDirection: 'row',
@@ -325,7 +335,7 @@ const styles = StyleSheet.create({
   },
   lastMessage: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     flex: 1,
   },
   statusRow: {
@@ -341,16 +351,16 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 1.5,
-    backgroundColor: DARK_COLORS.textMuted,
+    backgroundColor: LIGHT_COLORS.textMuted,
     marginHorizontal: SPACING.xxs,
   },
   priceText: {
     fontSize: TYPOGRAPHY.xs,
     fontWeight: TYPOGRAPHY.semibold,
-    color: DARK_COLORS.accent,
+    color: COLORS.accent,
   },
   unreadBadge: {
-    backgroundColor: DARK_COLORS.primary,
+    backgroundColor: COLORS.primary,
     minWidth: 22,
     height: 22,
     borderRadius: 11,
@@ -362,7 +372,7 @@ const styles = StyleSheet.create({
   unreadText: {
     fontSize: TYPOGRAPHY.xs,
     fontWeight: TYPOGRAPHY.bold,
-    color: DARK_COLORS.textPrimary,
+    color: '#ffffff',
   },
   emptyState: {
     flex: 1,
@@ -374,7 +384,7 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 48,
-    backgroundColor: DARK_COLORS.primaryMuted,
+    backgroundColor: COLORS.primaryMuted,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: SPACING.xl,
@@ -382,12 +392,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.semibold,
-    color: DARK_COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.sm,
   },
   emptyText: {
     fontSize: TYPOGRAPHY.sm,
-    color: DARK_COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     textAlign: 'center',
     lineHeight: 20,
   },

@@ -17,10 +17,21 @@ import {
   Sparkles,
   Filter,
 } from 'lucide-react-native';
-import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown } from '@/utils/animations';
 import { Avatar } from '@/components/ui/Avatar';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { useAppStore } from '@/stores/useAppStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 import { MOCK_SERVICE_REQUESTS, type MockServiceRequest } from '@/constants/mockData';
 
 type FilterType = 'all' | 'new' | 'viewed';
@@ -74,7 +85,7 @@ function RequestCard({
   const isUrgent = expiresIn < 10;
 
   return (
-    <Animated.View entering={FadeInDown.duration(300)}>
+    <Animated.View entering={webSafeFadeInDown(0, 300)}>
       <Surface style={[styles.requestCard, isNew && styles.requestCardNew]} elevation={2}>
         <View style={styles.requestHeader}>
           <View style={styles.customerInfo}>
@@ -84,7 +95,7 @@ function RequestCard({
                 <Text style={styles.customerName}>{request.customerName}</Text>
                 {isNew && (
                   <View style={styles.newBadge}>
-                    <Sparkles size={10} color={COLORS.charcoal} />
+                    <Sparkles size={10} color={LIGHT_COLORS.background} />
                     <Text style={styles.newBadgeText}>NEW</Text>
                   </View>
                 )}
@@ -185,11 +196,13 @@ export default function BarberRequestsScreen(): React.JSX.Element {
       : allRequests;
 
   const handleAccept = useCallback((requestId: string) => {
-    console.log('Accept request:', requestId);
+    // Accept request logic - update request status in Supabase
+    // This will be called when barber accepts a service request
   }, []);
 
   const handleDecline = useCallback((requestId: string) => {
-    console.log('Decline request:', requestId);
+    // Decline request logic - update request status in Supabase
+    // This will be called when barber declines a service request
   }, []);
 
   const handleChat = useCallback((requestId: string) => {
@@ -212,7 +225,7 @@ export default function BarberRequestsScreen(): React.JSX.Element {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <Animated.View entering={FadeIn.duration(300)} style={styles.header}>
+      <Animated.View entering={webSafeFadeIn(300)} style={styles.header}>
         <View style={styles.headerContent}>
           <Text style={styles.title}>Requests</Text>
           <View style={styles.headerBadge}>
@@ -285,7 +298,7 @@ export default function BarberRequestsScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   listContainer: {
     flex: 1,
@@ -302,7 +315,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: TYPOGRAPHY['2xl'],
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   headerBadge: {
     flexDirection: 'row',
@@ -336,7 +349,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.sm,
     borderRadius: RADIUS.full,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
   },
   filterButtonActive: {
     backgroundColor: COLORS.gold,
@@ -347,10 +360,10 @@ const styles = StyleSheet.create({
     color: COLORS.textMuted,
   },
   filterButtonTextActive: {
-    color: COLORS.charcoal,
+    color: LIGHT_COLORS.background,
   },
   filterBadge: {
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.border,
     paddingHorizontal: SPACING.xs,
     paddingVertical: SPACING.xxs,
     borderRadius: RADIUS.xs,
@@ -358,7 +371,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   filterBadgeActive: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   filterBadgeText: {
     fontSize: TYPOGRAPHY.xs,
@@ -377,7 +390,7 @@ const styles = StyleSheet.create({
   requestCard: {
     borderRadius: RADIUS.xl,
     padding: SPACING.lg,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
   },
   requestCardNew: {
     borderWidth: 1,
@@ -405,7 +418,7 @@ const styles = StyleSheet.create({
   customerName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   newBadge: {
     flexDirection: 'row',
@@ -419,7 +432,7 @@ const styles = StyleSheet.create({
   newBadgeText: {
     fontSize: 9,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.charcoal,
+    color: LIGHT_COLORS.background,
   },
   ratingRow: {
     flexDirection: 'row',
@@ -429,7 +442,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: TYPOGRAPHY.xs,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     fontWeight: TYPOGRAPHY.medium,
   },
   ratingDivider: {
@@ -487,7 +500,7 @@ const styles = StyleSheet.create({
   },
   locationContainer: {
     marginTop: SPACING.lg,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.border,
     borderRadius: RADIUS.md,
     padding: SPACING.md,
   },
@@ -501,7 +514,7 @@ const styles = StyleSheet.create({
   },
   locationAddress: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     fontWeight: TYPOGRAPHY.medium,
   },
   locationDistance: {
@@ -524,7 +537,7 @@ const styles = StyleSheet.create({
     marginTop: SPACING.lg,
     paddingTop: SPACING.lg,
     borderTopWidth: 1,
-    borderTopColor: COLORS.mediumGray,
+    borderTopColor: LIGHT_COLORS.border,
   },
   priceOfferLabel: {
     fontSize: TYPOGRAPHY.sm,
@@ -542,7 +555,7 @@ const styles = StyleSheet.create({
     marginTop: SPACING.lg,
     paddingTop: SPACING.lg,
     borderTopWidth: 1,
-    borderTopColor: COLORS.mediumGray,
+    borderTopColor: LIGHT_COLORS.border,
   },
   actionButton: {
     flex: 1,
@@ -570,7 +583,7 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 48,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: SPACING.xl,
@@ -578,7 +591,7 @@ const styles = StyleSheet.create({
   offlineTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.sm,
   },
   offlineText: {
@@ -605,7 +618,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.sm,
   },
   emptyText: {

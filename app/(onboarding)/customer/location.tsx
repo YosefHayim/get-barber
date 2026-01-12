@@ -4,10 +4,21 @@ import { Text, TextInput, Button } from 'react-native-paper';
 import { router } from 'expo-router';
 import { MapPin, Home, Briefcase, Navigation } from 'lucide-react-native';
 import * as Location from 'expo-location';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 import { OnboardingLayout } from '@/components/onboarding/OnboardingLayout';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/constants/theme';
 import { useOnboardingStore } from '@/stores/useOnboardingStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 export default function CustomerLocationScreen(): React.JSX.Element {
   const progress = useOnboardingStore((s) => s.progress);
@@ -98,7 +109,7 @@ export default function CustomerLocationScreen(): React.JSX.Element {
     >
       <View style={styles.content}>
         {!locationPermissionGranted && (
-          <Animated.View entering={FadeInDown.delay(100).duration(400)}>
+          <Animated.View entering={webSafeFadeInDown(100, 400)}>
             <Pressable onPress={handleRequestLocation} style={styles.locationCard}>
               <View style={styles.locationIconContainer}>
                 <Navigation size={24} color={COLORS.gold} />
@@ -115,10 +126,10 @@ export default function CustomerLocationScreen(): React.JSX.Element {
           </Animated.View>
         )}
 
-        <Animated.View entering={FadeInDown.delay(200).duration(400)} style={styles.addressSection}>
+        <Animated.View entering={webSafeFadeInDown(200, 400)} style={styles.addressSection}>
           <View style={styles.inputGroup}>
             <View style={styles.labelRow}>
-              <Home size={18} color={COLORS.textSecondary} />
+              <Home size={18} color={LIGHT_COLORS.textSecondary} />
               <Text style={styles.label}>Home Address</Text>
             </View>
             <TextInput
@@ -133,7 +144,7 @@ export default function CustomerLocationScreen(): React.JSX.Element {
 
           <View style={styles.inputGroup}>
             <View style={styles.labelRow}>
-              <Briefcase size={18} color={COLORS.textSecondary} />
+              <Briefcase size={18} color={LIGHT_COLORS.textSecondary} />
               <Text style={styles.label}>Work Address (optional)</Text>
             </View>
             <TextInput
@@ -147,8 +158,8 @@ export default function CustomerLocationScreen(): React.JSX.Element {
           </View>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(300).duration(400)} style={styles.note}>
-          <MapPin size={16} color={COLORS.textMuted} />
+        <Animated.View entering={webSafeFadeInDown(300, 400)} style={styles.note}>
+          <MapPin size={16} color={LIGHT_COLORS.textMuted} />
           <Text style={styles.noteText}>
             You can always add or change addresses later in your profile
           </Text>
@@ -174,7 +185,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: RADIUS.md,
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -188,7 +199,7 @@ const styles = StyleSheet.create({
   },
   locationCardSubtitle: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     marginTop: SPACING.xxs,
   },
   addressSection: {
@@ -205,27 +216,27 @@ const styles = StyleSheet.create({
   label: {
     fontSize: TYPOGRAPHY.sm,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   input: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
   },
   inputOutline: {
     borderRadius: RADIUS.md,
-    borderColor: COLORS.border,
+    borderColor: LIGHT_COLORS.border,
   },
   note: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: SPACING.sm,
     padding: SPACING.md,
-    backgroundColor: COLORS.borderLight,
+    backgroundColor: LIGHT_COLORS.surfaceHighlight,
     borderRadius: RADIUS.md,
   },
   noteText: {
     flex: 1,
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     lineHeight: 20,
   },
 });

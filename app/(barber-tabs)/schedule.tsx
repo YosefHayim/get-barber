@@ -15,10 +15,21 @@ import {
   Circle,
 } from 'lucide-react-native';
 import { format, addDays, startOfDay, isSameDay } from 'date-fns';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeIn, webSafeFadeInDown } from '@/utils/animations';
 import { Avatar } from '@/components/ui/Avatar';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { MOCK_BOOKINGS_BARBER, type MockBooking } from '@/constants/mockData';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 function DayButton({
   date,
@@ -81,7 +92,7 @@ function BookingTimelineCard({
   const isInProgress = booking.status === 'in_progress';
 
   return (
-    <Animated.View entering={FadeInDown.duration(300)}>
+    <Animated.View entering={webSafeFadeInDown(0, 300)}>
       <Pressable onPress={onPress} style={styles.timelineContainer}>
         <View style={styles.timelineLine}>
           <View
@@ -169,7 +180,7 @@ export default function BarberScheduleScreen(): React.JSX.Element {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <Animated.View entering={FadeIn.duration(300)} style={styles.header}>
+      <Animated.View entering={webSafeFadeIn(300)} style={styles.header}>
         <View style={styles.headerContent}>
           <Text style={styles.title}>Schedule</Text>
           <View style={styles.headerIcon}>
@@ -241,7 +252,7 @@ export default function BarberScheduleScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   header: {
     padding: SPACING.xl,
@@ -255,7 +266,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: TYPOGRAPHY['2xl'],
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   headerIcon: {
     width: 40,
@@ -274,7 +285,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: SPACING.sm,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     paddingVertical: SPACING.md,
   },
   weekNavButton: {
@@ -298,7 +309,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.gold,
   },
   dayButtonToday: {
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.border,
   },
   dayName: {
     fontSize: TYPOGRAPHY.xs,
@@ -306,22 +317,22 @@ const styles = StyleSheet.create({
     fontWeight: TYPOGRAPHY.medium,
   },
   dayNameSelected: {
-    color: COLORS.charcoal,
+    color: LIGHT_COLORS.background,
   },
   dayNameToday: {
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   dayNumber: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.bold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginTop: SPACING.xxs,
   },
   dayNumberSelected: {
-    color: COLORS.charcoal,
+    color: LIGHT_COLORS.background,
   },
   dayNumberToday: {
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   dayDot: {
     width: 6,
@@ -331,14 +342,14 @@ const styles = StyleSheet.create({
     marginTop: SPACING.xs,
   },
   dayDotSelected: {
-    backgroundColor: COLORS.charcoal,
+    backgroundColor: LIGHT_COLORS.background,
   },
   monthLabel: {
     paddingHorizontal: SPACING.xl,
     paddingVertical: SPACING.md,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.mediumGray,
+    borderBottomColor: LIGHT_COLORS.border,
   },
   monthLabelText: {
     fontSize: TYPOGRAPHY.sm,
@@ -365,9 +376,9 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
     borderWidth: 2,
-    borderColor: COLORS.mediumGray,
+    borderColor: LIGHT_COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -388,7 +399,7 @@ const styles = StyleSheet.create({
   timelineConnector: {
     flex: 1,
     width: 2,
-    backgroundColor: COLORS.mediumGray,
+    backgroundColor: LIGHT_COLORS.border,
     marginTop: SPACING.xxs,
   },
   timelineConnectorCompleted: {
@@ -398,7 +409,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
-    backgroundColor: COLORS.darkGray,
+    backgroundColor: LIGHT_COLORS.surface,
   },
   bookingCardActive: {
     borderWidth: 1,
@@ -429,7 +440,7 @@ const styles = StyleSheet.create({
   customerName: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
   },
   servicesText: {
     fontSize: TYPOGRAPHY.xs,
@@ -456,7 +467,7 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
     paddingTop: SPACING.md,
     borderTopWidth: 1,
-    borderTopColor: COLORS.mediumGray,
+    borderTopColor: LIGHT_COLORS.border,
   },
   bookingActionButton: {
     width: 40,
@@ -485,7 +496,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: TYPOGRAPHY.lg,
     fontWeight: TYPOGRAPHY.semibold,
-    color: COLORS.textInverse,
+    color: LIGHT_COLORS.textPrimary,
     marginBottom: SPACING.sm,
   },
   emptyText: {

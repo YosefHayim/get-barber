@@ -9,7 +9,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { ArrowLeft, Scissors, Sparkles } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 import { PhoneAuthInput, OTPInput } from '@/features/auth/components';
 import { usePhoneAuth } from '@/features/auth/hooks';
 import { useToast } from '@/hooks/useToast';
@@ -110,7 +111,7 @@ export default function PhoneLoginScreen(): React.JSX.Element {
           <ArrowLeft size={24} color="#1A1A1A" />
         </Pressable>
 
-        <Animated.View style={styles.header} entering={FadeInDown.duration(600).delay(100)}>
+        <Animated.View style={styles.header} entering={webSafeFadeInDown(100, 600)}>
           <View style={styles.logoContainer}>
             <View style={styles.logoInner}>
               <Scissors size={32} color="#FFFFFF" style={{ transform: [{ rotate: '-45deg' }] }} />

@@ -3,10 +3,21 @@ import { View, StyleSheet, Switch } from 'react-native';
 import { Text, Surface } from 'react-native-paper';
 import { router } from 'expo-router';
 import { Bell, Calendar, Tag, MapPin, Clock } from 'lucide-react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { webSafeFadeInDown } from '@/utils/animations';
 import { OnboardingLayout } from '@/components/onboarding/OnboardingLayout';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY, SHADOWS } from '@/constants/theme';
 import { useOnboardingStore } from '@/stores/useOnboardingStore';
+
+const LIGHT_COLORS = {
+  background: '#f6f6f8',
+  surface: '#ffffff',
+  surfaceHighlight: '#f1f5f9',
+  textPrimary: '#0d181b',
+  textSecondary: '#617f89',
+  textMuted: '#94a3b8',
+  border: '#e2e8f0',
+};
 
 interface NotificationOptionProps {
   icon: React.ReactNode;
@@ -42,8 +53,8 @@ function NotificationOption({
       <Switch
         value={value}
         onValueChange={onValueChange}
-        trackColor={{ false: COLORS.borderLight, true: COLORS.goldMuted }}
-        thumbColor={value ? COLORS.gold : COLORS.surface}
+        trackColor={{ false: LIGHT_COLORS.border, true: COLORS.goldMuted }}
+        thumbColor={value ? COLORS.gold : LIGHT_COLORS.surface}
       />
     </Surface>
   );
@@ -78,14 +89,14 @@ export default function CustomerNotificationsScreen(): React.JSX.Element {
       onNext={handleNext}
     >
       <View style={styles.content}>
-        <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.infoCard}>
+        <Animated.View entering={webSafeFadeInDown(100, 400)} style={styles.infoCard}>
           <Bell size={20} color={COLORS.gold} />
           <Text style={styles.infoText}>
             You can always change these settings later in your profile
           </Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(200).duration(400)} style={styles.options}>
+        <Animated.View entering={webSafeFadeInDown(200, 400)} style={styles.options}>
           <NotificationOption
             icon={<Calendar size={24} color={COLORS.goldDark} />}
             title="Booking updates"
@@ -139,7 +150,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textSecondary,
+    color: LIGHT_COLORS.textSecondary,
     lineHeight: 20,
   },
   options: {
@@ -150,7 +161,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: SPACING.lg,
     borderRadius: RADIUS.lg,
-    backgroundColor: COLORS.surface,
+    backgroundColor: LIGHT_COLORS.surface,
     gap: SPACING.md,
     ...SHADOWS.sm,
   },
@@ -174,7 +185,7 @@ const styles = StyleSheet.create({
   optionTitle: {
     fontSize: TYPOGRAPHY.md,
     fontWeight: '600',
-    color: COLORS.textPrimary,
+    color: LIGHT_COLORS.textPrimary,
   },
   recommendedBadge: {
     backgroundColor: COLORS.success + '20',
@@ -190,7 +201,7 @@ const styles = StyleSheet.create({
   },
   optionDescription: {
     fontSize: TYPOGRAPHY.sm,
-    color: COLORS.textMuted,
+    color: LIGHT_COLORS.textMuted,
     lineHeight: 18,
   },
 });
